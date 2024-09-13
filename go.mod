@@ -1,3 +1,3 @@
-module transcriptorWeb
+module WebServer
 
 go 1.23.0

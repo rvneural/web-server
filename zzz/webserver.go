@@ -21,7 +21,7 @@ func redirectToTls(w http.ResponseWriter, r *http.Request) {
 // Функция обработки запроса в корень
 func mainPage(w http.ResponseWriter, r *http.Request) {
 	log.Println("Connection to homePage from:", r.RemoteAddr)
-	t, err := template.ParseFiles("pages/html/index.html", "pages/base.html", "pages/styles/homePage.html", "pages/scripts/homePage.html")
+	t, err := template.ParseFiles("pages/html/recognition-from-file.html", "pages/base.html", "pages/styles/homePage.html", "pages/scripts/homePage.html")
 	if err != nil {
 		log.Println(err)
 		fmt.Fprint(w, err.Error())

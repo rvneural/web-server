@@ -1,0 +1,30 @@
+{{define "base"}}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Реальное время / Journalist Service</title>
+  <link rel="icon" href="pages/img/favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="styles/basic.css">
+  {{template "htmlStyle"}}
+  <link rel="stylesheet" href="styles/style.css">
+  <link rel="stylesheet" href="styles/animation.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <div class="header-buttons">
+      <form action="/"><button class="header-button" id="filePage">FILE</button></form>
+      <form action="/uri"><button class="header-button" id="urlPage" disabled>URL</button></form>
+      <form action="/image"><button class="header-button" id="imagePage">IMAGE</button></form>
+      <form action="/rewrite"><button class="header-button" id="rewritePage">REWRITE</button></form>
+      <form action="/text"><button class="header-button" id="textPage">TEXT</button></form>
+    </div>
+    {{template "content"}}
+</div>
+{{template "script"}}
+</body>
+</html>
+{{end}}

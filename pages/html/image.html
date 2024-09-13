@@ -1,0 +1,48 @@
+{{ define "content" }}
+<div class="header-group">
+  <img src="pages/img/logo.png" class="logo-image"/>
+  <h1>Реальное время / Генерация изображений</h1>
+</div>
+<div class="work-group">
+    <div class="input-group">
+        <div class="promt-area">
+        <textarea class="input-area" id="inputArea" placeholder="Введите текст для генерации изображения"></textarea>
+        </div>
+        <div class="settings-area">
+            <div class="ration-area">
+                <p>Укажите соотношение сторон: </p>
+                <select class="select" id="rationSelect" name="ration">
+                    <option value="3-2">3:2</option>
+                    <option value="1-1">1:1</option>
+                    <option value="16-9">16:9</option>
+                    <option value="9-16">9:16</option>
+                    <option value="2-3">2:3</option>
+                </select>
+            </div>
+            <div class="seed-area">
+                <p>Задайте seed (зерно) изображения:</p>
+                <input type="number" min="0" step="1" class="input-seed-area" id="seedArea" placeholder="123456" readonly></input>
+            </div>
+            <div class="random-seed">
+            <input type="checkbox" name="random-seed" class="checkbox" id="randomSeed" value="norm" checked>
+            <label for="normResult"><abbr title="Seed (зерно изображения) — параметр, который отвечает за базовую генерацию изображения. Одинаковые запрос и seed ведут к генерации одного и того же изображения">Случайный seed</abbr></label>
+            </div>
+        </div>
+    </div>
+    <div class="rewrite-button-group">
+        <div class="rewrite-buttons">
+        <button class="button rewrite-button" id="generateImageButton">>>></button>
+        <form action="https://yandex.cloud/ru/docs/foundation-models/prompts/yandexart/" target="_blank"><button class="help-button">?</button></form>
+    </div>
+    </div>
+    <div class="output-image-group">
+        <div class="output-image-class">
+        <img class="output-image" id="outputImage" src="pages/img/templates/3-2.png" alt="Генерируемое изображение">
+        </div>
+        <div class="seed-class">
+        <p>Seed (зерно):</p>
+        <p id="seedValue"></p>
+        </div>
+    </div>
+</div>
+{{ end }}

@@ -1,0 +1,30 @@
+{{ define "content" }}
+<div class="header-group">
+    <img src="pages/img/logo.png" class="logo-image"/>
+    <h1>Реальное время / Обработка текста</h1>
+</div>
+<div class="work-group">
+<div class="input-text-group">
+    <div class="input-text-area">
+        <textarea class="output-area" id="inputArea" placeholder="Введите сюда текст"></textarea>
+    </div>
+    <div class="input-text-area">
+        <textarea class="output-area" id="promtArea" placeholder="Введите сюда задачу для нейросети: ЧТО НУЖНО СДЕЛАТЬ С ЭТИМ ТЕКСТОМ"></textarea>
+    </div>
+</div>
+<div class="rewrite-button-group">
+    <div class="rewrite-buttons">
+        <button class="button rewrite-button" id="rewriteButton">>>></button>
+        <form action="https://yandex.cloud/ru/docs/foundation-models/prompts/yandexgpt/" target="_blank"><button class="help-button">?</button></form>
+    </div>
+</div>
+<div class="output-text-group">
+    <textarea class="output-area" id="outputArea" readonly placeholder="Здесь появится обработанный текст"></textarea>
+</div>
+</div>
+<div class="bottom-group">
+    <button class="button b1" id="saveFile" disabled>Сохранить</button>
+    <button class="button b2" id="copyText" disabled>Скопировать</button>
+    <button class="button b3" id="resetButton" disabled>Восстановить</button>
+</div>
+{{ end }}

@@ -1,0 +1,13 @@
+.loader {
+    animation: animate 6s ease infinite;
+  }
+  
+  @keyframes animate {
+    50% {
+      color: white;
+    }
+  }
+
+  .need-enter{
+    border: solid 6px red;
+  }

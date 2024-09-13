@@ -1,0 +1,89 @@
+  
+  /* Добавляем оформление элементам grid-контейнера: */
+  .container * {
+    border-radius: 5px; /* Скругляем углы на 5 пикселей */
+    background-color: #edeeee;
+    text-align: center; /* Контент размещаем в центре по горизонтали */
+  }
+  
+  /*Параметры конйтейнеров внутри grid-блока*/
+  
+  .header-buttons{
+    height: 45px;
+    justify-items: start;
+    align-items: center;
+    display: flex;
+  }
+
+  .header-buttons button{
+    font-size: 12px;
+    border: solid 1px black;
+  }
+
+  .header-buttons button:hover{
+    border: solid 1px black;
+  }
+  
+  .header-group{
+    justify-content: center;
+    justify-items: center;
+    align-items: center;
+    display:flex;
+  }
+
+  .bottom-group{
+    justify-content: center;
+    display: flex;
+  }
+  
+  
+  
+  
+  /*Отдельные элементы в блоках*/
+  
+  .header-buttons *{
+    height: 100%;
+    width: 100%;
+    border-radius: 0%;
+  }
+  
+  .header-group img{
+    height: 35px;
+  }
+  
+  .bottom-group button{
+    width: 33.3333%;
+    min-height: 40px;
+    float: left;
+  }
+  
+  /*Нижние кнопки слева направо*/
+  .b1{
+    border-radius: 5px 0px 0px 5px;
+  }
+  
+  .b2{
+    border-radius: 0px;
+  }
+  
+  .b3{
+    border-radius: 0px 5px 5px 0px;
+  }
+
+  /*Кнопка перехода на страницу с примерами промтов*/
+
+  .help-button{
+    font-size: 20px;
+    background-color: lightgray;
+    border: none;
+    color: black;
+}
+
+.help-button:hover{
+    background-color: gray;
+    border: none;
+}
+
+form{
+    background: transparent;
+}

@@ -1,0 +1,33 @@
+package image_generation
+
+import (
+	"fmt"
+	"html/template"
+	"log"
+	"net/http"
+)
+
+type ImageGenerationPage struct {
+	base string
+}
+
+func New() *ImageGenerationPage {
+	return &ImageGenerationPage{
+		base: "../../web/static/pages/template/html/base.html",
+	}
+}
+
+func (rp *ImageGenerationPage) GetPage(w http.ResponseWriter, r *http.Request) {
+	log.Println("Connection to ImageGenerationPage from:", r.RemoteAddr)
+
+	htmlStyle := "../../web/static/pages/image-generation/css/style.html"
+	content := "../../web/static/pages/image-generation/html/page.html"
+	script := "../../web/static/pages/image-generation/js/script.html"
+
+	t, err := template.ParseFiles(rp.base, htmlStyle, content, script)
+	if err != nil {
+		log.Println(err)
+		fmt.Fprint(w, err.Error())
+	}
+	t.ExecuteTemplate(w, "base", nil)
+}

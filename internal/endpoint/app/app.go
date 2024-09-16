@@ -8,17 +8,26 @@ import (
 type App struct {
 }
 
-type Handler interface {
+type PageHandler interface {
 	GetPage(w http.ResponseWriter, r *http.Request)
+}
+
+type FormHandler interface {
+	HandleForm(w http.ResponseWriter, r *http.Request)
 }
 
 func New() *App {
 	return &App{}
 }
 
-func (a *App) RegisterHandler(pattern string, handler Handler) {
+func (a *App) RegisterPage(pattern string, handler PageHandler) {
 	log.Println("Registering handler for pattern", pattern)
 	http.HandleFunc(pattern, handler.GetPage)
+}
+
+func (a *App) RegisterForm(pattern string, handler FormHandler) {
+	log.Println("Registering form handler for pattern", pattern)
+	http.HandleFunc(pattern, handler.HandleForm)
 }
 
 func (a *App) RegisterStatic(pattern string, handler http.Handler) {

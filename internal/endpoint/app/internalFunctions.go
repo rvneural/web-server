@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"path/filepath"
 )
 
 func (a *App) redirectToTls(w http.ResponseWriter, r *http.Request) {
@@ -20,10 +21,15 @@ func (a *App) startRedirection() error {
 
 func (a *App) startTLSServer() error {
 
-	certFile := "../../../ssl/domain.crt"
-	keyFile := "../../../ssl/domain.key"
+	s, _ := filepath.Abs("./")
+	log.Printf("Serving from: %s\n", s)
+
+	certFile := "../../internal/config/ssl/domain.crt"
+	keyFile := "../../internal/config/ssl/domain.key"
 
 	log.Println("starting HTTPS server")
+
+	http.Handle("/web/", http.StripPrefix("/web/", http.FileServer(http.Dir("../../web"))))
 
 	return http.ListenAndServeTLS(config.HTTPS_PORT, certFile, keyFile, nil)
 }

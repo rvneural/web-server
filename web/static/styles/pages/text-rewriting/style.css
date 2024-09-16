@@ -1,0 +1,78 @@
+
+  /* Добавляем оформление grid-контейнеру: */
+.container {
+    width: 90%;
+    height: 98vh;
+    margin-left: 5%;
+    margin-right: 5%;
+    border-radius: 5px; /* Скругляем углы на 5 пикселей */
+  }
+  
+  /*Параметры grid-контейнера*/
+  .container {
+    display: grid;
+    grid-template-rows: 0.5fr 0.5fr 7fr;
+    row-gap: 1%;
+  }
+  
+.work-group{
+    width: 100%;
+    display: grid;
+    background-color: transparent;
+    grid-template-columns: 5fr 0.1fr 5fr;
+    gap: 1%;
+}
+
+.input-text-group{
+    background-color: #edeeee;
+    display: flex;
+}
+
+.rewrite-button-group{
+    height: 60%;
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+}
+
+.rewrite-buttons{
+    background-color: transparent;
+}
+
+.rewrite-buttons *{
+    margin-bottom: 20px;
+}
+
+.output-text-group{
+    background-color: #edeeee;
+    display: flex;
+}
+
+  .rewrite-button-group button{
+    border-radius: 40px;
+    width: 40px;
+    height: 40px;
+  }
+
+  .rewrite-button-group button:hover{
+    width: 40px;
+    height: 40px;
+  }
+
+  .input-text-group textarea{
+    flex: 1;
+    font-size: 20px;
+    margin: 0.5%;
+    text-align: left;
+    line-height: 1.5em;
+    background-color: white;
+  }
+
+  .output-text-group textarea{
+    flex: 1;
+    font-size: 20px;
+    margin: 0.5%;
+    text-align: left;
+    line-height: 1.5em;
+    background-color: white;
+  }

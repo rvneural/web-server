@@ -8,9 +8,9 @@ import (
 func (a *App) startRedirection() error {
 	log.Println("starting redirect")
 	httpServer := &http.Server{
-		Addr: ":80",
+		Addr: ":http",
 		Handler: http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			host := "neuron-nexus.ru"
+			host := "neuron-nexus.ru:443"
 			http.Redirect(w, r, "https://"+host, http.StatusPermanentRedirect)
 		}),
 	}

@@ -12,11 +12,10 @@ import (
 var buffer = []string{}
 var clearingStarted = false
 
-func startClearing() {
+func startClearing(m *sync.Mutex) {
 	if clearingStarted {
 		return
 	}
-	m := sync.Mutex{}
 	clearingStarted = true
 	for {
 		<-time.After(time.Hour * 24)
@@ -29,7 +28,7 @@ func startClearing() {
 
 func Authorize(w http.ResponseWriter, r *http.Request) bool {
 	log.Println("Check authorization for", r.RemoteAddr)
-
+	m := sync.Mutex{}
 	if slices.Contains(buffer, r.RemoteAddr) {
 		return true
 	}
@@ -37,8 +36,7 @@ func Authorize(w http.ResponseWriter, r *http.Request) bool {
 		log.Println("Clearing buffer")
 		buffer = buffer[900:]
 	}
-
-	go startClearing()
+	go startClearing(&m)
 
 	login, err := r.Cookie("login")
 	if err != nil || login.Value != app.LOGIN {

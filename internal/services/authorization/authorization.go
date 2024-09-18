@@ -1,12 +1,13 @@
 package authorization
 
 import (
+	"WebServer/internal/config/app"
 	"log"
 	"net/http"
 	"slices"
+	"sync"
 	"time"
 )
-import "WebServer/internal/config/app"
 
 var buffer = []string{}
 var clearingStarted = false
@@ -15,10 +16,13 @@ func startClearing() {
 	if clearingStarted {
 		return
 	}
+	m := sync.Mutex{}
 	clearingStarted = true
 	for {
 		<-time.After(time.Hour * 24)
+		m.Lock()
 		buffer = nil
+		m.Unlock()
 		log.Println("Buffer cleared")
 	}
 }

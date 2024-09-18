@@ -1,8 +1,11 @@
 package app
 
 import (
+	"crypto/tls"
 	"log"
 	"net/http"
+
+	"golang.org/x/crypto/acme/autocert"
 )
 
 type App struct {
@@ -35,14 +38,34 @@ func (a *App) RegisterStatic(pattern string, handler http.Handler) {
 	http.Handle(pattern, handler)
 }
 
-func (a *App) Start() {
+func (a *App) StartLocal() {
+	http.Handle("/web/", http.StripPrefix("/web/", http.FileServer(http.Dir("../../web"))))
+	log.Println("Starting local server...")
+	httpServer := &http.Server{
+		Addr: ":80",
+	}
+	log.Fatal(httpServer.ListenAndServe())
+}
 
-	log.Println("Starting server...")
+func (a *App) StartTLS() {
+	log.Println("Starting TLS server...")
+	http.Handle("/web/", http.StripPrefix("/web/", http.FileServer(http.Dir("../../web"))))
+	m := &autocert.Manager{
+		Cache:      autocert.DirCache("./../../var/www/.cache"),
+		Prompt:     autocert.AcceptTOS,
+		HostPolicy: autocert.HostWhitelist("neuron-nexus.ru"),
+	}
+	tlsServer := &http.Server{
+		Addr: ":443",
+		TLSConfig: &tls.Config{
+			GetCertificate: m.GetCertificate,
+		},
+	}
 
 	go func() {
 		if err := a.startRedirection(); err != nil {
-			log.Fatalf("ListenAndServe error: %v", err)
+			log.Fatalf("Redirect server error: %v", err)
 		}
 	}()
-	log.Fatal(a.startTLSServer())
+	log.Fatal(tlsServer.ListenAndServeTLS("", ""))
 }

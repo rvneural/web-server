@@ -2,6 +2,8 @@ package app
 
 import (
 	cfg "WebServer/internal/config/app"
+	"os"
+	"strings"
 
 	endpoint "WebServer/internal/endpoint/app"
 	authPage "WebServer/internal/server/handlers/pages/auth"
@@ -44,5 +46,12 @@ func (a *App) Run() {
 	a.Endpoint.RegisterForm("/login", authHandler.New(cfg.LOGIN, cfg.PASSWORD))
 
 	log.Println("Starting endpoint...")
-	a.Endpoint.Start()
+	tlsMode := os.Getenv("TLS_MODE")
+	if strings.ToLower(tlsMode) == "true" {
+		log.Println("Starting endpoint with TLS...")
+		a.Endpoint.StartTLS() // adjust cert and key files as needed
+	} else {
+		log.Println("Starting endpoint locally...")
+		a.Endpoint.StartLocal()
+	}
 }

@@ -43,6 +43,7 @@ func Authorize(w http.ResponseWriter, r *http.Request) bool {
 		http.Redirect(w, r, "/auth", http.StatusSeeOther)
 		return false
 	}
+
 	password, err := r.Cookie("password")
 	if err != nil || password.Value != app.PASSWORD {
 		http.Redirect(w, r, "/auth", http.StatusSeeOther)

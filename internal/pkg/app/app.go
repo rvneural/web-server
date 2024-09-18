@@ -30,8 +30,6 @@ func New() *App {
 	}
 }
 
-//http.HandleFunc("/text", processTextPage)
-
 func (a *App) Run() {
 	a.Endpoint.RegisterPage("/", recognitionFromFilePage.New())
 	a.Endpoint.RegisterPage("/image", imageGenerationPage.New())
@@ -49,7 +47,7 @@ func (a *App) Run() {
 	tlsMode := os.Getenv("TLS_MODE")
 	if strings.ToLower(tlsMode) == "true" {
 		log.Println("Starting endpoint with TLS...")
-		a.Endpoint.StartTLS() // adjust cert and key files as needed
+		a.Endpoint.StartTLS()
 	} else {
 		log.Println("Starting endpoint locally...")
 		a.Endpoint.StartLocal()

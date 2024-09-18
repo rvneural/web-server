@@ -1,6 +1,7 @@
 package text_rewriting
 
 import (
+	"WebServer/internal/services/authorization"
 	"fmt"
 	"html/template"
 	"log"
@@ -18,6 +19,9 @@ func New() *TextRewritingPage {
 }
 
 func (rp *TextRewritingPage) GetPage(w http.ResponseWriter, r *http.Request) {
+	if !authorization.Authorize(w, r) {
+		return
+	}
 	log.Println("Connection to TextRewritingPage from:", r.RemoteAddr)
 
 	htmlStyle := "../../web/static/pages/text-rewriting/css/style.html"

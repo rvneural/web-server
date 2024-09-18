@@ -10,7 +10,8 @@ import (
 
 func (a *App) redirectToTls(w http.ResponseWriter, r *http.Request) {
 	log.Println("redirect to TLS server for ", r.RemoteAddr)
-	url := fmt.Sprintf("https://%s%s", config.IP, config.HTTPS_PORT)
+	url := fmt.Sprintf("https://%s%s", config.DOMAIN, config.HTTPS_PORT) // Redirect to production server
+	//url := fmt.Sprintf("https://%s%s", "127.0.0.1", config.HTTPS_PORT) // Redirect to https://127.0.0.1:443
 	http.Redirect(w, r, url, http.StatusMovedPermanently)
 }
 

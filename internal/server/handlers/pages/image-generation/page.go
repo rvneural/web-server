@@ -1,6 +1,7 @@
 package image_generation
 
 import (
+	"WebServer/internal/services/authorization"
 	"fmt"
 	"html/template"
 	"log"
@@ -18,6 +19,9 @@ func New() *ImageGenerationPage {
 }
 
 func (rp *ImageGenerationPage) GetPage(w http.ResponseWriter, r *http.Request) {
+	if !authorization.Authorize(w, r) {
+		return
+	}
 	log.Println("Connection to ImageGenerationPage from:", r.RemoteAddr)
 
 	htmlStyle := "../../web/static/pages/image-generation/css/style.html"

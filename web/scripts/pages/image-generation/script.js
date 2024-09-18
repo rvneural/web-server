@@ -93,13 +93,23 @@ generateImageButton.addEventListener('click', async() => {
         method: 'POST',
         body: formData,
     })
+    
+    let data
 
-    const data = await resp.json();
+    try {
+        data = await resp.json();
+    } catch (err) {
+        console.error('Error:', err)
+        alert('Ошибка при обращении к серверу')
+        unlockElements()
+        return
+    }
 
     console.log('data', data)
 
     if ((data.error) && (data.error!== '')) {
         alert('Ошибка генерации изображения:'+ data.error + "\n\nДетали: " + data.details)
+        unlockElements()
         return
     }
 

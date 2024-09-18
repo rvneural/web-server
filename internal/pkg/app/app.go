@@ -1,13 +1,17 @@
 package app
 
 import (
+	cfg "WebServer/internal/config/app"
+
 	endpoint "WebServer/internal/endpoint/app"
+	authPage "WebServer/internal/server/handlers/pages/auth"
 	imageGenerationPage "WebServer/internal/server/handlers/pages/image-generation"
 	recognitionFromFilePage "WebServer/internal/server/handlers/pages/recognition-from-file"
 	textProcessingPage "WebServer/internal/server/handlers/pages/text-processing"
 	rewritePage "WebServer/internal/server/handlers/pages/text-rewriting"
 
 	audioFormHandler "WebServer/internal/services/formHandlers/audio"
+	authHandler "WebServer/internal/services/formHandlers/auth"
 	imageFormHandler "WebServer/internal/services/formHandlers/img"
 	textFormHandler "WebServer/internal/services/formHandlers/text"
 
@@ -31,11 +35,13 @@ func (a *App) Run() {
 	a.Endpoint.RegisterPage("/image", imageGenerationPage.New())
 	a.Endpoint.RegisterPage("/rewrite", rewritePage.New())
 	a.Endpoint.RegisterPage("/text", textProcessingPage.New())
+	a.Endpoint.RegisterPage("/auth", authPage.New())
 
 	a.Endpoint.RegisterForm("/recognize", audioFormHandler.New())
 	a.Endpoint.RegisterForm("/rewriteFromWeb", textFormHandler.New("{{ rewrite }}"))
 	a.Endpoint.RegisterForm("/processTextFromWeb", textFormHandler.New(""))
 	a.Endpoint.RegisterForm("/generateImage", imageFormHandler.New())
+	a.Endpoint.RegisterForm("/login", authHandler.New(cfg.LOGIN, cfg.PASSWORD))
 
 	log.Println("Starting endpoint...")
 	a.Endpoint.Start()

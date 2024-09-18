@@ -1,6 +1,7 @@
 package recognition_from_file
 
 import (
+	"WebServer/internal/services/authorization"
 	"fmt"
 	"html/template"
 	"log"
@@ -18,6 +19,9 @@ func New() *RecognitionFromFilePage {
 }
 
 func (rp *RecognitionFromFilePage) GetPage(w http.ResponseWriter, r *http.Request) {
+	if !authorization.Authorize(w, r) {
+		return
+	}
 	log.Println("Connection to RecognitionFromFilePage from:", r.RemoteAddr)
 
 	htmlStyle := "../../web/static/pages/recognition-from-file/css/style.html"

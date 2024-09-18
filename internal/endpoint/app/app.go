@@ -44,6 +44,5 @@ func (a *App) Start() {
 			log.Fatalf("ListenAndServe error: %v", err)
 		}
 	}()
-
 	log.Fatal(a.startTLSServer())
 }

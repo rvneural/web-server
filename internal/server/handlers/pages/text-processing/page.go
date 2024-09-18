@@ -1,6 +1,7 @@
 package text_processing
 
 import (
+	"WebServer/internal/services/authorization"
 	"fmt"
 	"html/template"
 	"log"
@@ -18,6 +19,9 @@ func New() *TextProcessingPage {
 }
 
 func (rp *TextProcessingPage) GetPage(w http.ResponseWriter, r *http.Request) {
+	if !authorization.Authorize(w, r) {
+		return
+	}
 	log.Println("Connection to TextProcessingPage from:", r.RemoteAddr)
 
 	htmlStyle := "../../web/static/pages/text-processing/css/style.html"

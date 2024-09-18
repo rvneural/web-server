@@ -53,7 +53,7 @@ func (a *App) StartTLS() {
 	m := &autocert.Manager{
 		Cache:      autocert.DirCache("./../../var/www/.cache"),
 		Prompt:     autocert.AcceptTOS,
-		HostPolicy: autocert.HostWhitelist("neuron-nexus.ru"),
+		HostPolicy: autocert.HostWhitelist("neuron-nexus.ru", "www.neuron-nexus.ru", "*.neuron-nexus.ru"),
 	}
 	tlsServer := &http.Server{
 		Addr: ":443",

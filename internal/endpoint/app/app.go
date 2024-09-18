@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 
+	"golang.org/x/crypto/acme"
 	"golang.org/x/crypto/acme/autocert"
 )
 
@@ -51,14 +52,15 @@ func (a *App) StartTLS() {
 	log.Println("Starting TLS server...")
 	http.Handle("/web/", http.StripPrefix("/web/", http.FileServer(http.Dir("../../web"))))
 	m := &autocert.Manager{
-		Cache:      autocert.DirCache("./../../var/www/.cache"),
+		Cache:      autocert.DirCache("../../var/www/.cache"),
 		Prompt:     autocert.AcceptTOS,
-		HostPolicy: autocert.HostWhitelist("neuron-nexus.ru", "www.neuron-nexus.ru", "*.neuron-nexus.ru"),
+		HostPolicy: autocert.HostWhitelist("neuron-nexus.ru"),
 	}
 	tlsServer := &http.Server{
 		Addr: ":443",
 		TLSConfig: &tls.Config{
 			GetCertificate: m.GetCertificate,
+			NextProtos:     []string{acme.ALPNProto},
 		},
 	}
 

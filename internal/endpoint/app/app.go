@@ -21,6 +21,7 @@ type FormHandler interface {
 }
 
 func New() *App {
+	http.Handle("/web/", http.StripPrefix("/web/", http.FileServer(http.Dir("../../web"))))
 	return &App{}
 }
 
@@ -40,7 +41,6 @@ func (a *App) RegisterStatic(pattern string, handler http.Handler) {
 }
 
 func (a *App) StartLocal() {
-	http.Handle("/web/", http.StripPrefix("/web/", http.FileServer(http.Dir("../../web"))))
 	log.Println("Starting local server...")
 	httpServer := &http.Server{
 		Addr: ":80",
@@ -50,7 +50,6 @@ func (a *App) StartLocal() {
 
 func (a *App) StartTLS() {
 	log.Println("Starting TLS server...")
-	http.Handle("/web/", http.StripPrefix("/web/", http.FileServer(http.Dir("../../web"))))
 	m := &autocert.Manager{
 		Cache:      autocert.DirCache("../../var/www/.cache"),
 		Prompt:     autocert.AcceptTOS,

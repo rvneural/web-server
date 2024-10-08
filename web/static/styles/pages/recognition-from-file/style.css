@@ -43,10 +43,12 @@
 .file-group input{
   height: 100%;
   width: 100%;
+  background: transparent;
 }
 
 .language-group *{
   flex: 1;
+  background: transparent;
 }
 
 .language-group button{
@@ -77,5 +79,4 @@
   height: 95%;
   margin-left: 1%;
   margin-right: 1%;
-  background-color: white;
 }

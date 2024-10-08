@@ -1,0 +1,45 @@
+
+  /* Добавляем оформление grid-контейнеру: */
+  .container {
+    width: 80%;
+    height: 98vh;
+    margin-left: 10%;
+    margin-right: 10%;
+    border-radius: 5px; /* Скругляем углы на 5 пикселей */
+  }
+  
+  /*Параметры grid-контейнера*/
+  .container {
+    display: grid;
+    grid-template-rows: 0.5fr 0.5fr 7fr;
+    row-gap: 1%;
+  }
+
+  .work-group {
+    display: grid;
+    padding: 10px;
+    grid-template: 
+        "input-group input-group input-group input-group input-group input-group input-group input-group control-group" 4.5%
+        "output-group output-group output-group output-group output-group output-group output-group output-group output-group";
+    gap: 0.3%;
+  }
+
+  .input-group{
+    grid-area: input-group;
+    display: flex;
+    align-items: center;
+    border: solid black;
+  }
+
+  .control-group{
+    grid-area: control-group;
+    display: flex;
+    border: solid black;
+  }
+
+  .output-group{
+    grid-area: output-group;
+    display: flex;
+    border: solid black;
+  }
+  

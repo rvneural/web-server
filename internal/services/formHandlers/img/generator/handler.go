@@ -1,4 +1,4 @@
-package img
+package generator
 
 import (
 	models "WebServer/internal/models/img"

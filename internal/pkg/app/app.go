@@ -6,15 +6,17 @@ import (
 	"strings"
 
 	endpoint "WebServer/internal/endpoint/app"
+
 	authPage "WebServer/internal/server/handlers/pages/auth"
 	imageGenerationPage "WebServer/internal/server/handlers/pages/image-generation"
+	upscalePage "WebServer/internal/server/handlers/pages/image-upscaler"
 	recognitionFromFilePage "WebServer/internal/server/handlers/pages/recognition-from-file"
 	textProcessingPage "WebServer/internal/server/handlers/pages/text-processing"
 	rewritePage "WebServer/internal/server/handlers/pages/text-rewriting"
 
 	audioFormHandler "WebServer/internal/services/formHandlers/audio"
 	authHandler "WebServer/internal/services/formHandlers/auth"
-	imageFormHandler "WebServer/internal/services/formHandlers/img"
+	imageFormHandler "WebServer/internal/services/formHandlers/img/generator"
 	textFormHandler "WebServer/internal/services/formHandlers/text"
 
 	"log"
@@ -36,6 +38,7 @@ func (a *App) Run() {
 	a.Endpoint.RegisterPage("/rewrite", rewritePage.New())
 	a.Endpoint.RegisterPage("/text", textProcessingPage.New())
 	a.Endpoint.RegisterPage("/auth", authPage.New())
+	a.Endpoint.RegisterPage("/upscale", upscalePage.New())
 
 	a.Endpoint.RegisterForm("/recognize", audioFormHandler.New())
 	a.Endpoint.RegisterForm("/rewriteFromWeb", textFormHandler.New("{{ rewrite }}"))

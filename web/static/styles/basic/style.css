@@ -5,7 +5,7 @@ body {
 }
 
 .button{
-    background-color: #17964e;
+    background-color: rgb(43, 114, 75);
     border: none;
     color: white;
 }
@@ -38,12 +38,17 @@ textarea{
 }
 
 .header-button{
-    background-color: #17964e;
+    background-color: rgb(43, 114, 75);
     border: none;
     color: white;
+    border: 0.3px solid black;
   }
 
 .header-button:hover{
     background-color: #104d2a;
-    border: none;
+}
+
+.upper-bold{
+    font-weight: bold;
+    text-transform: uppercase;
 }

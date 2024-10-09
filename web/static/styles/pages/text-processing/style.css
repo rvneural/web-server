@@ -13,7 +13,28 @@
 }
 
 .input-text-area{
+    display: grid;
+    grid-template-rows: 2fr;
+}
+
+.input-text-area .area{
     display: flex;
+}
+
+.input-text-area .template{
+  display: flex;
+  align-items: center;
+  justify-items: center;
+  max-height: 40px;
+}
+.input-text-area .template p{
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.input-text-area .template select{
+  width: 60%;
+  max-height: 50%;
 }
 
 .rewrite-button-group{

@@ -2,6 +2,8 @@ const intupArea = document.getElementById('inputArea')
 const promtArea = document.getElementById('promtArea')
 const outputArea = document.getElementById('outputArea')
 
+const promtSelect = document.getElementById('promtSelect')
+
 const processButton = document.getElementById('rewriteButton')
 
 const resetButton = document.getElementById("resetButton") // Кнопка Reset
@@ -33,6 +35,13 @@ window.onload = function() {
         intupArea.value = localStorage.getItem('originalProcessText')
     }
 }
+
+promtSelect.addEventListener('change', () => {
+    console.log(promtSelect.value)
+    if (promtSelect.value !== '0') {
+        promtArea.value = "{{ " + promtSelect.value + " }}"
+    }
+})
 
 // Обработчик нажатия кнопки "Переписать"
 processButton.addEventListener('click', async () => {

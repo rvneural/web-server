@@ -1,6 +1,7 @@
 {{ define "title" }}Расшифровка аудио{{ end }}
 
 {{ define "content" }}
+<div class="work-group">
 <div class="file-group">
   <input type="file" class="input-field" name="filePath" id="fileInput" accept="audio/*,video/*,.flv,.mkv">
 </div>
@@ -38,6 +39,7 @@
 </div>
 <div class="output-group">
   <textarea class="output-area" id="outputArea" placeholder="Здесь появится расшифровка вашего текста" readonly></textarea>
+</div>
 </div>
 <div class="bottom-group">
   <button class="button b1" id="saveFile" disabled>Сохранить</button>

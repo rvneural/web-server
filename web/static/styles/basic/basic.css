@@ -5,14 +5,60 @@
     background-color: #edeeee;
     text-align: center; /* Контент размещаем в центре по горизонтали */
   }
+
+ /* Добавляем оформление grid-контейнеру:*/
+  .container {
+    height: 99vh;
+    width: 90vw;
+    margin: 0 auto;
+    border-radius: 3px;  /*Скругляем углы на 5 пикселей */
+  }
+  
+   /*Параметры grid-контейнера */
+  .container {
+    display: grid;
+    column-gap: 1%;
+    row-gap: 0.8%;
+    /*grid-template-rows: 0.5fr 0.5fr 7fr;*/
+    
+    grid-template: 
+          "b b b" 10vh
+          "a c c" 80vh
+          ". d d" auto;
+  }
+
+.header-buttons{
+  grid-area: a;
+}
+
+.header-group{
+  grid-area: b;
+}
+
+.work-group{
+  grid-area: c;
+  min-width: 70vw;
+  /*max-height: 78vh;*/
+}
+
+.bottom-group{
+  grid-area: d;
+}
+
+
+  .header-group{
+    min-height: 60px;
+    max-height: 60px;
+  }
   
   /*Параметры конйтейнеров внутри grid-блока*/
-  
   .header-buttons{
-    height: 45px;
+    height: 5%;
+    min-width: 200px;
+    max-width: 200px;
     justify-items: start;
     align-items: center;
-    display: flex;
+  
   }
 
   .header-buttons button{
@@ -25,6 +71,7 @@
   }
   
   .header-group{
+    width: 100%;
     justify-content: center;
     justify-items: center;
     align-items: center;
@@ -34,6 +81,7 @@
   .bottom-group{
     justify-content: center;
     display: flex;
+    max-height: 40px;
   }
   
   
@@ -44,6 +92,8 @@
   .header-buttons *{
     height: 100%;
     width: 100%;
+    min-height: 40px;
+    max-height: 40px;
     border-radius: 0%;
   }
   
@@ -54,6 +104,7 @@
   .bottom-group button{
     width: 33.3333%;
     min-height: 40px;
+    max-height: 40px;
     float: left;
   }
   

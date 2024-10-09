@@ -1,20 +1,4 @@
 
-  /* Добавляем оформление grid-контейнеру: */
-  .container {
-    width: 90%;
-    height: 98vh;
-    margin-left: 5%;
-    margin-right: 5%;
-    border-radius: 5px; /* Скругляем углы на 5 пикселей */
-  }
-  
-  /*Параметры grid-контейнера*/
-  .container {
-    display: grid;
-    grid-template-rows: 0.5fr 0.5fr 7fr;
-    row-gap: 1%;
-  }
-
   .work-group{
     display: grid;
     grid-template-columns: 2fr 0.1fr 3fr;
@@ -25,7 +9,7 @@
   .input-group{
     display: grid;
     grid-template-rows: 2fr 1fr;
-    row-gap: 7%;
+    row-gap: 2%;
     background: transparent;
   }
 
@@ -41,13 +25,15 @@
 
 .promt-area{
     display: flex;
+    min-height: 55vh;
+    max-height: 59vh;
 }
 
 .settings-area{
     background: transparent;
     display: grid;
-    row-gap: 3%;
-    grid-template-rows: 0.1fr 0.1fr 0.35fr;
+    row-gap: 5%;
+    grid-template-rows: 0.1fr 0.4fr 0.4fr;
 }
 
 /********************************/
@@ -59,7 +45,7 @@
 }
 
 .ration-area p{
-    margin-right: 10px;
+    margin-right: 3px;
 }
 
 .ration-area select{
@@ -83,7 +69,7 @@
 }
 
 .seed-area p{
-    margin-right: 10px;
+    margin-right: 1px;
 }
 
 .seed-area input{

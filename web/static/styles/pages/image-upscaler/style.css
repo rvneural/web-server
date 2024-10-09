@@ -1,27 +1,16 @@
 
-  /* Добавляем оформление grid-контейнеру: */
-  .container {
-    width: 80%;
-    height: 98vh;
-    margin-left: 10%;
-    margin-right: 10%;
-    border-radius: 5px; /* Скругляем углы на 5 пикселей */
-  }
-  
-  /*Параметры grid-контейнера*/
-  .container {
-    display: grid;
-    grid-template-rows: 0.5fr 0.5fr 7fr;
-    row-gap: 1%;
-  }
+.button-group{
+    display: none;
+}
 
   .work-group {
+    height: 100%;
     display: grid;
     padding: 10px;
     grid-template: 
-        "input-group input-group input-group input-group input-group input-group input-group input-group control-group" 4%
-        "output-group output-group output-group output-group output-group output-group output-group output-group output-group";
-    gap: 0.3%;
+        "input-group control-group" 4%
+        "output-group output-group";
+    row-gap: 0.3%;
   }
 
   .input-group{
@@ -32,6 +21,7 @@
   }
 
   .control-group{
+    max-width: 200px;
     grid-area: control-group;
     display: flex;
   }
@@ -40,6 +30,10 @@
     grid-area: output-group;
     display: flex;
     border: solid black;
+    width: 100%;
+    min-height: 75vh;
+    max-height: 75vh;
+    height: 75vh;
   }
 
   /*-------*/
@@ -54,5 +48,19 @@
     align-self: center;
     border-radius: 1px;
     width: 100%;
+  }
+
+  .output-group{
+    align-items: center;
+    justify-content: center;
+  }
+
+  .output-group img{
+    display: block;
+    max-width: 90%;
+    max-height: 70vh;
+    width: auto;
+    height: auto;
+    margin: 10px;
   }
   

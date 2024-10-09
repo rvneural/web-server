@@ -1,22 +1,15 @@
-  /* Добавляем оформление grid-контейнеру: */
-.container {
-  width: 80%;
-  height: 98vh;
-  margin-left: 10%;
-  margin-right: 10%;
-  border-radius: 5px; /* Скругляем углы на 5 пикселей */
+
+.work-group{
+  display: grid;
+  grid-template-rows: 1fr 1fr 1fr 22fr;
+  background: transparent;
+  row-gap: 1%;
 }
-  
-  /*Параметры grid-контейнера*/
-  .container {
-    display: grid;
-    grid-template-rows: 0.5fr 0.5fr 0.1fr 0.1fr 0.2fr 7fr;
-    row-gap: 1%;
-  }
 
 .file-group{
   justify-items: end;
   align-items: center;
+  max-height: 20px;
 }
 
 .language-group{
@@ -30,6 +23,7 @@
   align-items: center;
   justify-content: end;
   display: flex;
+  max-height: 25px;
 }
 
 .output-group{

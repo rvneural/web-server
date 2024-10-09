@@ -17,6 +17,7 @@ import (
 	audioFormHandler "WebServer/internal/services/formHandlers/audio"
 	authHandler "WebServer/internal/services/formHandlers/auth"
 	imageFormHandler "WebServer/internal/services/formHandlers/img/generator"
+	imageUpscalerFormHandler "WebServer/internal/services/formHandlers/img/upscale"
 	textFormHandler "WebServer/internal/services/formHandlers/text"
 
 	"log"
@@ -44,6 +45,7 @@ func (a *App) Run() {
 	a.Endpoint.RegisterForm("/rewriteFromWeb", textFormHandler.New("{{ rewrite }}"))
 	a.Endpoint.RegisterForm("/processTextFromWeb", textFormHandler.New(""))
 	a.Endpoint.RegisterForm("/generateImage", imageFormHandler.New())
+	a.Endpoint.RegisterForm("/upscaleImage", imageUpscalerFormHandler.New())
 	a.Endpoint.RegisterForm("/login", authHandler.New(cfg.LOGIN, cfg.PASSWORD))
 
 	log.Println("Starting endpoint...")

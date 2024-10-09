@@ -1,3 +1,5 @@
+github.com/neuron-nexus/go-image-upscaler v1.0.2 h1:8GkePjdse9K/1/vmGdPagFRvwgeHWNJuDgzhYn3LDzg=
+github.com/neuron-nexus/go-image-upscaler v1.0.2/go.mod h1:zR/R4CXOlGpL01qLB/oDGIJDeUDI5pJVwIU8h+YZE70=
 golang.org/x/crypto v0.27.0 h1:GXm2NjJrPaiv/h1tb2UH8QfgC/hOf/+z0p6PT8o1w7A=
 golang.org/x/crypto v0.27.0/go.mod h1:1Xngt8kV6Dvbssa53Ziq6Eqn0HqbZi5Z6R0ZpwQzt70=
 golang.org/x/net v0.21.0 h1:AQyQV4dYCvJ7vGmJyKki9+PBdyvhkSd8EIx/qb0AYv4=

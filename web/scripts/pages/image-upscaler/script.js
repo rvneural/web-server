@@ -22,3 +22,19 @@ inputFile.addEventListener("change", function () {
     outputImage.src = URL.createObjectURL(inputFile.files[0])
 
 })
+
+upscaleButton.addEventListener("click", async function () {
+    originalImage = inputFile.files[0]
+    formData = new FormData()
+    formData.append("image", originalImage)
+    const resp = await fetch("/upscaleImage", {
+        method: "POST",
+        body: formData
+    })
+    const data = await resp.json()
+    if(data.error) {
+        alert("Произошла следующая ошибка при обработке изображения:\n" + data.error)
+        return
+    }
+    outputImage.src = data.url
+})

@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"time"
 
 	imageupscaler "github.com/neuron-nexus/go-image-upscaler"
 
@@ -99,4 +100,13 @@ func (i *ImageUpscaler) HandleForm(w http.ResponseWriter, r *http.Request) {
 	resp := &Response{URL: "/web/uploads/upscaled-" + strings.ReplaceAll(header.Filename, " ", "-") + ".jpg"}
 	d, _ := json.Marshal(resp)
 	w.Write(d)
+
+	go deleteImage("../../web/uploads/upscaled-"+strings.ReplaceAll(header.Filename, " ", "-")+".jpg", time.After(1*time.Hour))
+}
+
+func deleteImage(url string, delay <-chan time.Time) {
+	select {
+	case <-delay:
+		os.Remove(url)
+	}
 }

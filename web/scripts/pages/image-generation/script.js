@@ -171,12 +171,11 @@ rationSelect.addEventListener('change', () => {
 // Функция обработки изменения checkbox randomSeed
 randomSeed.addEventListener('change', (e) => {
     if(e.target.checked){
-        console.log('SeedArea ----- readonly')
         //add readonly to seedArea
         seedArea.setAttribute('readonly', '')
+        seedArea.value = ""
     } else{
         // remove readonly from seedArea
         seedArea.removeAttribute('readonly')
-        console.log('SeedArea unreadonly')
     }
 })

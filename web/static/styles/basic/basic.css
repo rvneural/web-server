@@ -2,7 +2,7 @@
   /* Добавляем оформление элементам grid-контейнера: */
   .container * {
     border-radius: 5px; /* Скругляем углы на 5 пикселей */
-    background-color: #f8f9f9;
+    background-color: #ffffff6d;
     text-align: center; /* Контент размещаем в центре по горизонтали */
   }
 
@@ -60,10 +60,7 @@
     max-width: 200px;
     justify-items: start;
     align-items: center;
-  }
-
-  .header-buttons button{
-    font-size: 12px;
+    background: transparent;
   }
   
   .header-group{
@@ -86,16 +83,28 @@
   /*Отдельные элементы в блоках*/
   
   .header-buttons *{
+    font-size: 12px;
     height: 100%;
     width: 100%;
     min-height: 33px;
     max-height: 33px;
     border-radius: 5px;
     margin-bottom: 3px;
+    background: transparent;
+  }
+
+  .header-group * {
+    background: transparent;
   }
   
   .header-group img{
     height: 35px;
+  }
+
+  .work-group p,
+  .work-group abbr,
+  .work-group label{
+    background: transparent;
   }
   
   .bottom-group button{

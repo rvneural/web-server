@@ -8,8 +8,7 @@
 
 .input-text-group{
   height: 100%;
-    background-color: #edeeee;
-    display: flex;
+  display: flex;
 }
 
 .rewrite-button-group{
@@ -28,7 +27,6 @@
 }
 
 .output-text-group{
-    background-color: #edeeee;
     display: flex;
 }
 
@@ -49,7 +47,6 @@
     margin: 0.5%;
     text-align: left;
     line-height: 1.5em;
-    background-color: white;
   }
 
   .output-text-group textarea{
@@ -58,5 +55,4 @@
     margin: 0.5%;
     text-align: left;
     line-height: 1.5em;
-    background-color: white;
   }

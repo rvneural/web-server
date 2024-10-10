@@ -5,7 +5,7 @@ body {
 }
 
 .button{
-    background-color: rgb(43, 114, 75);
+    background-color: rgba(43, 114, 75, 0.719);
     border: none;
     color: white;
 }
@@ -38,7 +38,7 @@ textarea{
 }
 
 .header-button{
-    background-color: rgb(43, 114, 75);
+    background-color: rgba(43, 114, 75, 0.448);
     border: none;
     color: white;
     border: 0.3px solid black;
@@ -51,4 +51,9 @@ textarea{
 .upper-bold{
     font-weight: bold;
     text-transform: uppercase;
+}
+
+h1 {
+    margin-left: 10px;
+    margin-right: 5px;
 }

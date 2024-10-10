@@ -7,7 +7,6 @@
 }
 
 .input-text-group{
-    background-color: #edeeee;
     display: grid;
     grid-template-rows: 3fr 1fr;;
 }
@@ -15,6 +14,7 @@
 .input-text-area{
     display: grid;
     grid-template-rows: 2fr;
+    background: transparent;
 }
 
 .input-text-area .area{
@@ -57,7 +57,6 @@
 }
 
 .output-text-group{
-    background-color: #edeeee;
     display: flex;
 }
 
@@ -78,7 +77,6 @@
     margin: 0.5%;
     text-align: left;
     line-height: 1.5em;
-    background-color: white;
   }
 
   .output-text-group textarea{
@@ -87,5 +85,8 @@
     margin: 0.5%;
     text-align: left;
     line-height: 1.5em;
-    background-color: white;
+  }
+
+  .template, .area {
+    background: transparent;
   }

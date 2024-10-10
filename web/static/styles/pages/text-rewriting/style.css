@@ -47,6 +47,8 @@
     margin: 0.5%;
     text-align: left;
     line-height: 1.5em;
+    padding: 10px;
+  box-sizing: border-box;
   }
 
   .output-text-group textarea{
@@ -55,4 +57,6 @@
     margin: 0.5%;
     text-align: left;
     line-height: 1.5em;
+    padding: 10px;
+  box-sizing: border-box;
   }

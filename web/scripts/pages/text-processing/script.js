@@ -40,6 +40,8 @@ promtSelect.addEventListener('change', () => {
     console.log(promtSelect.value)
     if (promtSelect.value !== '0') {
         promtArea.value = "{{ " + promtSelect.value + " }}"
+    } else {
+        promtArea.value = ""
     }
 })
 

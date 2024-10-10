@@ -29,8 +29,8 @@ func New() *ImageUpscaler {
 }
 
 func (i *ImageUpscaler) HandleForm(w http.ResponseWriter, r *http.Request) {
-	log.Println("New image for upscaling")
 	imgFile, header, err := r.FormFile("image")
+	log.Println("New image for upscaling:", header.Filename)
 
 	if err != nil {
 		log.Println(err)
@@ -47,7 +47,7 @@ func (i *ImageUpscaler) HandleForm(w http.ResponseWriter, r *http.Request) {
 		resp := &Response{Error: err.Error()}
 		d, _ := json.Marshal(resp)
 		w.WriteHeader(http.StatusBadRequest)
-		w.Write(d)
+		go w.Write(d)
 		return
 	}
 
@@ -57,7 +57,7 @@ func (i *ImageUpscaler) HandleForm(w http.ResponseWriter, r *http.Request) {
 		resp := &Response{Error: err.Error()}
 		d, _ := json.Marshal(resp)
 		w.WriteHeader(http.StatusBadRequest)
-		w.Write(d)
+		go w.Write(d)
 		return
 	}
 	defer os.Remove(header.Filename)
@@ -69,7 +69,7 @@ func (i *ImageUpscaler) HandleForm(w http.ResponseWriter, r *http.Request) {
 		resp := &Response{Error: err.Error()}
 		d, _ := json.Marshal(resp)
 		w.WriteHeader(http.StatusBadRequest)
-		w.Write(d)
+		go w.Write(d)
 		return
 	}
 
@@ -80,7 +80,7 @@ func (i *ImageUpscaler) HandleForm(w http.ResponseWriter, r *http.Request) {
 		resp := &Response{Error: err.Error()}
 		d, _ := json.Marshal(resp)
 		w.WriteHeader(http.StatusBadRequest)
-		w.Write(d)
+		go w.Write(d)
 		return
 	}
 
@@ -90,7 +90,7 @@ func (i *ImageUpscaler) HandleForm(w http.ResponseWriter, r *http.Request) {
 		resp := &Response{Error: err.Error()}
 		d, _ := json.Marshal(resp)
 		w.WriteHeader(http.StatusBadRequest)
-		w.Write(d)
+		go w.Write(d)
 		return
 	}
 
@@ -99,7 +99,8 @@ func (i *ImageUpscaler) HandleForm(w http.ResponseWriter, r *http.Request) {
 	file.Close()
 	resp := &Response{URL: "/web/uploads/upscaled-" + strings.ReplaceAll(header.Filename, " ", "-") + ".jpg"}
 	d, _ := json.Marshal(resp)
-	w.Write(d)
+	w.WriteHeader(http.StatusOK)
+	go w.Write(d)
 
 	go deleteImage("../../web/uploads/upscaled-"+strings.ReplaceAll(header.Filename, " ", "-")+".jpg", time.After(1*time.Hour))
 }

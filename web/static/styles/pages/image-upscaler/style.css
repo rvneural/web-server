@@ -63,5 +63,8 @@
     width: auto;
     height: auto;
     margin: 10px;
+    box-shadow: 10px 5px 5px #fe72775b;
+    border: 1px solid black;
+    border-radius: 5px;
   }
   

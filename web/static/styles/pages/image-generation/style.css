@@ -117,7 +117,7 @@
 .output-image-class img{
     display: block;
     border-radius: 5px;
-    border: solid 2px black;
+    border: solid 1px black;
     max-width: 90%;
     max-height: 65vh;
     width: auto;

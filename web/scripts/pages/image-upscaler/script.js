@@ -24,6 +24,7 @@ inputFile.addEventListener("change", function () {
 })
 
 upscaleButton.addEventListener("click", async function () {
+    upscaleButton.setAttribute("disabled", "")
     originalImage = inputFile.files[0]
     formData = new FormData()
     formData.append("image", originalImage)
@@ -37,4 +38,5 @@ upscaleButton.addEventListener("click", async function () {
         return
     }
     outputImage.src = data.url
+    upscaleButton.removeAttribute("disabled")
 })

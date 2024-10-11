@@ -10,7 +10,7 @@ const saveFileButton = document.getElementById("saveFile") // Кнопка saveF
 var currentText = ""
 
 window.onload = function() {
-    document.getElementById('rewritePage').style.backgroundColor = "#104d2a"
+    document.getElementById('rewritePage').style.backgroundColor = "#0c087466"
 
     // Check if currentRewriteText is in localStorage
     if (localStorage.getItem('rewriteText')!== null) {

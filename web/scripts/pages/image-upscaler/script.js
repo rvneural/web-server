@@ -3,7 +3,7 @@ const outputImage = document.getElementById("image")
 const upscaleButton = document.getElementById("upscaleButton")
 
 window.onload = function () {
-    document.getElementById('upscalePage').style.backgroundColor = "#104d2a"
+    document.getElementById('upscalePage').style.backgroundColor = "#0c087466"
     upscaleButton.setAttribute("disabled", "")
 }
 

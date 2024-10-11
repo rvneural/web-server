@@ -11,7 +11,7 @@ const seedValue = document.getElementById('seedValue')
 var images = new Map()
 
 window.onload = function() {
-    document.getElementById('imagePage').style.backgroundColor = "#104d2a"
+    document.getElementById('imagePage').style.backgroundColor = "#0c087466"
 
     // Выгрузка изображений из localStorage
     if (localStorage.getItem('3-2-image')!== null) {

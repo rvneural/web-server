@@ -19,7 +19,7 @@ var currentNormText = "" // Глобальная переменная, хран�
 var currentRawText = "" // Глобальная переменная, хранящая исходный не нормализованный текст
 
 window.onload = function() {
-    document.getElementById('filePage').style.backgroundColor = "#104d2a"
+    document.getElementById('filePage').style.backgroundColor = "#0c087466"
 
     // Check if normText is in localStorage
     if (localStorage.getItem('normText')!== null) {

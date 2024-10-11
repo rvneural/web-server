@@ -13,7 +13,7 @@ const saveFileButton = document.getElementById("saveFile") // Кнопка saveF
 var currentText = ""
 
 window.onload = function() {
-    document.getElementById('textPage').style.backgroundColor = "#104d2a"
+    document.getElementById('textPage').style.backgroundColor = "#0c087466"
 
     // Check if currentText is in localStorage
     if (localStorage.getItem('currentProcessText')!== null) {

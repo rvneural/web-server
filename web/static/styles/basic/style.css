@@ -6,25 +6,25 @@ body {
 }
 
 .button{
-    background-color: rgba(43, 114, 75, 0.719);
+    background-color: #1b1a4366;
     border: none;
     color: white;
 }
 
 .button:hover{
-    background-color: #104d2a;
+    background-color: #0c087466;
     border: none;
 }
 
 button:disabled,
 button[disabled]{
-    background-color: grey;
+    background-color: rgba(214, 214, 214, 0.346);
     cursor: not-allowed;
 }
 
 button:disabled:hover,
 button[disabled]:hover{
-    background-color: grey;
+    background-color: rgba(214, 214, 214, 0.346);
     cursor: not-allowed;
 }
 
@@ -39,14 +39,14 @@ textarea{
 }
 
 .header-button{
-    background-color: rgba(43, 114, 75, 0.448);
+    background-color: #1b1a4366;
     border: none;
     color: white;
     border: 0.3px solid black;
   }
 
 .header-button:hover{
-    background-color: #104d2a;
+    background-color: #0c087466;
 }
 
 .upper-bold{

@@ -2,8 +2,16 @@ const inputFile = document.getElementById("fileInput")
 const outputImage = document.getElementById("image")
 const upscaleButton = document.getElementById("upscaleButton")
 
+var progress = false
+
+window.onbeforeunload = function () {
+    if (progress) {
+        return "Изображение все еще обрабатывается. Вы уверены, что хотите закрыть страницу?"
+    }
+}
+
 window.onload = function () {
-    document.getElementById('upscalePage').style.backgroundColor = "#0c087466"
+    document.getElementById('upscalePage').style.backgroundColor = "#494E56"
     upscaleButton.setAttribute("disabled", "")
 }
 
@@ -24,6 +32,7 @@ inputFile.addEventListener("change", function () {
 })
 
 upscaleButton.addEventListener("click", async function () {
+    progress = true
     upscaleButton.setAttribute("disabled", "")
     originalImage = inputFile.files[0]
     formData = new FormData()
@@ -35,8 +44,10 @@ upscaleButton.addEventListener("click", async function () {
     const data = await resp.json()
     if(data.error) {
         alert("Произошла следующая ошибка при обработке изображения:\n" + data.error)
+        progress = false
         return
     }
     outputImage.src = data.url
     upscaleButton.removeAttribute("disabled")
+    progress = false
 })

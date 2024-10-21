@@ -8,8 +8,12 @@ const dialogCheckBox = document.getElementById('dialog') // Чекбокс с у
 const normalizeCheckBox = document.getElementById('normResult') // Чекбос с указанием на то, какой вид ответа нужен: нормализованный или нет
 
 const outputArea = document.getElementById("outputArea") // Поле вывода результата
+
 const fileInput = document.getElementById('fileInput') // Поле выбора файла
+const urlInput = document.getElementById('urlInput') // Поле ввода ссылки на файл
+
 const language = document.getElementById("languageSelect") // Поле выбора языка
+const fileTypeSelect = document.getElementById("fileTypeSelect") // Поле выбора типа файла
 
 
 var normText = "" // Глобальная переменная, хранящая оригинал нормализованного текста с сервера
@@ -18,8 +22,26 @@ var rawText = "" // Глобальная переменная, хранящая 
 var currentNormText = "" // Глобальная переменная, хранящая измененный нормализованный текст
 var currentRawText = "" // Глобальная переменная, хранящая исходный не нормализованный текст
 
+var progress = false
+
+fileTypeSelect.addEventListener('change', function() {
+    if (fileTypeSelect.value == "file") {
+        fileInput.classList.remove('none-display')
+        urlInput.classList.add('none-display')
+    } else {
+        fileInput.classList.add('none-display')
+        urlInput.classList.remove('none-display')
+    }
+})
+
+window.onbeforeunload = function() {
+    if (progress) {
+        return 'Расшифровка еще не закончена. Вы уверены, что хотите закрыть страницу?'
+    }
+}
+
 window.onload = function() {
-    document.getElementById('filePage').style.backgroundColor = "#0c087466"
+    document.getElementById('filePage').style.backgroundColor = "#494E56"
 
     // Check if normText is in localStorage
     if (localStorage.getItem('normText')!== null) {
@@ -41,33 +63,41 @@ window.onload = function() {
 // Функция расшифровки
 async function recognize(){
 
-    // Проверяем, выбран ли необходимый файл
-    if (fileInput.files.length == 0){
+
+    if (fileTypeSelect.value == "file" && fileInput.files.length == 0) {
         alert('Вы не выбрали файл')
+        return
+    }
+
+    if (fileTypeSelect.value == "url" && urlInput.value.length == 0) {
+        alert('Вы не ввели ссылку')
         return
     }
 
     // Блокируем элементы управления
     lockElements()
+    progress = true
 
     // Включаем анимацию в поле вывода результата
     outputArea.classList.add("loader");
     outputArea.value = "Идет расшифровка"
-
-    // Получаем файл и создаем структуру запроса
-    const file = fileInput.files[0];
     const formData = new FormData();
 
-    // Добавляем в структуру запроса необходимые данные
-    // TODO: Сделать компрессию файла перед отправкой на сервер
-    formData.append('file', file); // Файл
-    formData.append('language', language.value) // Язык
-    formData.append('dialog', dialogCheckBox.checked) // Указатель того, стоит ли диалог
-    console.log(fileInput.value)
-    parts = fileInput.files[0].name.split('.')
-    console.log("Имя файла:", fileInput.files[0].name)
-    console.log(parts)
-    formData.append('fileType', parts.at(-1)) // Тип файла
+    // Получаем файл и создаем структуру запроса
+    if (fileTypeSelect.value == "file"){
+        const file = fileInput.files[0];
+        // Добавляем в структуру запроса необходимые данные
+        formData.append('file', file); // Файл
+        formData.append('language', language.value) // Язык
+        formData.append('dialog', dialogCheckBox.checked) // Указатель того, стоит ли диалог
+        parts = fileInput.files[0].name.split('.')
+        formData.append('fileType', parts.at(-1)) // Тип файла
+    } else {
+        console.log(urlInput.value)
+        formData.append('url', urlInput.value) // Ссылка
+        formData.append('language', language.value)
+        formData.append('dialog', dialogCheckBox.checked)
+    }
 
     // Показываем окно о начале расшифровки
     alert("Началась расшифровка файла. В зависимости от его размера, процесс может занять доительное время. В среднем 1 минута расшифровывается 10 секунд")
@@ -98,6 +128,7 @@ async function recognize(){
 
     // Разблокирем элементы управления
     unlockElements()
+    progress = false
 
     // Сохраняем в глобальных переменных исходные результаты расшифровки
     normText = await data.normText
@@ -142,11 +173,14 @@ function lockElements() {
     recognizeButton.setAttribute('disabled', '')
     outputArea.setAttribute('readonly', '')
     fileInput.setAttribute('disabled', '')
+    urlInput.setAttribute('disabled', '')
     normalizeCheckBox.setAttribute('disabled', '')
     dialogCheckBox.setAttribute('disabled', '')
     resetButton.setAttribute('disabled', '')
     copyTextButton.setAttribute('disabled', '')
     saveFileButton.setAttribute('disabled', '')
+    fileTypeSelect.setAttribute('disabled', '')
+    language.setAttribute('disabled', '')
 }
 
 // Разблокировка элементов
@@ -155,10 +189,13 @@ function unlockElements(){
     outputArea.removeAttribute('readonly')
     resetButton.removeAttribute('disabled')
     fileInput.removeAttribute('disabled')
+    urlInput.removeAttribute('disabled')
     dialogCheckBox.removeAttribute('disabled')
     normalizeCheckBox.removeAttribute('disabled')
     copyTextButton.removeAttribute('disabled')
     saveFileButton.removeAttribute('disabled')
+    fileTypeSelect.removeAttribute('disabled')
+    language.removeAttribute('disabled')
 }
 
 // Обработчик кнопки Reset

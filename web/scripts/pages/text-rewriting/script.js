@@ -9,8 +9,16 @@ const saveFileButton = document.getElementById("saveFile") // Кнопка saveF
 
 var currentText = ""
 
+var progress = false
+
+window.onbeforeunload = function() {
+    if (progress) {
+        return "Текст все еще обраатывается. Вы уверены, что хотите закрыть страницу?";
+    }
+};
+
 window.onload = function() {
-    document.getElementById('rewritePage').style.backgroundColor = "#0c087466"
+    document.getElementById('rewritePage').style.backgroundColor = "#494E56"
 
     // Check if currentRewriteText is in localStorage
     if (localStorage.getItem('rewriteText')!== null) {
@@ -51,6 +59,7 @@ processButton.addEventListener('click', async () => {
 
   // Подготовка
   lockElements()
+  progress = true
   outputArea.value = 'Переписываем текст...'
   outputArea.classList.add("loader");
 
@@ -65,6 +74,7 @@ processButton.addEventListener('click', async () => {
   localStorage.setItem('rewriteText', outputArea.value)
 
   unlockElements()
+  progress = false
 })
 
 // Функция переписывания текста, возвращает строку

@@ -8,10 +8,8 @@
 
  /* Добавляем оформление grid-контейнеру:*/
   .container {
-    height: 99vh;
-    width: 90vw;
-    max-width: 90vw;
-    min-width: 90vw;
+   width: 90vw;
+   height: 99vh;
     margin: 0 auto;
     border-radius: 3px;  /*Скругляем углы на 5 пикселей */
   }
@@ -31,20 +29,22 @@
 
 .header-buttons{
   grid-area: a;
+  width: 15vw;
 }
 
 .header-group{
   grid-area: b;
+  width: 91vw;
 }
 
 .work-group{
   grid-area: c;
-  min-width: 75vw;
-  max-width: 75vw;
+  width: 75vw;
 }
 
 .bottom-group{
   grid-area: d;
+  width: 100%;
 }
 
 
@@ -55,16 +55,12 @@
   
   /*Параметры конйтейнеров внутри grid-блока*/
   .header-buttons{
-    height: 5%;
-    min-width: 200px;
-    max-width: 200px;
     justify-items: start;
     align-items: center;
     background: transparent;
   }
   
   .header-group{
-    width: 100%;
     justify-content: center;
     justify-items: center;
     align-items: center;
@@ -141,6 +137,6 @@
     border: none;
 }
 
-form{
-    background: transparent;
+.help-button{
+  cursor: help;
 }

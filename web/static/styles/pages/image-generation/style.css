@@ -8,14 +8,14 @@
 
   .input-group{
     display: grid;
-    grid-template-rows: 2fr 1fr;
-    row-gap: 2%;
+    grid-template-rows: 3fr 1fr;
+    row-gap: 0.1%;
     background: transparent;
   }
 
   .output-image-group{
     display: grid;
-    grid-template-rows: 2fr 0.1fr;
+    grid-template-rows: 3fr 0.1fr;
     row-gap: 1%;
     background: transparent;
   }
@@ -32,8 +32,8 @@
 .settings-area{
     background: transparent;
     display: grid;
-    row-gap: 5%;
-    grid-template-rows: 0.1fr 0.4fr 0.4fr;
+    row-gap: 3%;
+    grid-template-rows: 0.1fr 1fr 0.4fr;
 }
 
 /********************************/

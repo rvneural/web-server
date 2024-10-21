@@ -16,8 +16,7 @@
 <body>
   <div class="container">
     <div class="header-buttons">
-      <form action="/"><button class="header-button upper-bold" id="filePage">Расшифровка файла</button></form>
-      <form action="/uri"><button class="header-button upper-bold" id="urlPage" disabled>Расшифровка по URL</button></form>
+      <form action="/"><button class="header-button upper-bold" id="filePage">Расшифровка</button></form>
       <form action="/image"><button class="header-button upper-bold" id="imagePage">Генерация изображения</button></form>
       <form action="/upscale"><button class="header-button upper-bold" id="upscalePage">Увеличение изображения</button></form>
       <form action="/rewrite"><button class="header-button upper-bold" id="rewritePage">Рерайт текста</button></form>
@@ -26,7 +25,7 @@
     <div class="header-group">
       <img src="/web/static/img/logo.png" class="logo-image"/>
       <h1>Реальное время / {{ template "title" . }}</h1>
-      <p class="version-label" style="margin-left: 10px; color: rgb(62, 62, 62);">(v 3.3.0)</p>
+      <p class="version-label" style="margin-left: 10px; color: rgb(62, 62, 62);">(v 3.3.1)</p>
     </div>
     {{template "content"}}
 </div>

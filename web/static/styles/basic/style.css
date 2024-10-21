@@ -6,14 +6,15 @@ body {
 }
 
 .button{
-    background-color: #1b1a4366;
+    background-color: #707784;
     border: none;
     color: white;
 }
 
 .button:hover{
-    background-color: #0c087466;
+    background-color: #494E56;
     border: none;
+    cursor: pointer;
 }
 
 button:disabled,
@@ -39,14 +40,15 @@ textarea{
 }
 
 .header-button{
-    background-color: #1b1a4366;
+    background-color: #707784;
     border: none;
     color: white;
     border: 0.3px solid black;
   }
 
 .header-button:hover{
-    background-color: #0c087466;
+    background-color: #494E56;
+    cursor: pointer;
 }
 
 .upper-bold{
@@ -57,4 +59,16 @@ textarea{
 h1 {
     margin-left: 10px;
     margin-right: 5px;
+}
+
+select, input[type="file"], input[type="checkbox"] {
+    cursor: pointer;
+}
+
+input[type="url"], input[type="text"], input[type="password"], input[type="number"], input[type="email"] {
+    cursor: text;
+}
+
+form{
+    background: transparent;
 }

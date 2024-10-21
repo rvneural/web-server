@@ -12,8 +12,16 @@ const saveFileButton = document.getElementById("saveFile") // Кнопка saveF
 
 var currentText = ""
 
+var progress = false
+
+window.onbeforeunload = function() {
+    if(progress){
+        return "Текст все еще обрабатывается. Вы уверены, что хотите закрыть страницу?"
+    }
+}
+
 window.onload = function() {
-    document.getElementById('textPage').style.backgroundColor = "#0c087466"
+    document.getElementById('textPage').style.backgroundColor = "#494E56"
 
     // Check if currentText is in localStorage
     if (localStorage.getItem('currentProcessText')!== null) {
@@ -72,6 +80,7 @@ processButton.addEventListener('click', async () => {
 
   // Подготовка
   lockElements()
+  progress = true
 
   // Update promtArea в localStorage
   localStorage.setItem('promtProcessArea', promtArea.value)
@@ -92,6 +101,7 @@ processButton.addEventListener('click', async () => {
   localStorage.setItem('currentProcessText', currentText)
 
   unlockElements()
+  progress = false
 })
 
 // Функция переписывания текста

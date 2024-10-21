@@ -26,6 +26,7 @@ func startClearing(m *sync.Mutex) {
 	}
 }
 
+// [ ] Auth Service
 func Authorize(w http.ResponseWriter, r *http.Request) bool {
 	log.Println("Check authorization for", r.RemoteAddr)
 	m := sync.Mutex{}

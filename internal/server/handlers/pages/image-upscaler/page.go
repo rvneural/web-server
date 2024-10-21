@@ -18,6 +18,7 @@ func New() *ImageUpscalerPage {
 	}
 }
 
+// [ ] Image Upscale Page
 func (rp *ImageUpscalerPage) GetPage(w http.ResponseWriter, r *http.Request) {
 	if !authorization.Authorize(w, r) {
 		return

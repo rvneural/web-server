@@ -14,6 +14,7 @@ func New() *Auth {
 	return &Auth{}
 }
 
+// [ ] Auth page
 func (rp *Auth) GetPage(w http.ResponseWriter, r *http.Request) {
 
 	log.Println("Connection to Auth from:", r.RemoteAddr)

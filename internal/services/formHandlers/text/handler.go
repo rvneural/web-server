@@ -19,6 +19,7 @@ func New(prompt string) *TextProcessingHandler {
 	}
 }
 
+// [ ] Text Processing Handler
 func (n *TextProcessingHandler) HandleForm(w http.ResponseWriter, r *http.Request) {
 	log.Println("New process text from web request from", r.RemoteAddr)
 

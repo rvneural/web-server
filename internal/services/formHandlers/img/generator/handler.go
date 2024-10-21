@@ -16,6 +16,7 @@ func New() *ImageGenerationHandler {
 	return &ImageGenerationHandler{}
 }
 
+// [ ] Image Generation handler
 func (n *ImageGenerationHandler) HandleForm(w http.ResponseWriter, r *http.Request) {
 	log.Println("New generate image from web request from", r.RemoteAddr)
 

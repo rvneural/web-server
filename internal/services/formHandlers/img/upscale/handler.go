@@ -28,6 +28,7 @@ func New() *ImageUpscaler {
 	return &ImageUpscaler{}
 }
 
+// [ ] Image Upscale Handler
 func (i *ImageUpscaler) HandleForm(w http.ResponseWriter, r *http.Request) {
 	imgFile, header, err := r.FormFile("image")
 	log.Println("New image for upscaling:", header.Filename)

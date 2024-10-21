@@ -17,6 +17,7 @@ func New(userName, password string) *Auth {
 	}
 }
 
+// [ ] Auth Handler
 func (n *Auth) HandleForm(w http.ResponseWriter, r *http.Request) {
 	login := r.FormValue("login")
 	password := r.FormValue("password")

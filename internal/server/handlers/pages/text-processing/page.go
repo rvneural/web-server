@@ -18,6 +18,7 @@ func New() *TextProcessingPage {
 	}
 }
 
+// [ ] Text Processing Page
 func (rp *TextProcessingPage) GetPage(w http.ResponseWriter, r *http.Request) {
 	if !authorization.Authorize(w, r) {
 		return

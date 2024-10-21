@@ -18,6 +18,7 @@ func New() *RecognitionFromFilePage {
 	}
 }
 
+// [ ] Recognition Page
 func (rp *RecognitionFromFilePage) GetPage(w http.ResponseWriter, r *http.Request) {
 	if !authorization.Authorize(w, r) {
 		return

@@ -18,6 +18,7 @@ func New() *ImageGenerationPage {
 	}
 }
 
+// [ ] Image Generation Page
 func (rp *ImageGenerationPage) GetPage(w http.ResponseWriter, r *http.Request) {
 	if !authorization.Authorize(w, r) {
 		return

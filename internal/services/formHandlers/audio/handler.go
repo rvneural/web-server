@@ -23,16 +23,10 @@ func (n *RecognitionHandler) handleFileRecognition(c *gin.Context) (models.Reque
 	if err != nil {
 		return Request, err
 	}
+	defer file.Close()
 
 	lang := c.Request.FormValue("language")     // Полученный язык
 	fileType := c.Request.FormValue("fileType") // Полученный тип файла
-
-	if err != nil {
-		log.Println(err)
-		return Request, err
-	}
-	defer file.Close()
-
 	fileData, err := io.ReadAll(file)
 
 	if err != nil {

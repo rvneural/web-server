@@ -84,11 +84,6 @@ func (i *ImageUpscaler) HandleForm(c *gin.Context) {
 	resp := &Response{URL: "/web/uploads/upscaled-" + strings.ReplaceAll(header.Filename, " ", "-") + ".jpg"}
 	d, _ := json.Marshal(resp)
 	c.JSON(http.StatusOK, d)
-	if err != nil {
-		log.Println(err)
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
 
 	go deleteImage("../../web/uploads/upscaled-"+strings.ReplaceAll(header.Filename, " ", "-")+".jpg", time.After(1*time.Hour))
 }

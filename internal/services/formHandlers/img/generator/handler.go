@@ -69,5 +69,14 @@ func (n *ImageGenerationHandler) HandleForm(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, byteResp)
+	model := models.Response{}
+	err = json.Unmarshal(byteResp, &model)
+
+	if err != nil {
+		log.Println(err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, model)
 }

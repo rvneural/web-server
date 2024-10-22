@@ -51,8 +51,7 @@ func (n *TextProcessingHandler) HandleForm(c *gin.Context) {
 
 		resonse.OldText = text
 		resonse.NewText = err.Error()
-		s_data, _ := json.Marshal(resonse)
-		c.JSON(http.StatusBadRequest, s_data)
+		c.JSON(http.StatusBadRequest, resonse)
 		return
 	}
 
@@ -63,8 +62,7 @@ func (n *TextProcessingHandler) HandleForm(c *gin.Context) {
 		log.Println(err)
 		resonse.OldText = text
 		resonse.NewText = err.Error()
-		s_data, _ := json.Marshal(resonse)
-		c.JSON(http.StatusBadRequest, s_data)
+		c.JSON(http.StatusBadRequest, resonse)
 		return
 	}
 
@@ -79,8 +77,7 @@ func (n *TextProcessingHandler) HandleForm(c *gin.Context) {
 		log.Println(err)
 		resonse.OldText = text
 		resonse.NewText = err.Error()
-		s_data, _ := json.Marshal(resonse)
-		c.JSON(http.StatusBadRequest, s_data)
+		c.JSON(http.StatusNotAcceptable, resonse)
 		return
 	}
 	defer resp.Body.Close()
@@ -92,11 +89,21 @@ func (n *TextProcessingHandler) HandleForm(c *gin.Context) {
 		log.Println(err)
 		resonse.OldText = text
 		resonse.NewText = err.Error()
-		s_data, _ := json.Marshal(resonse)
-		c.JSON(http.StatusBadRequest, s_data)
+		c.JSON(http.StatusInternalServerError, resonse)
+		return
+	}
+
+	model := models.Response{}
+	err = json.Unmarshal(byteAns, &model)
+
+	if err != nil {
+		log.Println(err)
+		resonse.OldText = text
+		resonse.NewText = err.Error()
+		c.JSON(http.StatusInternalServerError, resonse)
 		return
 	}
 
 	// Отправляем ответ в виде JSON клиенту
-	c.JSON(http.StatusOK, byteAns)
+	c.JSON(http.StatusOK, model)
 }

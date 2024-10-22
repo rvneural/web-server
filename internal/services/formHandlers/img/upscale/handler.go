@@ -1,7 +1,6 @@
 package upscale
 
 import (
-	"encoding/json"
 	"io"
 	"log"
 	"net/http"
@@ -82,8 +81,7 @@ func (i *ImageUpscaler) HandleForm(c *gin.Context) {
 	upscaler.Render(imageupscaler.JPG, renderFile, nil)
 	file.Close()
 	resp := &Response{URL: "/web/uploads/upscaled-" + strings.ReplaceAll(header.Filename, " ", "-") + ".jpg"}
-	d, _ := json.Marshal(resp)
-	c.JSON(http.StatusOK, d)
+	c.JSON(http.StatusOK, resp)
 
 	go deleteImage("../../web/uploads/upscaled-"+strings.ReplaceAll(header.Filename, " ", "-")+".jpg", time.After(1*time.Hour))
 }

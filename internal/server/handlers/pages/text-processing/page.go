@@ -29,7 +29,7 @@ func (rp *TextProcessingPage) GetPage(c *gin.Context) {
 	}
 
 	title := "Обработка текста"
-	style := "/web/styles/text-processing-style.js"
+	style := "/web/styles/text-processing-style.css"
 	script := "/web/scripts/text-processing-script.js"
 
 	templates := []Template{

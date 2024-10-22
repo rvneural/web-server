@@ -1,4 +1,4 @@
-{{template "header.html"}}
+{{template "header.html" .}}
 <div class="work-group">
     <div class="file-group">
       <input type="file" class="input-field" name="filePath" id="fileInput" accept="audio/*,video/*, .flv, .mkv, .aac">
@@ -36,4 +36,4 @@
       <button class="button b2" id="copyText" disabled>Скопировать</button>
       <button class="button b3" id="resetButton" disabled>Восстановить</button>
     </div>
-{{template "footer.html"}}
+{{template "footer.html" .}}

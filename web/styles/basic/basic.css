@@ -8,7 +8,7 @@
 
  /* Добавляем оформление grid-контейнеру:*/
   .container {
-   width: 90vw;
+   width: 95vw;
    height: 99vh;
     margin: 0 auto;
     border-radius: 3px;  /*Скругляем углы на 5 пикселей */
@@ -17,41 +17,37 @@
    /*Параметры grid-контейнера */
   .container {
     display: grid;
-    column-gap: 1%;
-    row-gap: 0.8%;
+    column-gap: 0.5%;
+    row-gap: 0.5%;
     /*grid-template-rows: 0.5fr 0.5fr 7fr;*/
     
     grid-template: 
-          "b b b" 10vh
-          "a c c" 80vh
+          "b b b" 8%
+          "a c c" 83%
           ". d d" auto;
+    
   }
 
 .header-buttons{
   grid-area: a;
-  width: 15vw;
+  border: solid 1px red;
 }
 
 .header-group{
   grid-area: b;
-  width: 91vw;
+  border: solid 1px red;
 }
 
 .work-group{
   grid-area: c;
-  width: 75vw;
+  border: solid 1px red;
 }
 
 .bottom-group{
   grid-area: d;
-  width: 100%;
+  max-height: 40px;
+  border: solid 1px red;
 }
-
-
-  .header-group{
-    min-height: 73px;
-    max-height: 73px;
-  }
   
   /*Параметры конйтейнеров внутри grid-блока*/
   .header-buttons{
@@ -70,7 +66,7 @@
   .bottom-group{
     justify-content: center;
     display: flex;
-    max-height: 40px;
+    background: transparent;
   }
   
   
@@ -106,7 +102,6 @@
   .bottom-group button{
     width: 33.3333%;
     min-height: 40px;
-    max-height: 40px;
     float: left;
   }
   

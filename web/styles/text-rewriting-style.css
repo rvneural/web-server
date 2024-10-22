@@ -1,5 +1,4 @@
 .work-group{
-  height: 100%;
     display: grid;
     background-color: transparent;
     grid-template-columns: 5fr 0.1fr 5fr;
@@ -7,7 +6,6 @@
 }
 
 .input-text-group{
-  height: 100%;
   display: flex;
 }
 

@@ -6,7 +6,7 @@
 }
 
 .input-text-group{
-  display: flex;
+  display: grid;
 }
 
 .rewrite-button-group{
@@ -20,12 +20,8 @@
     background-color: transparent;
 }
 
-.rewrite-buttons *{
-    margin-bottom: 20px;
-}
-
 .output-text-group{
-    display: flex;
+    display: grid;
 }
 
   .rewrite-button-group button{
@@ -34,13 +30,7 @@
     height: 40px;
   }
 
-  .rewrite-button-group button:hover{
-    width: 40px;
-    height: 40px;
-  }
-
   .input-text-group textarea{
-    flex: 1;
     font-size: 20px;
     margin: 0.5%;
     text-align: left;
@@ -50,7 +40,6 @@
   }
 
   .output-text-group textarea{
-    flex: 1;
     font-size: 20px;
     margin: 0.5%;
     text-align: left;

@@ -8,7 +8,8 @@
 
  /* Добавляем оформление grid-контейнеру:*/
   .container {
-   width: 95vw;
+   width: 100%;
+   max-width: 97vw;
    height: 99vh;
     margin: 0 auto;
     border-radius: 3px;  /*Скругляем углы на 5 пикселей */
@@ -23,8 +24,10 @@
     
     grid-template: 
           "b b b" 8%
-          "a c c" 83%
+          "a c c" 85%
           ". d d" auto;
+    
+    justify-content: start;
     
   }
 
@@ -45,7 +48,6 @@
 
 .bottom-group{
   grid-area: d;
-  max-height: 40px;
   border: solid 1px red;
 }
   

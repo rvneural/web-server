@@ -8,7 +8,7 @@
 
 .input-text-group{
     display: grid;
-    grid-template-rows: 3fr 1fr;;
+    grid-template-rows: 4fr 1fr;
 }
 
 .input-text-area{
@@ -27,14 +27,10 @@
   justify-items: center;
   max-height: 40px;
 }
-.input-text-area .template p{
-  margin-left: 10px;
-  margin-right: 10px;
-}
+
 
 .input-text-area .template select{
-  width: 60%;
-  max-height: 50%;
+  margin-right: 5px;
 }
 
 .rewrite-button-group{

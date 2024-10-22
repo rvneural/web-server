@@ -1,7 +1,6 @@
 package app
 
 import (
-	cfg "WebServer/internal/config/app"
 	"os"
 	"strings"
 
@@ -14,9 +13,9 @@ import (
 	rewritePage "WebServer/internal/server/handlers/pages/text-rewriting"
 
 	audioFormHandler "WebServer/internal/services/formHandlers/audio"
-	authHandler "WebServer/internal/services/formHandlers/auth"
 	imageFormHandler "WebServer/internal/services/formHandlers/img/generator"
 	imageUpscalerFormHandler "WebServer/internal/services/formHandlers/img/upscale"
+	photopea "WebServer/internal/services/formHandlers/photopea"
 	textFormHandler "WebServer/internal/services/formHandlers/text"
 
 	"log"
@@ -44,7 +43,7 @@ func (a *App) Run() {
 	a.Endpoint.RegisterForm("/processTextFromWeb", textFormHandler.New(""))
 	a.Endpoint.RegisterForm("/generateImage", imageFormHandler.New())
 	a.Endpoint.RegisterForm("/upscaleImage", imageUpscalerFormHandler.New())
-	a.Endpoint.RegisterForm("/login", authHandler.New(cfg.LOGIN, cfg.PASSWORD))
+	a.Endpoint.RegisterForm("/photopea", photopea.New())
 
 	log.Println("Starting endpoint...")
 	tlsMode := os.Getenv("TLS_MODE")

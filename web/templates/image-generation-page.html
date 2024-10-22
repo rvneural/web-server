@@ -8,11 +8,9 @@
             <div class="ration-area">
                 <p>Укажите соотношение сторон: </p>
                 <select class="select" id="rationSelect" name="ration">
-                    <option value="3-2">3:2</option>
-                    <option value="1-1">1:1</option>
-                    <option value="16-9">16:9</option>
-                    <option value="9-16">9:16</option>
-                    <option value="2-3">2:3</option>
+                    {{ range .rations }}
+                    <option value="{{ .Value }}">{{ .Name }}</option>
+                    {{ end }}
                 </select>
             </div>
             <div class="seed-area">

@@ -6,7 +6,7 @@
   <title>Реальное время / {{.title}}</title>
   <link rel="icon" href="/web/static/img/favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="/web/styles/basic/basic.css">
-  <link rel="stylesheet" href="{{.style}}">
+  <link rel="stylesheet" href= "{{.style}}">
   <link rel="stylesheet" href="/web/styles/basic/style.css">
   <link rel="stylesheet" href="/web/styles/basic/animation.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -21,10 +21,11 @@
       <form action="/upscale"><button class="header-button upper-bold" id="upscalePage">Увеличение изображения</button></form>
       <form action="/rewrite"><button class="header-button upper-bold" id="rewritePage">Рерайт текста</button></form>
       <form action="/text"><button class="header-button upper-bold" id="textPage">Обработка текста</button></form>
+      <form action="https://www.photopea.com/" target="_blank"><button class="header-button upper-bold" id="textPage">↪ Онлайн Photoshop</button></form>
     </div>
     <div class="header-group">
       <img src="/web/static/img/logo.png" class="logo-image"/>
-      <h1>Реальное время / {{.title}}</h1>
+      <h1>Реальное время / {{.title}} </h1>
       <p class="version-label" style="margin-left: 10px; color: rgb(62, 62, 62);">(v 3.3.1)</p>
     </div>
 {{end}}

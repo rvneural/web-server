@@ -7,6 +7,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+type Template struct {
+	Value string
+	Name  string
+}
+
 type TextProcessingPage struct {
 	base string
 }
@@ -27,9 +32,45 @@ func (rp *TextProcessingPage) GetPage(c *gin.Context) {
 	style := "/web/styles/text-processing-style.js"
 	script := "/web/scripts/text-processing-script.js"
 
+	templates := []Template{
+		{
+			Value: "0",
+			Name:  "Выбрать шаблон",
+		},
+		{
+			Value: "digest",
+			Name:  "Дайджест",
+		},
+		{
+			Value: "rewrite",
+			Name:  "Рерайт",
+		},
+		{
+			Value: "title",
+			Name:  "Заголовок",
+		},
+		{
+			Value: "short",
+			Name:  "Сокращение",
+		},
+		{
+			Value: "summary",
+			Name:  "Суммаризация",
+		},
+		{
+			Value: "analysis",
+			Name:  "Анализ",
+		},
+		{
+			Value: "normalize",
+			Name:  "Знаки препинания",
+		},
+	}
+
 	c.HTML(http.StatusOK, "text-processing-page.html", gin.H{
-		"title":  title,
-		"style":  style,
-		"script": script,
+		"title":     title,
+		"style":     style,
+		"script":    script,
+		"templates": templates,
 	})
 }

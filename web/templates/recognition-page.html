@@ -11,22 +11,9 @@
     <div class="language-group">
       <p class="help-text">Выберите язык для расшифровки</p>
       <select class="select" id="languageSelect" name="language">
-        <option value="ru-RU">Русский</option>
-        <option value="en-US">Английский</option>
-        <option value="de-DE">Немецкий</option>
-        <option value="es-ES">Испанский</option>
-        <option value="fi-FI">Финский</option>
-        <option value="fr-FR">Французский</option>
-        <option value="pl-PL">Польский</option>
-        <option value="he-HE">Иврит</option>
-        <option value="it-IT">Итальянский</option>
-        <option value="kk-KZ">Казахский</option>
-        <option value="nl-NL">Голландский</option>
-        <option value="pt-PT">Портунальский</option>
-        <option value="pt-BR">Бразильский порт.</option>
-        <option value="sv-SE">Шведский</option>
-        <option value="tr-TR">Турецкий</option>
-        <option value="uz-UZ">Узбецкий (латиница)</option>
+        {{ range .languages}}
+            <option value="{{ .Code }}">{{ .Name }}</option>
+        {{ end }}
       </select>
       <button class="button" id="recognizeButton">Расшифровать</button>
     </div>

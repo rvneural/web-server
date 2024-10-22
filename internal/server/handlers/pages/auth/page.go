@@ -15,5 +15,7 @@ func New() *Auth {
 
 // [x] Auth page
 func (rp *Auth) GetPage(c *gin.Context) {
-	c.HTML(http.StatusOK, "auth-page.html", nil)
+	c.HTML(http.StatusOK, "auth-page.html", gin.H{
+		"title": "Авторизация",
+	})
 }

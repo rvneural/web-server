@@ -7,6 +7,8 @@ import (
 	"io"
 	"log"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 type ImageGenerationHandler struct {
@@ -16,14 +18,12 @@ func New() *ImageGenerationHandler {
 	return &ImageGenerationHandler{}
 }
 
-// [ ] Image Generation handler
-func (n *ImageGenerationHandler) HandleForm(w http.ResponseWriter, r *http.Request) {
-	log.Println("New generate image from web request from", r.RemoteAddr)
-
-	prompt := r.FormValue("prompt")
-	seed := r.FormValue("seed")
-	widthRatio := r.FormValue("widthRatio")
-	heightRatio := r.FormValue("heightRatio")
+// [x] Image Generation handler
+func (n *ImageGenerationHandler) HandleForm(c *gin.Context) {
+	prompt := c.Request.FormValue("prompt")
+	seed := c.Request.FormValue("seed")
+	widthRatio := c.Request.FormValue("widthRatio")
+	heightRatio := c.Request.FormValue("heightRatio")
 
 	var request models.Request
 	request.Prompt = prompt
@@ -35,16 +35,14 @@ func (n *ImageGenerationHandler) HandleForm(w http.ResponseWriter, r *http.Reque
 
 	if err != nil {
 		log.Println(err)
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte(`{"error": ` + err.Error()))
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
 	httpRequest, err := http.NewRequest("POST", "http://127.0.0.1:8083/", bytes.NewBuffer(byteRequets))
 	if err != nil {
 		log.Println(err)
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte(`{"error": ` + err.Error()))
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
@@ -57,8 +55,7 @@ func (n *ImageGenerationHandler) HandleForm(w http.ResponseWriter, r *http.Reque
 
 	if err != nil {
 		log.Println(err)
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte(`{"error": ` + err.Error()))
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
@@ -68,11 +65,9 @@ func (n *ImageGenerationHandler) HandleForm(w http.ResponseWriter, r *http.Reque
 
 	if err != nil {
 		log.Println(err)
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(`{"error": ` + err.Error()))
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	w.WriteHeader(200)
-	w.Write(byteResp)
+	c.JSON(http.StatusOK, byteResp)
 }

@@ -7,6 +7,8 @@ import (
 	"io"
 	"log"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 type TextProcessingHandler struct {
@@ -20,15 +22,13 @@ func New(prompt string) *TextProcessingHandler {
 }
 
 // [ ] Text Processing Handler
-func (n *TextProcessingHandler) HandleForm(w http.ResponseWriter, r *http.Request) {
-	log.Println("New process text from web request from", r.RemoteAddr)
-
+func (n *TextProcessingHandler) HandleForm(c *gin.Context) {
 	// Получаем текст и промт
-	text := r.FormValue("text")
+	text := c.Request.FormValue("text")
 	var prompt string
 
 	if n.DefaultPrompt == "" {
-		prompt = r.FormValue("prompt")
+		prompt = c.Request.FormValue("prompt")
 	} else {
 		prompt = n.DefaultPrompt
 	}
@@ -52,8 +52,7 @@ func (n *TextProcessingHandler) HandleForm(w http.ResponseWriter, r *http.Reques
 		resonse.OldText = text
 		resonse.NewText = err.Error()
 		s_data, _ := json.Marshal(resonse)
-		w.WriteHeader(200)
-		w.Write(s_data)
+		c.JSON(http.StatusBadRequest, s_data)
 		return
 	}
 
@@ -65,8 +64,7 @@ func (n *TextProcessingHandler) HandleForm(w http.ResponseWriter, r *http.Reques
 		resonse.OldText = text
 		resonse.NewText = err.Error()
 		s_data, _ := json.Marshal(resonse)
-		w.WriteHeader(200)
-		w.Write(s_data)
+		c.JSON(http.StatusBadRequest, s_data)
 		return
 	}
 
@@ -82,8 +80,7 @@ func (n *TextProcessingHandler) HandleForm(w http.ResponseWriter, r *http.Reques
 		resonse.OldText = text
 		resonse.NewText = err.Error()
 		s_data, _ := json.Marshal(resonse)
-		w.WriteHeader(200)
-		w.Write(s_data)
+		c.JSON(http.StatusBadRequest, s_data)
 		return
 	}
 	defer resp.Body.Close()
@@ -96,12 +93,10 @@ func (n *TextProcessingHandler) HandleForm(w http.ResponseWriter, r *http.Reques
 		resonse.OldText = text
 		resonse.NewText = err.Error()
 		s_data, _ := json.Marshal(resonse)
-		w.WriteHeader(200)
-		w.Write(s_data)
+		c.JSON(http.StatusBadRequest, s_data)
 		return
 	}
 
 	// Отправляем ответ в виде JSON клиенту
-	w.WriteHeader(http.StatusOK)
-	w.Write(byteAns)
+	c.JSON(http.StatusOK, byteAns)
 }

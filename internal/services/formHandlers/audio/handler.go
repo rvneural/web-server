@@ -6,6 +6,8 @@ import (
 	"log"
 	"net/http"
 	"strings"
+
+	"github.com/gin-gonic/gin"
 )
 
 type RecognitionHandler struct {
@@ -15,11 +17,15 @@ func New() *RecognitionHandler {
 	return &RecognitionHandler{}
 }
 
-func (n *RecognitionHandler) handleFileRecognition(r *http.Request) (models.Request, error) {
+func (n *RecognitionHandler) handleFileRecognition(c *gin.Context) (models.Request, error) {
 	var Request models.Request
-	file, _, err := r.FormFile("file")  // Полученный файл
-	lang := r.FormValue("language")     // Полученный язык
-	fileType := r.FormValue("fileType") // Полученный тип файла
+	file, _, err := c.Request.FormFile("file") // Полученный файл
+	if err != nil {
+		return Request, err
+	}
+
+	lang := c.Request.FormValue("language")     // Полученный язык
+	fileType := c.Request.FormValue("fileType") // Полученный тип файла
 
 	if err != nil {
 		log.Println(err)
@@ -44,34 +50,32 @@ func (n *RecognitionHandler) handleFileRecognition(r *http.Request) (models.Requ
 	return Request, nil
 }
 
-func (n *RecognitionHandler) handleURLRecognition(r *http.Request) models.Request {
+func (n *RecognitionHandler) handleURLRecognition(c *gin.Context) models.Request {
 	var Request models.Request
-	Request.URL = r.FormValue("url")
-	lang := r.FormValue("language")
+	Request.URL = c.Request.FormValue("url")
+	lang := c.Request.FormValue("language")
 	Request.Languages = []string{lang}
 
 	return Request
 }
 
-// [ ] Audio Handler
-func (n *RecognitionHandler) HandleForm(w http.ResponseWriter, r *http.Request) {
-	log.Println("Get recognize models from", r.RemoteAddr)
+// [x] Audio Handler
+func (n *RecognitionHandler) HandleForm(c *gin.Context) {
 	var Request models.Request
-	var err error
-	url := r.FormValue("url")
+	var err error = nil
+	url := c.Request.FormValue("url")
 	if url != "" {
-		Request = n.handleURLRecognition(r)
+		Request = n.handleURLRecognition(c)
 	} else {
-		Request, err = n.handleFileRecognition(r)
+		Request, err = n.handleFileRecognition(c)
 	}
 
 	if err != nil {
 		log.Println("Error sending recognition response", err)
-		w.WriteHeader(http.StatusBadRequest)
-		http.Error(w, "Invalid file", http.StatusBadRequest)
+		c.JSON(http.StatusBadRequest, gin.H{"error": err})
 	}
 
-	isDialog := r.FormValue("dialog") // Полученный флаг диалога
+	isDialog := c.Request.FormValue("dialog") // Полученный флаг диалога
 	var dialog = false
 
 	if strings.ToLower(isDialog) == "true" {
@@ -80,10 +84,5 @@ func (n *RecognitionHandler) HandleForm(w http.ResponseWriter, r *http.Request) 
 	Request.Dialog = dialog
 
 	// Отправляем запрос на распознавание текста
-	w.WriteHeader(http.StatusOK)
-	_, err = w.Write(n.recognize(Request))
-
-	if err != nil {
-		log.Println("Error sending recognition response", err)
-	}
+	c.JSON(http.StatusOK, n.recognize(Request))
 }

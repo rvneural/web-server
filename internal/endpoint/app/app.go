@@ -24,7 +24,6 @@ type FormHandler interface {
 	HandleForm(c *gin.Context)
 }
 
-// [x] New App
 func New() *App {
 	gin.SetMode(gin.TestMode)
 	router := gin.Default()
@@ -46,19 +45,16 @@ func New() *App {
 	return &App{engine: router}
 }
 
-// [x] Page Registration
 func (a *App) RegisterPage(pattern string, handler PageHandler) {
 	log.Println("Registering handler for pattern", pattern)
 	a.engine.GET(pattern, handler.GetPage)
 }
 
-// [x] Form Registration
 func (a *App) RegisterForm(pattern string, handler FormHandler) {
 	log.Println("Registering form handler for pattern", pattern)
 	a.engine.POST(pattern, handler.HandleForm)
 }
 
-// [x] Handler
 func (a *App) StartLocal() {
 	log.Println("Starting local server...")
 	httpServer := &http.Server{
@@ -68,7 +64,6 @@ func (a *App) StartLocal() {
 	log.Fatal(httpServer.ListenAndServe())
 }
 
-// [x] TLS Handler
 func (a *App) StartTLS() {
 	log.Println("Starting TLS server...")
 

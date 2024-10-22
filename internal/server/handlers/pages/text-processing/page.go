@@ -21,7 +21,6 @@ func New() *TextProcessingPage {
 	}
 }
 
-// [x] Text Processing Page
 func (rp *TextProcessingPage) GetPage(c *gin.Context) {
 	title := "Обработка текста"
 	style := "/web/styles/text-processing-style.css"

@@ -19,7 +19,6 @@ func New(userName, password string) *Auth {
 	}
 }
 
-// [x] Auth Handler
 func (n *Auth) HandleForm(c *gin.Context) {
 	login := c.Request.FormValue("login")
 	password := c.Request.FormValue("password")

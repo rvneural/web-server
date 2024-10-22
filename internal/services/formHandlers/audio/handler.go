@@ -53,7 +53,6 @@ func (n *RecognitionHandler) handleURLRecognition(c *gin.Context) models.Request
 	return Request
 }
 
-// [x] Audio Handler
 func (n *RecognitionHandler) HandleForm(c *gin.Context) {
 	var Request models.Request
 	var err error = nil

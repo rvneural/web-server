@@ -21,7 +21,6 @@ func New() *ImageGenerationPage {
 	}
 }
 
-// [x] Image Generation Page
 func (rp *ImageGenerationPage) GetPage(c *gin.Context) {
 	style := "/web/styles/image-generation-style.css"
 	script := "/web/scripts/image-generation-script.js"

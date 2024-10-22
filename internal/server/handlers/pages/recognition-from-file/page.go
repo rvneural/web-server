@@ -21,7 +21,6 @@ func New() *RecognitionFromFilePage {
 	}
 }
 
-// [x] Recognition Page
 func (rp *RecognitionFromFilePage) GetPage(c *gin.Context) {
 	style := "/web/styles/recognition-style.css"
 	script := "/web/scripts/recognition-script.js"

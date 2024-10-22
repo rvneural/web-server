@@ -18,7 +18,6 @@ func New() *ImageGenerationHandler {
 	return &ImageGenerationHandler{}
 }
 
-// [x] Image Generation handler
 func (n *ImageGenerationHandler) HandleForm(c *gin.Context) {
 	prompt := c.Request.FormValue("prompt")
 	seed := c.Request.FormValue("seed")

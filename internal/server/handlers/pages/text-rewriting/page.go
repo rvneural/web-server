@@ -16,7 +16,6 @@ func New() *TextRewritingPage {
 	}
 }
 
-// [x] Text Rewriting Page
 func (rp *TextRewritingPage) GetPage(c *gin.Context) {
 	title := "Рерайт текста"
 	script := "/web/scripts/text-rewriting-script.js"

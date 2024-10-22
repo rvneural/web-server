@@ -21,7 +21,6 @@ func New(prompt string) *TextProcessingHandler {
 	}
 }
 
-// [x] Text Processing Handler
 func (n *TextProcessingHandler) HandleForm(c *gin.Context) {
 	// Получаем текст и промт
 	text := c.Request.FormValue("text")

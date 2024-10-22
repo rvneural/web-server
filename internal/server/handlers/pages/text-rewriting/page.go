@@ -1,7 +1,6 @@
 package text_rewriting
 
 import (
-	"WebServer/internal/services/authorization"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -19,10 +18,6 @@ func New() *TextRewritingPage {
 
 // [x] Text Rewriting Page
 func (rp *TextRewritingPage) GetPage(c *gin.Context) {
-	if !authorization.Authorize(c) {
-		return
-	}
-
 	title := "Рерайт текста"
 	script := "/web/scripts/text-rewriting-script.js"
 	style := "/web/styles/text-rewriting-style.css"

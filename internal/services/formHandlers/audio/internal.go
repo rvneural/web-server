@@ -5,7 +5,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"io"
-	"log"
 	"net/http"
 )
 
@@ -18,7 +17,6 @@ func (n *RecognitionHandler) recognize(request models.Request) models.Response {
 
 	// В случае ошибки — возвращаем ошибку на морду
 	if err != nil {
-		log.Println(err)
 		ans := models.Response{NormText: err.Error(), RawText: err.Error(), Error: err.Error()}
 		return ans
 	}
@@ -28,7 +26,6 @@ func (n *RecognitionHandler) recognize(request models.Request) models.Response {
 
 	httpRequest, err := http.NewRequest("POST", addr, reader)
 	if err != nil {
-		log.Println(err)
 		ans := models.Response{NormText: err.Error(), RawText: err.Error(), Error: err.Error()}
 		return ans
 	}
@@ -42,7 +39,6 @@ func (n *RecognitionHandler) recognize(request models.Request) models.Response {
 
 	// В случае ошибки — возвращаем ошибку на морду
 	if err != nil {
-		log.Println(err)
 		ans := models.Response{NormText: err.Error(), RawText: err.Error(), Error: err.Error()}
 		return ans
 	}

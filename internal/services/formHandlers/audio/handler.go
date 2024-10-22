@@ -69,13 +69,7 @@ func (n *RecognitionHandler) HandleForm(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err})
 	}
 
-	isDialog := c.Request.FormValue("dialog") // Полученный флаг диалога
-	var dialog = false
-
-	if strings.ToLower(isDialog) == "true" {
-		dialog = true
-	}
-	Request.Dialog = dialog
+	Request.Dialog = (strings.ToLower(c.Request.FormValue("dialog")) == "true")
 
 	// Отправляем запрос на распознавание текста
 	c.JSON(http.StatusOK, n.recognize(Request))

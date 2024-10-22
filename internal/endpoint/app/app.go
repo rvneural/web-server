@@ -9,6 +9,7 @@ import (
 	"golang.org/x/crypto/acme/autocert"
 
 	"github.com/gin-gonic/gin"
+	//routes "github.com/golangcompany/JWT-Authentication/routes"
 )
 
 type App struct {
@@ -27,6 +28,13 @@ type FormHandler interface {
 func New() *App {
 	gin.SetMode(gin.TestMode)
 	router := gin.Default()
+
+	router.Use(gin.BasicAuth(gin.Accounts{
+		"rvrev": "MnKL9H!",
+	}))
+
+	//routes.UserRoutes(router)
+	//routes.AuthRoutes(router)
 
 	router.StaticFS("/web/", http.Dir("../../web"))
 

@@ -1,7 +1,6 @@
 package text_processing
 
 import (
-	"WebServer/internal/services/authorization"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -24,10 +23,6 @@ func New() *TextProcessingPage {
 
 // [x] Text Processing Page
 func (rp *TextProcessingPage) GetPage(c *gin.Context) {
-	if !authorization.Authorize(c) {
-		return
-	}
-
 	title := "Обработка текста"
 	style := "/web/styles/text-processing-style.css"
 	script := "/web/scripts/text-processing-script.js"

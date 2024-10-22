@@ -1,12 +1,11 @@
 package authorization
 
 import (
-	"WebServer/internal/config/app"
 	"log"
-	"net/http"
-	"slices"
 	"sync"
 	"time"
+
+	"github.com/gin-gonic/gin"
 )
 
 var buffer = []string{}
@@ -27,29 +26,29 @@ func startClearing(m *sync.Mutex) {
 }
 
 // [ ] Auth Service
-func Authorize(w http.ResponseWriter, r *http.Request) bool {
-	log.Println("Check authorization for", r.RemoteAddr)
-	m := sync.Mutex{}
-	if slices.Contains(buffer, r.RemoteAddr) {
-		return true
-	}
-	if len(buffer) > 1000 {
-		log.Println("Clearing buffer")
-		buffer = buffer[900:]
-	}
-	go startClearing(&m)
+// TODO: MAKE NEW AUTHORIZATION SERVICE
+func Authorize(c *gin.Context) bool {
+	// m := sync.Mutex{}
+	// if slices.Contains(buffer, r.RemoteAddr) {
+	// 	return true
+	// }
+	// if len(buffer) > 1000 {
+	// 	log.Println("Clearing buffer")
+	// 	buffer = buffer[900:]
+	// }
+	// go startClearing(&m)
 
-	login, err := r.Cookie("login")
-	if err != nil || login.Value != app.LOGIN {
-		http.Redirect(w, r, "/auth", http.StatusSeeOther)
-		return false
-	}
+	// login, err := r.Cookie("login")
+	// if err != nil || login.Value != app.LOGIN {
+	// 	http.Redirect(w, r, "/auth", http.StatusSeeOther)
+	// 	return false
+	// }
 
-	password, err := r.Cookie("password")
-	if err != nil || password.Value != app.PASSWORD {
-		http.Redirect(w, r, "/auth", http.StatusSeeOther)
-		return false
-	}
-	buffer = append(buffer, r.RemoteAddr)
+	// password, err := r.Cookie("password")
+	// if err != nil || password.Value != app.PASSWORD {
+	// 	http.Redirect(w, r, "/auth", http.StatusSeeOther)
+	// 	return false
+	// }
+	// buffer = append(buffer, r.RemoteAddr)
 	return true
 }

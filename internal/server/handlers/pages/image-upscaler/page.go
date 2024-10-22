@@ -2,10 +2,9 @@ package imageupscaler
 
 import (
 	"WebServer/internal/services/authorization"
-	"fmt"
-	"html/template"
-	"log"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 type ImageUpscalerPage struct {
@@ -18,21 +17,19 @@ func New() *ImageUpscalerPage {
 	}
 }
 
-// [ ] Image Upscale Page
-func (rp *ImageUpscalerPage) GetPage(w http.ResponseWriter, r *http.Request) {
-	if !authorization.Authorize(w, r) {
+// [x] Image Upscale Page
+func (rp *ImageUpscalerPage) GetPage(c *gin.Context) {
+	if !authorization.Authorize(c) {
 		return
 	}
-	log.Println("Connection to ImageUpscalerPage from:", r.RemoteAddr)
 
-	htmlStyle := "../../web/static/pages/image-upscaler/css/style.html"
-	content := "../../web/static/pages/image-upscaler/html/page.html"
-	script := "../../web/static/pages/image-upscaler/js/script.html"
+	style := "/web/styles/image-upscale-style.css"
+	script := "/web/scripts/image-upscale-script.js"
+	title := "Увеличение изображения"
 
-	t, err := template.ParseFiles(rp.base, htmlStyle, content, script)
-	if err != nil {
-		log.Println(err)
-		fmt.Fprint(w, err.Error())
-	}
-	t.ExecuteTemplate(w, "base", nil)
+	c.HTML(http.StatusOK, "image-upscale-page.html", gin.H{
+		"title":  title,
+		"style":  style,
+		"script": script,
+	})
 }

@@ -2,10 +2,9 @@ package text_processing
 
 import (
 	"WebServer/internal/services/authorization"
-	"fmt"
-	"html/template"
-	"log"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 type TextProcessingPage struct {
@@ -18,21 +17,19 @@ func New() *TextProcessingPage {
 	}
 }
 
-// [ ] Text Processing Page
-func (rp *TextProcessingPage) GetPage(w http.ResponseWriter, r *http.Request) {
-	if !authorization.Authorize(w, r) {
+// [x] Text Processing Page
+func (rp *TextProcessingPage) GetPage(c *gin.Context) {
+	if !authorization.Authorize(c) {
 		return
 	}
-	log.Println("Connection to TextProcessingPage from:", r.RemoteAddr)
 
-	htmlStyle := "../../web/static/pages/text-processing/css/style.html"
-	content := "../../web/static/pages/text-processing/html/page.html"
-	script := "../../web/static/pages/text-processing/js/script.html"
+	title := "Обработка текста"
+	style := "/web/styles/text-processing-style.js"
+	script := "/web/scripts/text-processing-script.js"
 
-	t, err := template.ParseFiles(rp.base, htmlStyle, content, script)
-	if err != nil {
-		log.Println(err)
-		fmt.Fprint(w, err.Error())
-	}
-	t.ExecuteTemplate(w, "base", nil)
+	c.HTML(http.StatusOK, "text-processing-page.html", gin.H{
+		"title":  title,
+		"style":  style,
+		"script": script,
+	})
 }

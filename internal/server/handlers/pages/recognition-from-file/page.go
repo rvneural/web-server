@@ -2,10 +2,9 @@ package recognition_from_file
 
 import (
 	"WebServer/internal/services/authorization"
-	"fmt"
-	"html/template"
-	"log"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 type RecognitionFromFilePage struct {
@@ -18,21 +17,19 @@ func New() *RecognitionFromFilePage {
 	}
 }
 
-// [ ] Recognition Page
-func (rp *RecognitionFromFilePage) GetPage(w http.ResponseWriter, r *http.Request) {
-	if !authorization.Authorize(w, r) {
+// [x] Recognition Page
+func (rp *RecognitionFromFilePage) GetPage(c *gin.Context) {
+	if !authorization.Authorize(c) {
 		return
 	}
-	log.Println("Connection to RecognitionFromFilePage from:", r.RemoteAddr)
 
-	htmlStyle := "../../web/static/pages/recognition-from-file/css/style.html"
-	content := "../../web/static/pages/recognition-from-file/html/page.html"
-	script := "../../web/static/pages/recognition-from-file/js/script.html"
+	style := "/web/styles/recognition-style.css"
+	script := "/web/scripts/recognition-script.js"
+	title := "Расшифровка аудио и видео"
 
-	t, err := template.ParseFiles(rp.base, htmlStyle, content, script)
-	if err != nil {
-		log.Println(err)
-		fmt.Fprint(w, err.Error())
-	}
-	t.ExecuteTemplate(w, "base", nil)
+	c.HTML(http.StatusOK, "recognition-page.html", gin.H{
+		"title":  title,
+		"style":  style,
+		"script": script,
+	})
 }

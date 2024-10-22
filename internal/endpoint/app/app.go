@@ -27,6 +27,7 @@ type FormHandler interface {
 func New() *App {
 	router := gin.Default()
 	router.StaticFS("/web/", http.Dir("../../web"))
+	router.LoadHTMLGlob("../../web/templates/*.html")
 	return &App{engine: router}
 }
 

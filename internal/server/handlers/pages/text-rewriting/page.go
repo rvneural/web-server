@@ -2,10 +2,9 @@ package text_rewriting
 
 import (
 	"WebServer/internal/services/authorization"
-	"fmt"
-	"html/template"
-	"log"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 type TextRewritingPage struct {
@@ -18,21 +17,19 @@ func New() *TextRewritingPage {
 	}
 }
 
-// [ ] Text Rewriting Page
-func (rp *TextRewritingPage) GetPage(w http.ResponseWriter, r *http.Request) {
-	if !authorization.Authorize(w, r) {
+// [x] Text Rewriting Page
+func (rp *TextRewritingPage) GetPage(c *gin.Context) {
+	if !authorization.Authorize(c) {
 		return
 	}
-	log.Println("Connection to TextRewritingPage from:", r.RemoteAddr)
 
-	htmlStyle := "../../web/static/pages/text-rewriting/css/style.html"
-	content := "../../web/static/pages/text-rewriting/html/page.html"
-	script := "../../web/static/pages/text-rewriting/js/script.html"
+	title := "Рерайт текста"
+	script := "/web/scripts/text-rewriting-script.js"
+	style := "/web/styles/text-rewriting-style.css"
 
-	t, err := template.ParseFiles(rp.base, htmlStyle, content, script)
-	if err != nil {
-		log.Println(err)
-		fmt.Fprint(w, err.Error())
-	}
-	t.ExecuteTemplate(w, "base", nil)
+	c.HTML(http.StatusOK, "text-rewriting-page.html", gin.H{
+		"title":  title,
+		"script": script,
+		"style":  style,
+	})
 }

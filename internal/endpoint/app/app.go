@@ -4,12 +4,12 @@ import (
 	"crypto/tls"
 	"log"
 	"net/http"
+	"os"
 
 	"golang.org/x/crypto/acme"
 	"golang.org/x/crypto/acme/autocert"
 
 	"github.com/gin-gonic/gin"
-	//routes "github.com/golangcompany/JWT-Authentication/routes"
 )
 
 type App struct {
@@ -29,12 +29,15 @@ func New() *App {
 	gin.SetMode(gin.TestMode)
 	router := gin.Default()
 
-	router.Use(gin.BasicAuth(gin.Accounts{
-		"rvrev": "MnKL9H!",
-	}))
+	login := os.Getenv("LOGIN")
+	password := os.Getenv("PASSWORD")
 
-	//routes.UserRoutes(router)
-	//routes.AuthRoutes(router)
+	if login != "" && password != "" {
+		log.Println("Using authorization")
+		router.Use(gin.BasicAuth(gin.Accounts{
+			login: password,
+		}))
+	}
 
 	router.StaticFS("/web/", http.Dir("../../web"))
 

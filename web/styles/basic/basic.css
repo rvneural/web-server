@@ -8,8 +8,7 @@
 
  /* Добавляем оформление grid-контейнеру:*/
   .container {
-   width: 100%;
-   max-width: 97vw;
+   width: 90vw;
    height: 99vh;
     margin: 0 auto;
     border-radius: 3px;  /*Скругляем углы на 5 пикселей */
@@ -33,6 +32,8 @@
 
 .header-buttons{
   grid-area: a;
+  width: 15vw;
+  max-width: 200px;
   border: solid 1px red;
 }
 

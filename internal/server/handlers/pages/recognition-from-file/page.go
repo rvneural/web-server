@@ -12,13 +12,10 @@ type Language struct {
 }
 
 type RecognitionFromFilePage struct {
-	base string
 }
 
 func New() *RecognitionFromFilePage {
-	return &RecognitionFromFilePage{
-		base: "../../web/static/pages/template/html/base.html",
-	}
+	return &RecognitionFromFilePage{}
 }
 
 func (rp *RecognitionFromFilePage) GetPage(c *gin.Context) {

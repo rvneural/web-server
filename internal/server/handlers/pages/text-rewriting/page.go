@@ -7,13 +7,10 @@ import (
 )
 
 type TextRewritingPage struct {
-	base string
 }
 
 func New() *TextRewritingPage {
-	return &TextRewritingPage{
-		base: "../../web/static/pages/template/html/base.html",
-	}
+	return &TextRewritingPage{}
 }
 
 func (rp *TextRewritingPage) GetPage(c *gin.Context) {

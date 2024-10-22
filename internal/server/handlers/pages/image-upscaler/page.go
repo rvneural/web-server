@@ -7,13 +7,10 @@ import (
 )
 
 type ImageUpscalerPage struct {
-	base string
 }
 
 func New() *ImageUpscalerPage {
-	return &ImageUpscalerPage{
-		base: "../../web/static/pages/template/html/base.html",
-	}
+	return &ImageUpscalerPage{}
 }
 
 func (rp *ImageUpscalerPage) GetPage(c *gin.Context) {

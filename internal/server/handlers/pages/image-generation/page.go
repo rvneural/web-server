@@ -7,7 +7,6 @@ import (
 )
 
 type ImageGenerationPage struct {
-	base string
 }
 
 type Rations struct {
@@ -16,9 +15,7 @@ type Rations struct {
 }
 
 func New() *ImageGenerationPage {
-	return &ImageGenerationPage{
-		base: "../../web/static/pages/template/html/base.html",
-	}
+	return &ImageGenerationPage{}
 }
 
 func (rp *ImageGenerationPage) GetPage(c *gin.Context) {

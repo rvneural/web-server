@@ -12,13 +12,10 @@ type Template struct {
 }
 
 type TextProcessingPage struct {
-	base string
 }
 
 func New() *TextProcessingPage {
-	return &TextProcessingPage{
-		base: "../../web/static/pages/template/html/base.html",
-	}
+	return &TextProcessingPage{}
 }
 
 func (rp *TextProcessingPage) GetPage(c *gin.Context) {

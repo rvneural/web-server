@@ -19,7 +19,6 @@
     display: grid;
     column-gap: 0.5%;
     row-gap: 0.5%;
-    /*grid-template-rows: 0.5fr 0.5fr 7fr;*/
     
     grid-template: 
           "b b b" 8%
@@ -44,6 +43,7 @@
 
 .work-group{
   grid-area: c;
+  width: 80vw;
   border: solid 1px red;
 }
 

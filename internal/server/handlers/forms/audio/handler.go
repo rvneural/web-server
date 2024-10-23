@@ -19,24 +19,20 @@ func New() *RecognitionHandler {
 
 func (n *RecognitionHandler) handleFileRecognition(c *gin.Context) (models.Request, error) {
 	var Request models.Request
-	file, _, err := c.Request.FormFile("file") // Полученный файл
+	file, _, err := c.Request.FormFile("file")
 	if err != nil {
 		return Request, err
 	}
 	defer file.Close()
 
-	lang := c.Request.FormValue("language")     // Полученный язык
-	fileType := c.Request.FormValue("fileType") // Полученный тип файла
+	lang := c.Request.FormValue("language")
+	fileType := c.Request.FormValue("fileType")
 	fileData, err := io.ReadAll(file)
-
 	if err != nil {
 		log.Println(err)
 		return Request, err
 	}
 
-	// В зависимости от того, прошло сжатие данных успешно или нет
-	// выполняется передача данных на Main Server в сжатом
-	// или не в сжатом виде
 	Request.File.Data = fileData
 	Request.Languages = []string{lang}
 	Request.File.Type = fileType

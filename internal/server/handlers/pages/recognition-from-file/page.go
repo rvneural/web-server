@@ -29,6 +29,10 @@ func (rp *RecognitionFromFilePage) GetPage(c *gin.Context) {
 			Name: "Русский",
 		},
 		{
+			Code: "auto",
+			Name: "Определить автоматически",
+		},
+		{
 			Code: "en-US",
 			Name: "Английский",
 		},

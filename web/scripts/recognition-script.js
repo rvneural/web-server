@@ -86,18 +86,15 @@ async function recognize(){
     // Получаем файл и создаем структуру запроса
     if (fileTypeSelect.value == "file"){
         const file = fileInput.files[0];
-        // Добавляем в структуру запроса необходимые данные
         formData.append('file', file); // Файл
-        formData.append('language', language.value) // Язык
-        formData.append('dialog', dialogCheckBox.checked) // Указатель того, стоит ли диалог
-        parts = fileInput.files[0].name.split('.')
+        parts = file.name.split('.')
         formData.append('fileType', parts.at(-1)) // Тип файла
     } else {
-        console.log(urlInput.value)
         formData.append('url', urlInput.value) // Ссылка
-        formData.append('language', language.value)
-        formData.append('dialog', dialogCheckBox.checked)
     }
+    
+    formData.append('language', language.value) // Язык
+    formData.append('auto', autoCheckBox.checked) 
 
     // Показываем окно о начале расшифровки
     alert("Началась расшифровка файла. В зависимости от его размера, процесс может занять доительное время. В среднем 1 минута расшифровывается 10 секунд")

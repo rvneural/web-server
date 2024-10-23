@@ -12,11 +12,11 @@ import (
 	textProcessingPage "WebServer/internal/server/handlers/pages/text-processing"
 	rewritePage "WebServer/internal/server/handlers/pages/text-rewriting"
 
-	audioFormHandler "WebServer/internal/services/formHandlers/audio"
-	imageFormHandler "WebServer/internal/services/formHandlers/img/generator"
-	imageUpscalerFormHandler "WebServer/internal/services/formHandlers/img/upscale"
-	photopea "WebServer/internal/services/formHandlers/photopea"
-	textFormHandler "WebServer/internal/services/formHandlers/text"
+	audioFormHandler "WebServer/internal/server/handlers/forms/audio"
+	imageFormHandler "WebServer/internal/server/handlers/forms/img/generator"
+	imageUpscalerFormHandler "WebServer/internal/server/handlers/forms/img/upscale"
+	photopea "WebServer/internal/server/handlers/forms/photopea"
+	textFormHandler "WebServer/internal/server/handlers/forms/text"
 
 	"log"
 )

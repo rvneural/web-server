@@ -15,6 +15,7 @@ import (
 
 type App struct {
 	engine *gin.Engine
+	result *gin.RouterGroup
 }
 
 type PageHandler interface {
@@ -32,6 +33,8 @@ func New() *App {
 	login := os.Getenv("LOGIN")
 	password := os.Getenv("PASSWORD")
 
+	r := router.Group("/operation")
+
 	if login != "" && password != "" {
 		log.Println("Using authorization")
 		router.Use(gin.BasicAuth(gin.Accounts{
@@ -41,9 +44,17 @@ func New() *App {
 
 	router.StaticFS("/web/", http.Dir("../../web"))
 
-	router.LoadHTMLGlob("../../web/templates/*")
+	router.LoadHTMLGlob("../../web/templates/*.html")
 
-	return &App{engine: router}
+	return &App{
+		engine: router,
+		result: r,
+	}
+}
+
+func (a *App) RegisterResult(pattern string, handler PageHandler) {
+	log.Println("Registering result handler for pattern", pattern)
+	a.result.GET(pattern, handler.GetPage)
 }
 
 func (a *App) RegisterPage(pattern string, handler PageHandler) {

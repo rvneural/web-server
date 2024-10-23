@@ -18,6 +18,10 @@ import (
 	photopea "WebServer/internal/server/handlers/forms/photopea"
 	textFormHandler "WebServer/internal/server/handlers/forms/text"
 
+	audioResult "WebServer/internal/server/handlers/pages/results/audio"
+	imageResult "WebServer/internal/server/handlers/pages/results/image"
+	textResult "WebServer/internal/server/handlers/pages/results/text"
+
 	"log"
 )
 
@@ -37,6 +41,10 @@ func (a *App) Run() {
 	a.Endpoint.RegisterPage("/rewrite", rewritePage.New())
 	a.Endpoint.RegisterPage("/text", textProcessingPage.New())
 	a.Endpoint.RegisterPage("/upscale", upscalePage.New())
+
+	a.Endpoint.RegisterResult("/audio", audioResult.New())
+	a.Endpoint.RegisterResult("/text", textResult.New())
+	a.Endpoint.RegisterResult("/image", imageResult.New())
 
 	a.Endpoint.RegisterForm("/recognize", audioFormHandler.New())
 	a.Endpoint.RegisterForm("/rewriteFromWeb", textFormHandler.New("{{ rewrite }}"))

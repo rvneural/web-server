@@ -52,6 +52,11 @@ func New() *App {
 	}
 }
 
+func (a *App) Register404Page(handler PageHandler) {
+	log.Println("Registering 404 page")
+	a.engine.NoRoute(handler.GetPage)
+}
+
 func (a *App) RegisterResult(pattern string, handler PageHandler) {
 	log.Println("Registering result handler for pattern", pattern)
 	a.result.GET(pattern, handler.GetPage)

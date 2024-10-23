@@ -6,10 +6,11 @@ import (
 	"net/http"
 	"os"
 
-	"golang.org/x/crypto/acme"
-	"golang.org/x/crypto/acme/autocert"
+	config "WebServer/internal/config/app"
 
 	"github.com/gin-gonic/gin"
+	"golang.org/x/crypto/acme"
+	"golang.org/x/crypto/acme/autocert"
 )
 
 type App struct {
@@ -58,7 +59,7 @@ func (a *App) RegisterForm(pattern string, handler FormHandler) {
 func (a *App) StartLocal() {
 	log.Println("Starting local server...")
 	httpServer := &http.Server{
-		Addr:    ":80",
+		Addr:    config.HTTP_PORT,
 		Handler: a.engine,
 	}
 	log.Fatal(httpServer.ListenAndServe())
@@ -70,10 +71,10 @@ func (a *App) StartTLS() {
 	m := &autocert.Manager{
 		Cache:      autocert.DirCache("../../var/www/.cache"),
 		Prompt:     autocert.AcceptTOS,
-		HostPolicy: autocert.HostWhitelist("neuron-nexus.ru"),
+		HostPolicy: autocert.HostWhitelist(config.DOMAIN),
 	}
 	tlsServer := &http.Server{
-		Addr: ":443",
+		Addr: config.HTTPS_PORT,
 		TLSConfig: &tls.Config{
 			GetCertificate: m.GetCertificate,
 			NextProtos:     []string{acme.ALPNProto},

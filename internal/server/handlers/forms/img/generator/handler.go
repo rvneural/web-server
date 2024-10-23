@@ -1,6 +1,7 @@
 package generator
 
 import (
+	config "WebServer/internal/config/services/text2image-service"
 	models "WebServer/internal/models/img"
 	"bytes"
 	"encoding/json"
@@ -38,7 +39,7 @@ func (n *ImageGenerationHandler) HandleForm(c *gin.Context) {
 		return
 	}
 
-	httpRequest, err := http.NewRequest("POST", "http://127.0.0.1:8083/", bytes.NewBuffer(byteRequets))
+	httpRequest, err := http.NewRequest("POST", config.URL, bytes.NewBuffer(byteRequets))
 	if err != nil {
 		log.Println(err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -46,7 +47,7 @@ func (n *ImageGenerationHandler) HandleForm(c *gin.Context) {
 	}
 
 	httpRequest.Header.Set("Content-Type", "application/json")
-	httpRequest.Header.Set("Authorization", "Bearer KU2WTZBzFWn4Ko9lJ7TlpmUXwkHc8Y")
+	httpRequest.Header.Set("Authorization", "Bearer "+config.KEY)
 
 	client := http.Client{}
 

@@ -1,6 +1,7 @@
 package text
 
 import (
+	config "WebServer/internal/config/services/text2text-service"
 	models "WebServer/internal/models/text"
 	"bytes"
 	"encoding/json"
@@ -55,7 +56,7 @@ func (n *TextProcessingHandler) HandleForm(c *gin.Context) {
 	}
 
 	// Получаем ответ от Main Server
-	httpRequest, err := http.NewRequest("POST", "http://127.0.0.1:8081/", bytes.NewBuffer(data))
+	httpRequest, err := http.NewRequest("POST", config.URL, bytes.NewBuffer(data))
 
 	if err != nil {
 		log.Println(err)
@@ -65,7 +66,7 @@ func (n *TextProcessingHandler) HandleForm(c *gin.Context) {
 		return
 	}
 
-	httpRequest.Header.Set("Authorization", "Bearer GAuhJOHQ4IQ3sJtFxyRO3OZ84ROyeb")
+	httpRequest.Header.Set("Authorization", "Bearer "+config.KEY)
 	httpRequest.Header.Set("Content-Type", "application/json")
 
 	client := http.Client{}

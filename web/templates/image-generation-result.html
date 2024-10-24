@@ -5,13 +5,12 @@
                 <textarea class="output-area" id="inputArea">{{.prompt}}</textarea>
             </div>
             <div class="seed-area">
-                <p class="left-align">SEED:</p><p class="seed-align">{{.seed}}</p>
+                <p>SEED:</p>
+                <p class="seed-align upper-bold">{{.seed}}</p>
             </div>
         </div>
         <div class="output-image-group">
-            <div class="output-image-class">
-                <img class="output-image" id="outputImage" src="{{.image}}">
-            </div>
+            <img src="{{.image}}">
         </div>
     </div>
 {{template "footer.html" .}}

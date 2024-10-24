@@ -130,6 +130,10 @@
     flex: 1;
 }
 
+.seed-text{
+    color: rgb(0, 255, 208)
+}
+
 /********************************/
   .rewrite-button-group{
     height: 60%;

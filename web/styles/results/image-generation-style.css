@@ -1,8 +1,8 @@
   
 .work-group{
     display: grid;
-    grid-template-columns: 1fr 2fr;
-    column-gap: 1%;
+    grid-template-columns: 2fr 5fr;
+    column-gap: 0.5%;
     background: transparent;
 }
 
@@ -16,10 +16,9 @@
 
     .input-group{
         display: grid;
-        grid-template-rows: 9fr 0.5fr;
-        gap: 1%;
+        grid-template-rows: 9fr 1fr;
+        row-gap: 0.5%;
         background: transparent;
-        margin: 10px 0 36px 0;
     }
 
         .prompt-area{
@@ -29,56 +28,35 @@
 
             .prompt-area *{
                 flex: 1;
-                margin: 10px 10px 10px 10px;
+                margin: 5px;
             }
 
         .seed-area{
-            width: 100%;
-            font-size: 19px;
-            grid-template-columns: 2fr 2fr 1fr;
-            display: grid;
+            font-size: 14px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
             .seed-area * {
                 flex: 1;
-                margin: 10px 0 10px 20px;
             }
 
-            .left-align {
+            .seed-align{
                 text-align: left;
-            }
-            .seed-align {
-                text-align: left;
+                color: rgb(0, 255, 208);
             }
 
     .output-image-group{
-        display: grid;
-        grid-template-rows: 4fr 0.1fr;
-        row-gap: 1%;
-        background: transparent;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
-
-        .output-image-class{
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
         
-        .output-image-class img{
-            background: transparent;
+        .output-image-group img{
             display: block;
             border-radius: 5px;
-            max-width: 90%;
-            max-height: 65vh;
+            border: solid 1px black;
+            max-width: 99%;
+            max-height: 80vh;
             margin: 10px;
-            object-fit: contain
-        }
-
-        .output-image-group *{
-            flex: 1;
-            margin: 10px 10px 10px 0;
-        }
-
-        .output-image *{
-            flex: 1;
-            margin: 10px 10px 10px 0;
         }

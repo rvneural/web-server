@@ -53,7 +53,7 @@ func (a *App) init() {
 	a.Endpoint.RegisterPage("/text", textProcessingPage.New())
 	a.Endpoint.RegisterPage("/upscale", upscalePage.New())
 
-	a.Endpoint.RegisterPage("/get/operation/:type", newID.New())
+	a.Endpoint.RegisterIDGenerator("/get/operation/:type", newID.New())
 
 	a.Endpoint.RegisterResult("/audio/:id", audioResult.New())
 	a.Endpoint.RegisterResult("/text/:id", textResult.New())

@@ -57,11 +57,11 @@ func (n *RecognitionHandler) HandleForm(c *gin.Context) {
 		Request = n.handleURLRecognition(c)
 	} else {
 		Request, err = n.handleFileRecognition(c)
-	}
-
-	if err != nil {
-		log.Println("Error sending recognition response", err)
-		c.JSON(http.StatusBadRequest, gin.H{"error": err})
+		if err != nil {
+			log.Println("Error sending recognition response", err)
+			c.JSON(http.StatusBadRequest, gin.H{"error": err})
+			return
+		}
 	}
 
 	Request.Dialog = (strings.ToLower(c.Request.FormValue("dialog")) == "true")

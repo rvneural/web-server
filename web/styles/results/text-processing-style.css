@@ -2,7 +2,7 @@
 .work-group{
     display: grid;
     grid-template-columns: 1fr 2fr;
-    gap: 1%;
+    gap: 0.5%;
 }
 
 .work-group textarea{
@@ -21,7 +21,7 @@
         display: grid;
         background: transparent;
         grid-template-rows: 5fr 1fr;
-        gap: 1%;
+        gap: 0.5%;
     }
 
         .old-text-area{
@@ -31,7 +31,7 @@
 
             .old-text-area *{
                 flex: 1;
-                margin: 10px 0 0 10px;
+                margin: 5px 0 0 5px;
             }
 
         .prompt-area{
@@ -40,7 +40,7 @@
         }
             .prompt-area * {
                 flex: 1;
-                margin: 0 0 10px 10px;
+                margin: 0 0 5px 5px;
             }
 
     .output-group{
@@ -50,5 +50,5 @@
 
         .output-group *{
             flex: 1;
-            margin: 10px 10px 10px 0;
+            margin: 5px 5px 5px 0;
         }

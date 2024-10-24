@@ -27,7 +27,7 @@ func (r *RecognitionResult) GetPage(c *gin.Context) {
 
 	prompt := "Some prompt for ID: " + id
 	seed := 321321321321
-	image := "/web/static/img/templates/1-1.png"
+	image := "/web/static/img/templates/9-16.png"
 
 	c.HTML(200, "image-generation-result.html", gin.H{
 		"title":  "Результаты генерации",

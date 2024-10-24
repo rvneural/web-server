@@ -15,6 +15,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/acme"
 	"golang.org/x/crypto/acme/autocert"
+
+	ginsession "github.com/go-session/gin-session"
 )
 
 type App struct {
@@ -38,11 +40,15 @@ func New() *App {
 	gin.SetMode(gin.TestMode)
 	router := gin.Default()
 
+	// Use session
+	router.Use(ginsession.New())
+
 	r := router.Group("/operation")
-	store := persistence.NewInMemoryStore(time.Minute)
+
+	// Create cache
+	store := persistence.NewInMemoryStore(30 * time.Minute)
 
 	router.StaticFS("/web/", http.Dir("../../web"))
-
 	router.LoadHTMLGlob("../../web/templates/*.html")
 
 	return &App{
@@ -71,12 +77,17 @@ func (a *App) Register404Page(handler PageHandler) {
 
 func (a *App) RegisterResult(pattern string, handler PageHandler) {
 	log.Println("Registering result handler for pattern", pattern)
-	a.result.GET(pattern, cache.CachePage(a.store, time.Minute, handler.GetPage))
+	a.result.GET(pattern, cache.CachePage(a.store, 5*time.Minute, handler.GetPage))
 }
 
 func (a *App) RegisterPage(pattern string, handler PageHandler) {
 	log.Println("Registering handler for pattern", pattern)
-	a.engine.GET(pattern, handler.GetPage)
+	a.engine.GET(pattern, cache.CachePage(a.store, 30*time.Minute, handler.GetPage))
+}
+
+func (a *App) RegisterIDGenerator(pattern string, handler PageHandler) {
+	log.Println("Registering form result handler for pattern", pattern)
+	a.result.POST(pattern, handler.GetPage)
 }
 
 func (a *App) RegisterForm(pattern string, handler FormHandler) {

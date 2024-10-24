@@ -22,6 +22,8 @@ import (
 	imageResult "WebServer/internal/server/handlers/pages/results/image"
 	textResult "WebServer/internal/server/handlers/pages/results/text"
 
+	notFound "WebServer/internal/server/handlers/pages/404"
+
 	"log"
 )
 
@@ -52,6 +54,8 @@ func (a *App) Run() {
 	a.Endpoint.RegisterForm("/generateImage", imageFormHandler.New())
 	a.Endpoint.RegisterForm("/upscaleImage", imageUpscalerFormHandler.New())
 	a.Endpoint.RegisterForm("/photopea", photopea.New())
+
+	a.Endpoint.Register404Page(notFound.New())
 
 	log.Println("Starting endpoint...")
 	tlsMode := os.Getenv("TLS_MODE")

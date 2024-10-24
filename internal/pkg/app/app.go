@@ -2,7 +2,6 @@ package app
 
 import (
 	"os"
-	"strings"
 
 	endpoint "WebServer/internal/endpoint/app"
 
@@ -44,13 +43,7 @@ func (a *App) init() {
 
 	a.login = os.Getenv("LOGIN")
 	a.password = os.Getenv("PASSWORD")
-	tlsMode := os.Getenv("TLS_MODE")
-
-	if strings.ToLower(tlsMode) == "true" {
-		a.tlsMode = true
-	} else {
-		a.tlsMode = false
-	}
+	a.tlsMode = os.Getenv("TLS_MODE") == "true"
 
 	a.Endpoint.RegisterPage("/", recognitionFromFilePage.New())
 	a.Endpoint.RegisterPage("/image", imageGenerationPage.New())

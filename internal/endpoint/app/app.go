@@ -7,6 +7,11 @@ import (
 
 	config "WebServer/internal/config/app"
 
+	"time"
+
+	"github.com/gin-contrib/cache"
+	"github.com/gin-contrib/cache/persistence"
+
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/acme"
 	"golang.org/x/crypto/acme/autocert"
@@ -15,6 +20,7 @@ import (
 type App struct {
 	engine *gin.Engine
 	result *gin.RouterGroup
+	store  *persistence.InMemoryStore
 
 	login    string
 	password string
@@ -33,6 +39,7 @@ func New() *App {
 	router := gin.Default()
 
 	r := router.Group("/operation")
+	store := persistence.NewInMemoryStore(time.Second)
 
 	router.StaticFS("/web/", http.Dir("../../web"))
 
@@ -41,6 +48,7 @@ func New() *App {
 	return &App{
 		engine: router,
 		result: r,
+		store:  store,
 	}
 }
 
@@ -58,12 +66,12 @@ func (a *App) SetBasicAuth(login, password string) {
 
 func (a *App) Register404Page(handler PageHandler) {
 	log.Println("Registering 404 page")
-	a.engine.NoRoute(handler.GetPage)
+	a.engine.NoRoute(cache.CachePage(a.store, time.Hour, handler.GetPage))
 }
 
 func (a *App) RegisterResult(pattern string, handler PageHandler) {
 	log.Println("Registering result handler for pattern", pattern)
-	a.result.GET(pattern, handler.GetPage)
+	a.result.GET(pattern, cache.CachePage(a.store, time.Hour, handler.GetPage))
 }
 
 func (a *App) RegisterPage(pattern string, handler PageHandler) {

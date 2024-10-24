@@ -39,7 +39,7 @@ func New() *App {
 	router := gin.Default()
 
 	r := router.Group("/operation")
-	store := persistence.NewInMemoryStore(time.Second)
+	store := persistence.NewInMemoryStore(time.Hour)
 
 	router.StaticFS("/web/", http.Dir("../../web"))
 

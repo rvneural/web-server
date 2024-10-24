@@ -2,7 +2,8 @@
 .work-group{
     display: grid;
     grid-template-columns: 1fr 2fr;
-    gap: 1%;
+    column-gap: 1%;
+    background: transparent;
 }
 
 .work-group textarea{
@@ -13,15 +14,12 @@
     box-sizing: border-box;
 }
 
-    .work-group div{
-        background: transparent;
-    }
-
     .input-group{
         display: grid;
-        background: transparent;
-        grid-template-rows: 9.5fr 0.5fr;
+        grid-template-rows: 9fr 0.5fr;
         gap: 1%;
+        background: transparent;
+        margin: 10px 0 36px 0;
     }
 
         .prompt-area{
@@ -31,18 +29,18 @@
 
             .prompt-area *{
                 flex: 1;
-                margin: 10px 0 0 10px;
+                margin: 10px 10px 10px 10px;
             }
 
         .seed-area{
             width: 100%;
             font-size: 19px;
-            grid-template-columns: 1fr 2fr 1fr;
+            grid-template-columns: 2fr 2fr 1fr;
             display: grid;
         }
             .seed-area * {
                 flex: 1;
-                margin: 0 0 10px 20px;
+                margin: 10px 0 10px 20px;
             }
 
             .left-align {
@@ -53,9 +51,27 @@
             }
 
     .output-image-group{
-        display: flex;
-        width: 100%;
+        display: grid;
+        grid-template-rows: 4fr 0.1fr;
+        row-gap: 1%;
+        background: transparent;
     }
+
+        .output-image-class{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .output-image-class img{
+            background: transparent;
+            display: block;
+            border-radius: 5px;
+            max-width: 90%;
+            max-height: 65vh;
+            margin: 10px;
+            object-fit: contain
+        }
 
         .output-image-group *{
             flex: 1;

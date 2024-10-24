@@ -1,7 +1,15 @@
 {{template "header.html" .}}
 <div class="work-group">
-    <div class="output-group">
-        <img id="image" src="/web/static/img/templates/16-9.png">
+        <div class="input-group">
+            <div class="prompt-area">
+                <textarea class="output-area" id="inputArea">{{.prompt}}</textarea>
+            </div>
+            <div class="seed-area">
+                <p class="left-align">SEED:</p><p class="seed-align">{{.seed}}</p>
+            </div>
+        </div>
+        <div class="output-image-group">
+            <img class="output-image" id="outputImage" src="{{.image}}">
+        </div>
     </div>
-</div>
 {{template "footer.html" .}}

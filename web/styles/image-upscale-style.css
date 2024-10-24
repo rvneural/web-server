@@ -47,10 +47,6 @@
     border-radius: 5px;
     height: 30px;
     width: 100%;
-    cursor: pointer;
-    text-align: center; /* центрируем текст */
-    font-size: 15px; /* размер шрифта */
-    color: #333; /* цвет текста */
   }
 
   .output-group{

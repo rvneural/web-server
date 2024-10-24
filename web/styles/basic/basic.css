@@ -33,23 +33,19 @@
   grid-area: a;
   width: 15vw;
   max-width: 200px;
-  border: solid 1px red;
 }
 
 .header-group{
   grid-area: b;
-  border: solid 1px red;
 }
 
 .work-group{
   grid-area: c;
   width: 80vw;
-  border: solid 1px red;
 }
 
 .bottom-group{
   grid-area: d;
-  border: solid 1px red;
 }
   
   /*Параметры конйтейнеров внутри grid-блока*/

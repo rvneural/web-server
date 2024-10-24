@@ -1,5 +1,16 @@
 {{template "header.html" .}}
 <div class="work-group">
-
+    <div class="input-group">
+        <div class="old-text-area">
+            <textarea class="output-area" id="inputArea">{{.old_text}}</textarea>
+        </div>
+        <div class="prompt-area">
+            <textarea class="output-area" id="promtArea">{{.prompt}}</textarea>
+        </div>
+    </div>
+    <div class="output-group">
+        <textarea class="output-area" id="outputArea">{{.new_text}}</textarea>
+    </div>
 </div>
-{{template "footer.html" .}}}
+
+{{template "footer.html" .}}

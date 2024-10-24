@@ -1,0 +1,54 @@
+  
+.work-group{
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 1%;
+}
+
+.work-group textarea{
+    text-align: left;
+    color: black;
+    padding: 10px;
+    font-size: 19px;
+    box-sizing: border-box;
+}
+
+    .work-group div{
+        background: transparent;
+    }
+
+    .input-group{
+        display: grid;
+        background: transparent;
+        grid-template-rows: 5fr 1fr;
+        gap: 1%;
+    }
+
+        .old-text-area{
+            width: 100%;
+            display: flex;
+        }
+
+            .old-text-area *{
+                flex: 1;
+                margin: 10px 0 0 10px;
+            }
+
+        .prompt-area{
+            width: 100%;
+            display: flex;
+        }
+            .prompt-area * {
+                flex: 1;
+                margin: 0 0 10px 10px;
+            }
+
+    .output-group{
+        display: flex;
+        width: 100%;
+    }
+
+        .output-group *{
+            flex: 1;
+            margin: 10px 10px 10px 0;
+        }

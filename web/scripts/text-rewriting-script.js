@@ -19,24 +19,6 @@ window.onbeforeunload = function() {
 
 window.onload = function() {
     document.getElementById('rewritePage').style.backgroundColor = "#494E56"
-
-    // Check if currentRewriteText is in localStorage
-    if (localStorage.getItem('rewriteText')!== null) {
-
-        //Unlock outputArea
-        outputArea.removeAttribute('readonly')
-
-
-        currentText = localStorage.getItem('rewriteText')
-        outputArea.value = currentText
-
-        unlockElements()
-    }
-
-    // Check if promtRewriteArea is in localStorage
-    if (localStorage.getItem('promtRewriteArea')!== null) {
-        intupArea.value = localStorage.getItem('promtRewriteArea')
-    }
 }
 
 // Обработчик нажатия кнопки "Переписать"
@@ -53,10 +35,6 @@ processButton.addEventListener('click', async () => {
     }, 3000)
     return
   }
-
-  // Update promtRewriteArea в localStorage
-  localStorage.setItem('promtRewriteArea', intupArea.value)
-
   // Подготовка
   lockElements()
   progress = true
@@ -69,9 +47,6 @@ processButton.addEventListener('click', async () => {
   // Финал
   outputArea.classList.remove("loader");
   outputArea.value = currentText
-
-  // Update rewriteText в localStorage
-  localStorage.setItem('rewriteText', outputArea.value)
 
   unlockElements()
   progress = false
@@ -119,9 +94,6 @@ function unlockElements(){
 // Обработчик нажатия кнопки "Сбросить"
 resetButton.addEventListener('click', () => {
   outputArea.value = currentText
-
-  // Update currenRewriteText в localStorage
-  localStorage.setItem('rewriteText', currentText)
 })
 
 // Обработчик кнопки "Копировать текст"
@@ -129,9 +101,6 @@ copyTextButton.addEventListener('click', async () => {
    // Убираем из текста двойные переносы строк
    var text = outputArea.value.trim().replaceAll('\n\n', '\n')
    console.log("Text for copying: ", text)
-
-   // Update rewriteText в localStorage
-   localStorage.setItem('rewriteText', text)
 
    // Пытаемся отправить текст в clipboard
    try{
@@ -166,10 +135,7 @@ copyTextButton.addEventListener('click', async () => {
 saveFileButton.addEventListener('click', async () => {
     // Создаем BLOB и убираем двойные переносы строк в тексте
     const blob = new Blob([outputArea.value.trim().replaceAll('\n\n', '\n')], {type: 'text/plain'})
-
-    // Update rewriteText in localStorage
-    localStorage.setItem('rewriteText', outputArea.value)
-
+    
     // Создаем документ и ссылку на скачиваение
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);

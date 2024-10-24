@@ -20,41 +20,6 @@ window.onbeforeunload = function() {
 
 window.onload = function() {
     document.getElementById('imagePage').style.backgroundColor = "#494E56"
-
-    // Выгрузка изображений из localStorage
-    if (localStorage.getItem('3-2-image')!== null) {
-        images.set('3-2-image', localStorage.getItem('3-2-image'))
-        images.set('3-2-seed', localStorage.getItem('3-2-seed'))
-        images.set('3-2-prompt', localStorage.getItem('3-2-prompt'))
-        setImage("data:image/png;base64," + images.get('3-2-image'), images.get('3-2-prompt'), images.get('3-2-seed'))
-        inputArea.value = images.get('3-2-prompt')
-        seedValue.innerText = images.get('3-2-seed')
-    }
-
-    if (localStorage.getItem('1-1-image')!== null) {
-        images.set('1-1-image', localStorage.getItem('1-1-image'))
-        images.set('1-1-seed', localStorage.getItem('1-1-seed'))
-        images.set('1-1-prompt', localStorage.getItem('1-1-prompt'))
-    }
-
-    if (localStorage.getItem('16-9-image')!== null) {
-        images.set('16-9-image', localStorage.getItem('16-9-image'))
-        images.set('16-9-seed', localStorage.getItem('16-9-seed'))
-        images.set('16-9-prompt', localStorage.getItem('16-9-prompt'))
-    }
-
-    if (localStorage.getItem('9-16-image')!== null) {
-        images.set('9-16-image', localStorage.getItem('9-16-image'))
-        images.set('9-16-seed', localStorage.getItem('9-16-seed'))
-        images.set('9-16-prompt', localStorage.getItem('9-16-prompt'))
-    }
-
-    if (localStorage.getItem('2-3-image')!== null) {
-        images.set('2-3-image', localStorage.getItem('2-3-image'))
-        images.set('2-3-seed', localStorage.getItem('2-3-seed'))
-        images.set('2-3-prompt', localStorage.getItem('2-3-prompt'))
-    }
-
 }
 
 generateImageButton.addEventListener('click', async() => {
@@ -127,11 +92,6 @@ generateImageButton.addEventListener('click', async() => {
     images.set(rationSelect.value.trim() + "-image", data.image.b64String)
     images.set(rationSelect.value.trim() + "-seed", data.image.seed)
     images.set(rationSelect.value.trim() + "-prompt", prompt)
-
-    // Update localStorage
-    localStorage.setItem(rationSelect.value.trim() + "-image", data.image.b64String)
-    localStorage.setItem(rationSelect.value.trim() + "-seed", data.image.seed)
-    localStorage.setItem(rationSelect.value.trim() + "-prompt", prompt)
 
     unlockElements()
 

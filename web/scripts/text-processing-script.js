@@ -22,26 +22,6 @@ window.onbeforeunload = function() {
 
 window.onload = function() {
     document.getElementById('textPage').style.backgroundColor = "#494E56"
-
-    // Check if currentText is in localStorage
-    if (localStorage.getItem('currentProcessText')!== null) {
-        currentText = localStorage.getItem('currentProcessText')
-        outputArea.value = currentText
-
-        //Unlock outputArea
-        outputArea.removeAttribute('readonly')
-
-        unlockElements()
-    }
-
-    // Check if promtProcessArea is in localStorage
-    if (localStorage.getItem('promtProcessArea')!== null) {
-        promtArea.value = localStorage.getItem('promtProcessArea')
-    }
-
-    if (localStorage.getItem('originalProcessText')!== null) {
-        intupArea.value = localStorage.getItem('originalProcessText')
-    }
 }
 
 promtSelect.addEventListener('change', () => {
@@ -82,11 +62,6 @@ processButton.addEventListener('click', async () => {
   lockElements()
   progress = true
 
-  // Update promtArea в localStorage
-  localStorage.setItem('promtProcessArea', promtArea.value)
-  localStorage.setItem('originalProcessText', intupArea.value)
-
-
   outputArea.value = 'Обрабатываем текст...'
   outputArea.classList.add("loader");
 
@@ -96,9 +71,6 @@ processButton.addEventListener('click', async () => {
   // Финал
   outputArea.classList.remove("loader");
   outputArea.value = currentText
-
-  // Update currentProcessText в localStorage
-  localStorage.setItem('currentProcessText', currentText)
 
   unlockElements()
   progress = false
@@ -153,8 +125,6 @@ function unlockElements(){
 resetButton.addEventListener('click', () => {
   outputArea.value = currentText
 
-  // Update currentProcessText в localStorage
-  localStorage.setItem('currentProcessText', currentText)
 })
 
 // Обработчик кнопки "Копировать текст"
@@ -162,9 +132,6 @@ copyTextButton.addEventListener('click', async () => {
    // Убираем из текста двойные переносы строк
    var text = outputArea.value.trim().replaceAll('\n\n', '\n')
    console.log("Text for copying: ", text)
-
-   // Update currentProcessText в localStorage
-   localStorage.setItem('currentProcessText', text)
    
 
    // Пытаемся отправить текст в clipboard
@@ -200,9 +167,6 @@ copyTextButton.addEventListener('click', async () => {
 saveFileButton.addEventListener('click', async () => {
     // Создаем BLOB и убираем двойные переносы строк в тексте
     const blob = new Blob([outputArea.value.trim().replaceAll('\n\n', '\n')], {type: 'text/plain'})
-
-    // Update currentProcessText в localStorage
-    localStorage.setItem('currentProcessText', outputArea.value)
 
     // Создаем документ и ссылку на скачиваение
     const link = document.createElement('a');

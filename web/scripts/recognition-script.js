@@ -42,22 +42,6 @@ window.onbeforeunload = function() {
 
 window.onload = function() {
     document.getElementById('filePage').style.backgroundColor = "#494E56"
-
-    // Check if normText is in localStorage
-    if (localStorage.getItem('normText')!== null) {
-        normText = localStorage.getItem('normText')
-        currentNormText = normText
-        outputArea.value = normText
-
-        //Unlock outputArea
-        unlockElements()
-    }
-
-    // Check if rawText is in localStorage
-    if (localStorage.getItem('rawText')!== null) {
-        rawText = localStorage.getItem('rawText')
-        currentRawText = rawText
-    }
 }
 
 // Функция расшифровки
@@ -131,19 +115,9 @@ async function recognize(){
     normText = await data.normText
     rawText = await data.rawText
 
-    // update normText и rawText в localStorage
-    localStorage.setItem('normText', normText)
-    localStorage.setItem('rawText', rawText)
-
-    console.log("Raw:", rawText)
-    console.log("Norm:", normText)
-
     // Первоначально инициализируем измененные тексты начальными результатами
     currentNormText = await data.normText
     currentRawText = await data.rawText
-
-    console.log("CurRaw:", currentRawText)
-    console.log("CurNorm:", currentNormText)
 }
 
 // Обработка кнопки распознавания текста
@@ -215,14 +189,6 @@ copyTextButton.addEventListener('click', async (event)=>{
     // Убираем из текста двойные переносы строк
     var text = outputArea.value.trim().replaceAll('\n\n', '\n')
     console.log("Text for copying: ", text)
-
-    if (normalizeCheckBox.checked){
-        // Update normText в localStorage
-        localStorage.setItem('normText', text)
-    } else{
-        // Update rawText в localStorage
-        localStorage.setItem('rawText', text)
-    }
 
     // Пытаемся отправить текст в clipboard
     try{

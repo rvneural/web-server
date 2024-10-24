@@ -52,7 +52,7 @@ func (a *App) init() {
 	a.Endpoint.RegisterPage("/upscale", upscalePage.New())
 
 	a.Endpoint.RegisterResult("/audio", audioResult.New())
-	a.Endpoint.RegisterResult("/text", textResult.New())
+	a.Endpoint.RegisterResult("/text/:id", textResult.New())
 	a.Endpoint.RegisterResult("/image", imageResult.New())
 
 	a.Endpoint.RegisterForm("/recognize", audioFormHandler.New())

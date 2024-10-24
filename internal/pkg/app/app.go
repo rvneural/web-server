@@ -23,6 +23,8 @@ import (
 
 	notFound "WebServer/internal/server/handlers/pages/404"
 
+	newID "WebServer/internal/server/operations"
+
 	"log"
 )
 
@@ -51,9 +53,11 @@ func (a *App) init() {
 	a.Endpoint.RegisterPage("/text", textProcessingPage.New())
 	a.Endpoint.RegisterPage("/upscale", upscalePage.New())
 
-	a.Endpoint.RegisterResult("/audio", audioResult.New())
+	a.Endpoint.RegisterPage("/get/operation/:type", newID.New())
+
+	a.Endpoint.RegisterResult("/audio/:id", audioResult.New())
 	a.Endpoint.RegisterResult("/text/:id", textResult.New())
-	a.Endpoint.RegisterResult("/image", imageResult.New())
+	a.Endpoint.RegisterResult("/image/:id", imageResult.New())
 
 	a.Endpoint.RegisterForm("/recognize", audioFormHandler.New())
 	a.Endpoint.RegisterForm("/rewriteFromWeb", textFormHandler.New("{{ rewrite }}"))

@@ -39,7 +39,7 @@ func New() *App {
 	router := gin.Default()
 
 	r := router.Group("/operation")
-	store := persistence.NewInMemoryStore(time.Hour)
+	store := persistence.NewInMemoryStore(time.Minute)
 
 	router.StaticFS("/web/", http.Dir("../../web"))
 
@@ -66,12 +66,12 @@ func (a *App) SetBasicAuth(login, password string) {
 
 func (a *App) Register404Page(handler PageHandler) {
 	log.Println("Registering 404 page")
-	a.engine.NoRoute(cache.CachePage(a.store, time.Hour, handler.GetPage))
+	a.engine.NoRoute(cache.CachePage(a.store, time.Minute, handler.GetPage))
 }
 
 func (a *App) RegisterResult(pattern string, handler PageHandler) {
 	log.Println("Registering result handler for pattern", pattern)
-	a.result.GET(pattern, cache.CachePage(a.store, time.Hour, handler.GetPage))
+	a.result.GET(pattern, cache.CachePage(a.store, time.Minute, handler.GetPage))
 }
 
 func (a *App) RegisterPage(pattern string, handler PageHandler) {

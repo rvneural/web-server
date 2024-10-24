@@ -4,7 +4,6 @@ import (
 	"crypto/tls"
 	"log"
 	"net/http"
-	"os"
 
 	config "WebServer/internal/config/app"
 
@@ -16,6 +15,9 @@ import (
 type App struct {
 	engine *gin.Engine
 	result *gin.RouterGroup
+
+	login    string
+	password string
 }
 
 type PageHandler interface {
@@ -30,17 +32,7 @@ func New() *App {
 	gin.SetMode(gin.TestMode)
 	router := gin.Default()
 
-	login := os.Getenv("LOGIN")
-	password := os.Getenv("PASSWORD")
-
 	r := router.Group("/operation")
-
-	if login != "" && password != "" {
-		log.Println("Using authorization")
-		router.Use(gin.BasicAuth(gin.Accounts{
-			login: password,
-		}))
-	}
 
 	router.StaticFS("/web/", http.Dir("../../web"))
 
@@ -49,6 +41,18 @@ func New() *App {
 	return &App{
 		engine: router,
 		result: r,
+	}
+}
+
+func (a *App) SetBasicAuth(login, password string) {
+	a.login = login
+	a.password = password
+
+	if a.login != "" && a.password != "" {
+		log.Println("Using authorization")
+		a.engine.Use(gin.BasicAuth(gin.Accounts{
+			login: password,
+		}))
 	}
 }
 

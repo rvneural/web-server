@@ -29,6 +29,9 @@ import (
 
 type App struct {
 	Endpoint endpoint.App
+	login    string
+	password string
+	tlsMode  bool
 }
 
 func New() *App {
@@ -37,7 +40,18 @@ func New() *App {
 	}
 }
 
-func (a *App) Run() {
+func (a *App) init() {
+
+	a.login = os.Getenv("LOGIN")
+	a.password = os.Getenv("PASSWORD")
+	tlsMode := os.Getenv("TLS_MODE")
+
+	if strings.ToLower(tlsMode) == "true" {
+		a.tlsMode = true
+	} else {
+		a.tlsMode = false
+	}
+
 	a.Endpoint.RegisterPage("/", recognitionFromFilePage.New())
 	a.Endpoint.RegisterPage("/image", imageGenerationPage.New())
 	a.Endpoint.RegisterPage("/rewrite", rewritePage.New())
@@ -56,10 +70,17 @@ func (a *App) Run() {
 	a.Endpoint.RegisterForm("/photopea", photopea.New())
 
 	a.Endpoint.Register404Page(notFound.New())
+}
 
-	log.Println("Starting endpoint...")
-	tlsMode := os.Getenv("TLS_MODE")
-	if strings.ToLower(tlsMode) == "true" {
+func (a *App) Run() {
+
+	a.init()
+
+	if a.login != "" && a.password != "" {
+		a.Endpoint.SetBasicAuth(a.login, a.password)
+	}
+
+	if a.tlsMode {
 		log.Println("Starting endpoint with TLS...")
 		a.Endpoint.StartTLS()
 	} else {

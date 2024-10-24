@@ -1,6 +1,10 @@
 package operations
 
-import "github.com/gin-gonic/gin"
+import (
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+)
 
 type Operation struct {
 }
@@ -10,5 +14,7 @@ func New() *Operation {
 }
 
 func (o *Operation) GetNewID(c *gin.Context) {
-
+	c.JSON(http.StatusOK, gin.H{
+		"id": o.newID(),
+	})
 }

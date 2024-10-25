@@ -1,0 +1,45 @@
+  
+.work-group{
+    display: grid;
+    background-color: transparent;
+    grid-template-columns: 5fr 5fr;
+    gap: 1%;
+  }
+  
+  .input-text-group{
+    grid-template-rows: 1fr 12fr;
+    display: grid;
+  }
+  
+  .output-text-group{
+    grid-template-rows: 0.5fr 12fr;
+    display: grid;
+  }
+  
+  .input-text-group p{
+    text-align: left;
+    font-size: 20px;
+  }
+
+  .output-text-group p{
+    text-align: left;
+    font-size: 20px;
+  }
+
+  .input-text-group textarea{
+    font-size: 20px;
+    margin: 0.5%;
+    text-align: left;
+    line-height: 1.5em;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+  
+  .output-text-group textarea{
+    font-size: 20px;
+    margin: 0.5%;
+    text-align: left;
+    line-height: 1.5em;
+    padding: 10px;
+    box-sizing: border-box;
+  }

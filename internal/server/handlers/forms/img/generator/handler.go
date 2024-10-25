@@ -10,6 +10,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	ginsession "github.com/go-session/gin-session"
 )
 
 type ImageGenerationHandler struct {
@@ -79,4 +80,14 @@ func (n *ImageGenerationHandler) HandleForm(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, model)
+
+	store := ginsession.FromContext(c)
+	store.Set("generation-image", model.Image.B64String)
+	store.Set("generation-seed", model.Image.Seed)
+	store.Set("generation-prompt", prompt)
+
+	err = store.Save()
+	if err != nil {
+		log.Panicln("Can't save session: " + err.Error())
+	}
 }

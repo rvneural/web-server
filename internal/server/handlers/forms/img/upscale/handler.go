@@ -30,7 +30,6 @@ func New() *ImageUpscaler {
 
 func (i *ImageUpscaler) HandleForm(c *gin.Context) {
 	imgFile, header, err := c.Request.FormFile("image")
-	log.Println("New image for upscaling:", header.Filename)
 
 	if err != nil {
 		log.Println(err)

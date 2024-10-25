@@ -16,7 +16,13 @@ import (
 	"golang.org/x/crypto/acme"
 	"golang.org/x/crypto/acme/autocert"
 
-	ginsession "github.com/go-session/gin-session"
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-contrib/sessions/cookie"
+
+	"github.com/gin-contrib/gzip"
+
+	"github.com/gin-contrib/rollbar"
+	roll "github.com/rollbar/rollbar-go"
 )
 
 type App struct {
@@ -41,12 +47,23 @@ func New() *App {
 	router := gin.Default()
 
 	// Use session
-	router.Use(ginsession.New())
+	cookieStore := cookie.NewStore([]byte(config.SESSION_SECRET))
+	router.Use(sessions.Sessions("neuron-nexus-session", cookieStore))
 
-	r := router.Group("/operation")
+	// Use GZIP compression
+	router.Use(gzip.Gzip(gzip.DefaultCompression))
 
 	// Create cache
-	store := persistence.NewInMemoryStore(30 * time.Minute)
+	store := persistence.NewInMemoryStore(time.Hour)
+
+	// Use rollbar
+	roll.SetToken(config.ROLLBAR_TOKEN)
+	roll.SetEnvironment("development")
+	roll.SetCodeVersion("v2")
+	roll.SetServerHost("web.1")
+	router.Use(rollbar.Recovery(false))
+
+	r := router.Group("/operation")
 
 	router.StaticFS("/web/", http.Dir("../../web"))
 	router.LoadHTMLGlob("../../web/templates/*.html")
@@ -82,7 +99,7 @@ func (a *App) RegisterResult(pattern string, handler PageHandler) {
 
 func (a *App) RegisterPage(pattern string, handler PageHandler) {
 	log.Println("Registering handler for pattern", pattern)
-	a.engine.GET(pattern, cache.CachePage(a.store, 30*time.Minute, handler.GetPage))
+	a.engine.GET(pattern, cache.CachePage(a.store, 20*time.Minute, handler.GetPage))
 }
 
 func (a *App) RegisterIDGenerator(pattern string, handler PageHandler) {

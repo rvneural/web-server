@@ -20,12 +20,12 @@ func (r *RecognitionResult) GetPage(c *gin.Context) {
 
 	if len(id) < 10 {
 		c.HTML(http.StatusNotFound, "no-operation.html", gin.H{
-			"title": "Операция не найдела",
+			"title": "Операция не найдена",
 			"style": "/web/styles/results/no-operation-style.css",
 		})
 		return
 	} else if len(id) > 35 {
-		c.HTML(http.StatusProcessing, "progress-operation.html", gin.H{
+		c.HTML(http.StatusNotFound, "progress-operation.html", gin.H{
 			"title": "Операция еще выполняется",
 			"style": "/web/styles/results/progress-operation.css",
 		})

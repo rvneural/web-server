@@ -40,7 +40,7 @@ func (n *TextProcessingHandler) HandleForm(c *gin.Context) {
 	request.Prompt = prompt
 
 	if prompt == "{{ rewrite }}" {
-		request.Temperature = "0"
+		request.Temperature = "0.3"
 	}
 
 	// Маршаллим структуру в JSON и отправляем запрос на Main Server

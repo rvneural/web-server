@@ -6,11 +6,20 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type RecognitionResult struct {
+type NoResultPage interface {
+	GetPage(c *gin.Context, id string)
 }
 
-func New() *RecognitionResult {
-	return &RecognitionResult{}
+type RecognitionResult struct {
+	notFoundOperation NoResultPage
+	progressOperation NoResultPage
+}
+
+func New(notFoundOperation, progressOperation NoResultPage) *RecognitionResult {
+	return &RecognitionResult{
+		notFoundOperation: notFoundOperation,
+		progressOperation: progressOperation,
+	}
 }
 
 func (r *RecognitionResult) GetPage(c *gin.Context) {
@@ -19,16 +28,10 @@ func (r *RecognitionResult) GetPage(c *gin.Context) {
 	id := c.Param("id")
 
 	if len(id) < 10 {
-		c.HTML(http.StatusNotFound, "no-operation.html", gin.H{
-			"title": "Операция не найдена",
-			"style": "/web/styles/results/no-operation-style.css",
-		})
+		r.notFoundOperation.GetPage(c, id)
 		return
 	} else if len(id) > 35 {
-		c.HTML(http.StatusNotFound, "progress-operation.html", gin.H{
-			"title": "Операция еще выполняется",
-			"style": "/web/styles/results/progress-operation.css",
-		})
+		r.progressOperation.GetPage(c, id)
 		return
 	}
 

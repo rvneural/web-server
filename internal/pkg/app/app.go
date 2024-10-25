@@ -27,6 +27,9 @@ import (
 
 	"WebServer/internal/services/idgenerator"
 
+	notFoundOperationPage "WebServer/internal/server/handlers/pages/results/notfound"
+	progressOperationPage "WebServer/internal/server/handlers/pages/results/progress"
+
 	"log"
 )
 
@@ -57,9 +60,9 @@ func (a *App) init() {
 
 	a.Endpoint.RegisterIDGenerator("/get/operation/:type", newID.New(idgenerator.New(35)))
 
-	a.Endpoint.RegisterResult("/audio/:id", audioResult.New())
-	a.Endpoint.RegisterResult("/text/:id", textResult.New())
-	a.Endpoint.RegisterResult("/image/:id", imageResult.New())
+	a.Endpoint.RegisterResult("/audio/:id", audioResult.New(notFoundOperationPage.New(), progressOperationPage.New()))
+	a.Endpoint.RegisterResult("/text/:id", textResult.New(notFoundOperationPage.New(), progressOperationPage.New()))
+	a.Endpoint.RegisterResult("/image/:id", imageResult.New(notFoundOperationPage.New(), progressOperationPage.New()))
 
 	a.Endpoint.RegisterForm("/recognize", audioFormHandler.New())
 	a.Endpoint.RegisterForm("/rewriteFromWeb", textFormHandler.New("{{ rewrite }}"))

@@ -2,24 +2,24 @@ package operations
 
 import (
 	"net/http"
-	"strconv"
+	"os"
 	"strings"
 
 	"github.com/gin-gonic/gin"
+
+	config "WebServer/internal/config/app"
 )
 
-type Operation struct {
-	lastID map[string]int
+type IDGeneratoer interface {
+	Generate() string
 }
 
-func New() *Operation {
-	lastID := make(map[string]int)
+type Operation struct {
+	generator IDGeneratoer
+}
 
-	lastID["image"] = 0
-	lastID["audio"] = 0
-	lastID["text"] = 0
-
-	return &Operation{lastID: lastID}
+func New(generator IDGeneratoer) *Operation {
+	return &Operation{generator: generator}
 }
 
 // TODO: incorrect name of function
@@ -34,10 +34,17 @@ func (o *Operation) GetPage(c *gin.Context) {
 		return
 	}
 
-	id := o.newID(operationType)
+	id := o.generator.Generate()
+
+	var urn string
+	if strings.ToLower(os.Getenv("TLS_MODE")) == "true" {
+		urn = "https://" + config.DOMAIN
+	} else {
+		urn = "localhost"
+	}
 
 	c.JSON(http.StatusOK, gin.H{
 		"id":  id,
-		"uri": strings.ReplaceAll(c.Request.RequestURI, "/get", "") + "/" + strconv.Itoa(id),
+		"uri": urn + "/operation/" + operationType + "/" + id,
 	})
 }

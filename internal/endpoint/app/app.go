@@ -103,8 +103,8 @@ func (a *App) RegisterPage(pattern string, handler PageHandler) {
 }
 
 func (a *App) RegisterIDGenerator(pattern string, handler PageHandler) {
-	log.Println("Registering form result handler for pattern", pattern)
-	a.result.POST(pattern, handler.GetPage)
+	log.Println("Registering ID generator handler for pattern", pattern)
+	a.engine.GET(pattern, handler.GetPage)
 }
 
 func (a *App) RegisterForm(pattern string, handler FormHandler) {

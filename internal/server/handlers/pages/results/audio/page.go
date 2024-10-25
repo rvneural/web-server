@@ -1,9 +1,6 @@
 package audio
 
 import (
-	"net/http"
-	"strconv"
-
 	"github.com/gin-gonic/gin"
 )
 
@@ -19,11 +16,6 @@ func (r *RecognitionResult) GetPage(c *gin.Context) {
 	style := "/web/styles/results/recognition-style.css"
 
 	id := c.Param("id")
-	int_id, err := strconv.Atoi(id)
-	if err != nil || int_id < 1 {
-		c.HTML(http.StatusNotFound, "404.html", nil)
-		return
-	}
 
 	raw_text := "Some raw text for ID: " + id
 	norm_text := "Some normalized text for ID: " + id

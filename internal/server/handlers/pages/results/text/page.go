@@ -1,9 +1,6 @@
 package text
 
 import (
-	"net/http"
-	"strconv"
-
 	"github.com/gin-gonic/gin"
 )
 
@@ -18,11 +15,6 @@ func (r *RecognitionResult) GetPage(c *gin.Context) {
 	style := "/web/styles/results/text-processing-style.css"
 
 	id := c.Param("id")
-	int_id, err := strconv.Atoi(id)
-	if err != nil || int_id < 1 {
-		c.HTML(http.StatusNotFound, "404.html", nil)
-		return
-	}
 
 	old_text := "Some old text for ID: " + id
 	new_text := "Some new text for ID: " + id

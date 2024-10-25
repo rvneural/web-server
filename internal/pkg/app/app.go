@@ -25,6 +25,8 @@ import (
 
 	newID "WebServer/internal/server/operations"
 
+	"WebServer/internal/services/idgenerator"
+
 	"log"
 )
 
@@ -53,7 +55,7 @@ func (a *App) init() {
 	a.Endpoint.RegisterPage("/text", textProcessingPage.New())
 	a.Endpoint.RegisterPage("/upscale", upscalePage.New())
 
-	a.Endpoint.RegisterIDGenerator("/get/operation/:type", newID.New())
+	a.Endpoint.RegisterIDGenerator("/get/operation/:type", newID.New(idgenerator.New(35)))
 
 	a.Endpoint.RegisterResult("/audio/:id", audioResult.New())
 	a.Endpoint.RegisterResult("/text/:id", textResult.New())

@@ -2,11 +2,11 @@
 <div class="work-group">
     <div class="input-text-group">
         <p>Нормализованный текст</p>
-        <textarea class="output-area" id="inputArea"></textarea>
+        <textarea class="output-area" id="inputArea">{{.norm_text}}</textarea>
     </div>
     <div class="output-text-group">
         <p >Сырой текст</p>
-        <textarea class="output-area" id="outputArea"></textarea>
+        <textarea class="output-area" id="outputArea">{{.raw_text}}</textarea>
     </div>
 </div>
 {{template "footer.html" .}}

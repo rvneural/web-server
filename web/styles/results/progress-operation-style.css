@@ -1,3 +1,31 @@
-.name-type{
-    font-size: 100px;
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }
+
+.mainbox {
+    background: transparent;
+  }
+  
+  .mainbox p {
+      text-align: center;
+      font-size: 2rem;
+      background-color: transparent;
+    }
+
+    .name-type{
+        margin-top: 5%;
+        background: transparent;
+    }
+
+    .loading {
+        width: 20%;
+        height: auto;
+        background: transparent;
+        background-color: transparent;
+        animation: rotate 10s linear infinite;
+    }

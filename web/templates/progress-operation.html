@@ -1,13 +1,11 @@
 {{template "header.html" .}}
 <div class="work-group">
     <div class="name-type">
-        <p>ЗАПРОС ВЫПОЛНЯЕТСЯ</p>
+        <img class="loading" src="/web/static/img/loading.svg">
     </div>
-    <div class="user_id">
-        <p >ID вашей операции</p> {{.ID}}
-    </div>
-    <div class="text">
-        <p>Пожалуйст подождите.</p>
+    <div class="mainbox">
+        <p>Запрос еще выполняется.</p>
+        <p>Попробуйте обновить страницу позже.</p>
     </div>
 </div>
 {{template "footer.html" .}}

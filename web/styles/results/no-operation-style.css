@@ -8,7 +8,6 @@
   }
 
     .err {
-      font-family: 'Nunito Sans', sans-serif;
       font-size: 11.5rem;
       position:absolute;
       left: 20%;
@@ -25,7 +24,6 @@
   }
   
    .err2 {
-      font-family: 'Nunito Sans', sans-serif;
       font-size: 11.5rem;
       position:absolute;
       left: 68%;
@@ -35,7 +33,6 @@
   
   .msg {
       text-align: center;
-      font-family: 'Nunito Sans', sans-serif;
       font-size: 2rem;
       position:absolute;
       left: 16%;

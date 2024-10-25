@@ -1,0 +1,12 @@
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1080" width="1080" height="1080">
+	<title>Новый проект</title>
+	<style>
+		.s0 { fill: none;stroke: #000000;stroke-miterlimit:100;stroke-width: 80 } 
+		.s1 { fill: #000000 } 
+	</style>
+	<path id="форма 1" class="s0" d="m539.2 914.2c-207.4 0-375-167.6-375-375 0-207.4 167.6-375 375-375 207.4 0 375 167.6 375 375 0 207.4-167.6 375-375 375z"/>
+	<path id="форма 2" class="s1" d="m663.1 165.3l-250 144.4v-288.7z"/>
+	<path id="форма 2 copy" class="s1" d="m914.8 662.7l-144.3-250h288.6z"/>
+	<path id="форма 2 copy 2" class="s1" d="m413.7 914.2l250-144.3v288.6z"/>
+	<path id="форма 2 copy 3" class="s1" d="m165.3 412.7l144.4 250h-288.7z"/>
+</svg>

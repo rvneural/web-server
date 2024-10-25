@@ -38,11 +38,13 @@ type App struct {
 	login    string
 	password string
 	tlsMode  bool
+	idMaxLen int
 }
 
 func New() *App {
 	return &App{
 		Endpoint: *endpoint.New(),
+		idMaxLen: 35,
 	}
 }
 
@@ -58,7 +60,7 @@ func (a *App) init() {
 	a.Endpoint.RegisterPage("/text", textProcessingPage.New())
 	a.Endpoint.RegisterPage("/upscale", upscalePage.New())
 
-	a.Endpoint.RegisterIDGenerator("/get/operation/:type", newID.New(idgenerator.New(35)))
+	a.Endpoint.RegisterIDGenerator("/get/operation/:type", newID.New(idgenerator.New(a.idMaxLen)))
 
 	a.Endpoint.RegisterResult("/audio/:id", audioResult.New(notFoundOperationPage.New(), progressOperationPage.New()))
 	a.Endpoint.RegisterResult("/text/:id", textResult.New(notFoundOperationPage.New(), progressOperationPage.New()))

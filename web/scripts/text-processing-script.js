@@ -179,3 +179,51 @@ saveFileButton.addEventListener('click', async () => {
     link.click();
     URL.revokeObjectURL(link.href);
 })
+
+async function sendRequestURL() {
+    try {
+        // Отправляем GET-запрос на сервер
+        const resp = await fetch('get/operation/text', {
+            method: 'GET',
+        });
+
+        // Проверяем, успешен ли ответ
+        if (!resp.ok) {
+            throw new Error(`HTTP error! Status: ${resp.status}`);
+        }
+
+        // Расшифровываем результат в JSON
+        const data = await resp.json();
+
+        // Получаем URL из ответа
+        const url = data.url;
+
+        return url; // Возвращаем URL
+    } catch (error) {
+        console.error('Ошибка при выполнении запроса:', error);
+    }
+}
+
+document.getElementById('rewriteButton').onclick = async function() {  
+    const url_page = await sendRequestURL();
+        // Создаем элемент ссылки
+        const link = document.createElement('a');
+    link.href = url_page; // Устанавливаем URL
+    link.target = '_blank'; // Открываем в новом окне
+    link.textContent = 'ТУТ'; // Устанавливаем текст ссылки как "тут"
+
+    // Получаем элемент для всплывающего сообщения
+    const popupMessage = document.getElementById('popupMessage');
+    
+    // Удаляем предыдущие содержимое и добавляем новое
+    popupMessage.innerHTML = `Ссылка на ваш запрос `; // Устанавливаем текст до ссылки
+    popupMessage.appendChild(link); // Добавляем ссылку в сообщение
+
+    // Показываем всплывающее окно
+    document.getElementById('popup').style.display = 'block';    
+    };
+
+// Обработчик для кнопки закрытия всплывающего окна
+document.getElementById('closePopup').onclick = function() {
+    document.getElementById('popup').style.display = 'none'; // Скрываем всплывающее окно
+};

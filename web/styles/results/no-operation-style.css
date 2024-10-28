@@ -12,6 +12,8 @@
       position:absolute;
       left: 20%;
       top: 8%;
+      right: 52%;
+      font-weight: 700;
       background-color: transparent;
     }
   
@@ -26,8 +28,9 @@
    .err2 {
       font-size: 11.5rem;
       position:absolute;
-      left: 68%;
+      left: 63%;
       top: 8%;
+      font-weight: 700;
       background-color: transparent;
     }
   

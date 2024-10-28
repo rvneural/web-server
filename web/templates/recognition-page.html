@@ -1,5 +1,9 @@
 {{template "header.html" .}}
 <div class="work-group">
+    <div class="popup" id="popup" style="display:none;">
+      <p id="popupMessage">Здесь будет ваше сообщение.</p>
+      <button id="closePopup">Закрыть</button>
+    </div>
     <div class="file-group">
       <input type="file" class="input-field" name="filePath" id="fileInput" accept="audio/*,video/*, .flv, .mkv, .aac">
       <input type="url" class="input-field none-display" name="url" id="urlInput" placeholder="https://vk.com/video/@realnoevremya_official?z=video-85466065_456241777%2Fclub85466065">

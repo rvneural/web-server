@@ -1,5 +1,9 @@
 {{template "header.html" .}}
 <div class="work-group">
+    <div class="popup" id="popup" style="display:none;">
+        <p id="popupMessage">Здесь будет ваше сообщение.</p>
+        <button id="closePopup">Закрыть</button>
+    </div>
     <div class="input-group">
         <div class="promt-area">
         <textarea class="input-area" id="inputArea" placeholder="Введите текст для генерации изображения"></textarea>

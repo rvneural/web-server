@@ -2,12 +2,9 @@ package operations
 
 import (
 	"net/http"
-	"os"
 	"strings"
 
 	"github.com/gin-gonic/gin"
-
-	config "WebServer/internal/config/app"
 )
 
 type IDGeneratoer interface {
@@ -36,15 +33,15 @@ func (o *Operation) GetPage(c *gin.Context) {
 
 	id := o.generator.Generate()
 
-	var urn string
+	/*var urn string
 	if strings.ToLower(os.Getenv("TLS_MODE")) == "true" {
 		urn = "https://" + config.DOMAIN
 	} else {
 		urn = "localhost"
-	}
+	}*/
 
 	c.JSON(http.StatusOK, gin.H{
 		"id":  id,
-		"uri": urn + "/operation/" + operationType + "/" + id,
+		"url": "/operation/" + operationType + "/" + id,
 	})
 }

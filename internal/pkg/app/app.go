@@ -62,9 +62,12 @@ func (a *App) init() {
 
 	a.Endpoint.RegisterIDGenerator("/get/operation/:type", newID.New(idgenerator.New(a.idMaxLen)))
 
-	a.Endpoint.RegisterResult("/audio/:id", audioResult.New(notFoundOperationPage.New(), progressOperationPage.New()))
-	a.Endpoint.RegisterResult("/text/:id", textResult.New(notFoundOperationPage.New(), progressOperationPage.New()))
-	a.Endpoint.RegisterResult("/image/:id", imageResult.New(notFoundOperationPage.New(), progressOperationPage.New()))
+	notFoundOperationPageP := notFoundOperationPage.New()
+	progressOperationPageP := progressOperationPage.New()
+
+	a.Endpoint.RegisterResult("/audio/:id", audioResult.New(notFoundOperationPageP, progressOperationPageP, nil))
+	a.Endpoint.RegisterResult("/text/:id", textResult.New(notFoundOperationPageP, progressOperationPageP, nil))
+	a.Endpoint.RegisterResult("/image/:id", imageResult.New(notFoundOperationPageP, progressOperationPageP, nil))
 
 	a.Endpoint.RegisterForm("/recognize", audioFormHandler.New())
 	a.Endpoint.RegisterForm("/rewriteFromWeb", textFormHandler.New("{{ rewrite }}"))

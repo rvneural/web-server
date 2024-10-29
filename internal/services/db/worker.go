@@ -2,6 +2,7 @@ package db
 
 import (
 	"fmt"
+	"strings"
 
 	model "WebServer/internal/models/db/model"
 
@@ -36,6 +37,7 @@ func (w *Worker) connectToDB() (*sqlx.DB, error) {
 
 func (w *Worker) RegisterOperation(uniqID string) error {
 
+	uniqID = strings.TrimSpace(uniqID)
 	if len(uniqID) == 0 || len(uniqID) > 35 {
 		return fmt.Errorf("uniqID is empty or too big")
 	}
@@ -46,12 +48,13 @@ func (w *Worker) RegisterOperation(uniqID string) error {
 	}
 	defer db.Close()
 
-	_, err = db.Exec("INSERT INTO $1 (operation_id, in_progress) VALUES ($2, $3)", w.table_name, uniqID, true)
+	_, err = db.Exec("INSERT INTO "+w.table_name+" (operation_id, in_progress) VALUES ($1, $2)", uniqID, true)
 	return err
 }
 
 func (w *Worker) SetResult(uniqID string, data []byte) error {
 
+	uniqID = strings.TrimSpace(uniqID)
 	if len(uniqID) == 0 || len(uniqID) > 35 {
 		return fmt.Errorf("uniqID is empty or too big")
 	}
@@ -62,12 +65,13 @@ func (w *Worker) SetResult(uniqID string, data []byte) error {
 	}
 	defer db.Close()
 
-	_, err = db.Exec("UPDATE $1 SET result=$2, in_progress=$3 WHERE operation_id = $4", w.table_name, data, false, uniqID)
+	_, err = db.Exec("UPDATE "+w.table_name+" SET data = $1, in_progress = $2 WHERE operation_id = $3", data, false, uniqID)
 	return err
 }
 
 func (w *Worker) GetResult(uniqID string) (dbResult model.DBResult, err error) {
 
+	uniqID = strings.TrimSpace(uniqID)
 	if len(uniqID) == 0 || len(uniqID) > 35 {
 		return model.DBResult{}, fmt.Errorf("uniqID is empty or too big")
 	}
@@ -80,7 +84,7 @@ func (w *Worker) GetResult(uniqID string) (dbResult model.DBResult, err error) {
 
 	dbResults := []model.DBResult{}
 
-	err = db.Select(&dbResults, "SELECT * FROM $1 WHERE operation_id = $2 LIMIT 1", w.table_name, uniqID)
+	err = db.Select(&dbResults, "SELECT * FROM "+w.table_name+" WHERE operation_id = $1 LIMIT 1", uniqID)
 	if err != nil {
 		return model.DBResult{}, err
 	}

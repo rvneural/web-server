@@ -1,24 +1,23 @@
 package text
 
 import (
+	"WebServer/internal/server/handlers/interfaces"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
-type NoResultPage interface {
-	GetPage(c *gin.Context, id string)
-}
-
 type RecognitionResult struct {
-	notFoundOperation NoResultPage
-	progressOperation NoResultPage
+	notFoundOperation interfaces.NoResultPage
+	progressOperation interfaces.NoResultPage
+	dbWorker          interfaces.DBWorker
 }
 
-func New(notFoundOperation, progressOperation NoResultPage) *RecognitionResult {
+func New(notFoundOperation, progressOperation interfaces.NoResultPage, dbWorker interfaces.DBWorker) *RecognitionResult {
 	return &RecognitionResult{
 		notFoundOperation: notFoundOperation,
 		progressOperation: progressOperation,
+		dbWorker:          dbWorker,
 	}
 }
 

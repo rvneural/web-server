@@ -1,24 +1,23 @@
 package audio
 
 import (
+	"WebServer/internal/server/handlers/interfaces"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
-type NoResultPage interface {
-	GetPage(c *gin.Context, id string)
-}
-
 type RecognitionResult struct {
-	notFoundOperation NoResultPage
-	progressOperation NoResultPage
+	notFoundOperation interfaces.NoResultPage
+	progressOperation interfaces.NoResultPage
+	dbWorker          interfaces.DBWorker
 }
 
-func New(notFoundOperation, progressOperation NoResultPage) *RecognitionResult {
+func New(notFoundOperation, progressOperation interfaces.NoResultPage, dbWorker interfaces.DBWorker) *RecognitionResult {
 	return &RecognitionResult{
 		notFoundOperation: notFoundOperation,
 		progressOperation: progressOperation,
+		dbWorker:          dbWorker,
 	}
 }
 
@@ -28,16 +27,15 @@ func (r *RecognitionResult) GetPage(c *gin.Context) {
 
 	id := c.Param("id")
 
-	if len(id) < 10 {
+	res, err := r.dbWorker.GetResult(id)
+
+	if err != nil {
 		r.notFoundOperation.GetPage(c, id)
 		return
-	} else if len(id) > 35 {
+	} else if res.IN_PROGRESS {
 		r.progressOperation.GetPage(c, id)
 		return
 	}
-
-	raw_text := "Some raw text for ID: " + id
-	norm_text := "Some normalized text for ID: " + id
 
 	c.HTML(http.StatusOK, "recognition-result.html", gin.H{
 		"title":     "Результаты расшифровки",

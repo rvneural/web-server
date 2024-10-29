@@ -263,8 +263,8 @@ async function sendRequestURL() {
 
 document.getElementById('recognizeButton').onclick = async function() {  
     const url_page = await sendRequestURL();
-        // Создаем элемент ссылки
-        const link = document.createElement('a');
+    // Создаем элемент ссылки
+    const link = document.createElement('a');
     link.href = url_page; // Устанавливаем URL
     link.target = '_blank'; // Открываем в новом окне
     link.textContent = 'ТУТ'; // Устанавливаем текст ссылки как "тут"
@@ -277,10 +277,34 @@ document.getElementById('recognizeButton').onclick = async function() {
     popupMessage.appendChild(link); // Добавляем ссылку в сообщение
 
     // Показываем всплывающее окно
-    document.getElementById('popup').style.display = 'block';    
+    document.getElementById('popup').style.display = 'block';
+    popup.style.display = 'block';
+    popup.classList.add('popup');    
     };
 
 // Обработчик для кнопки закрытия всплывающего окна
 document.getElementById('closePopup').onclick = function() {
     document.getElementById('popup').style.display = 'none'; // Скрываем всплывающее окно
+};
+
+// Обработчик для кнопки копирования
+document.getElementById('copyLinkButton').onclick = function() {
+    const url_page = document.querySelector('#popupMessage a').href; // Получаем URL из ссылки
+    navigator.clipboard.writeText(url_page) // Копируем URL в буфер обмена
+        .then(() => {
+            const copyButton = document.getElementById('copyLinkButton');
+            copyButton.innerText = 'Скопировано'; // Меняем текст кнопки
+            copyButton.setAttribute('disabled', ''); // Блокируем кнопку
+            copyButton.classList.add('button-copied'); // Меняем цвет кнопки
+
+            // Уведомление об успешном копировании
+            setTimeout(() => {
+                copyButton.innerText = 'Скопировать'; // Возвращаем текст кнопки
+                copyButton.removeAttribute('disabled'); // Разблокируем кнопку
+                copyButton.classList.remove('button-copied'); // Возвращаем исходный цвет
+            }, 2000);
+        })
+        .catch(err => {
+            console.error('Ошибка при копировании: ', err);
+        });
 };

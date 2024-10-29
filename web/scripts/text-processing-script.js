@@ -220,7 +220,9 @@ document.getElementById('rewriteButton').onclick = async function() {
     popupMessage.appendChild(link); // Добавляем ссылку в сообщение
 
     // Показываем всплывающее окно
-    document.getElementById('popup').style.display = 'block';    
+    document.getElementById('popup').style.display = 'block';
+    popup.style.display = 'block';
+    popup.classList.add('popup');    
     };
 
 // Обработчик для кнопки закрытия всплывающего окна

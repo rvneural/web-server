@@ -1,4 +1,13 @@
-
+@keyframes slideIn {
+  from {
+      transform: translateY(100%); /* Начальная позиция - ниже */
+      opacity: 0; /* Начальная непрозрачность */
+  }
+  to {
+      transform: translateY(0); /* Конечная позиция - на месте */
+      opacity: 1; /* Конечная непрозрачность */
+  }
+}
   .work-group{
     display: grid;
     grid-template-columns: 2fr 0.1fr 3fr;
@@ -177,6 +186,7 @@
     z-index: 1000;
     color: white;
     display: none;
+    animation: slideIn 0.5s forwards;
   }
   
   .popup p {

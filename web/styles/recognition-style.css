@@ -1,3 +1,13 @@
+@keyframes slideIn {
+  from {
+      transform: translateY(100%); /* Начальная позиция - ниже */
+      opacity: 0; /* Начальная непрозрачность */
+  }
+  to {
+      transform: translateY(0); /* Конечная позиция - на месте */
+      opacity: 1; /* Конечная непрозрачность */
+  }
+}
 
 .work-group{
   display: grid;
@@ -119,6 +129,7 @@
   z-index: 1000;
   color: white;
   display: none;
+  animation: slideIn 0.5s forwards;
 }
 
 .popup p {
@@ -126,6 +137,22 @@
 }
 
 #closePopup {
+  background-color: #2b3845;
+  color: white; 
+  border: none; 
+  padding: 10px 15px; 
+  border-radius: 5px; 
+  cursor: pointer; 
+  transition: background-color 0.3s; 
+}
+
+#button-copied {
+  background-color: #4CAF50; /* Зеленый цвет для "Скопировано" */
+  color: white; /* Белый текст */
+  cursor: not-allowed; /* Указатель "недоступно" */
+}
+
+#copyLinkButton {
   background-color: #2b3845;
   color: white; 
   border: none; 

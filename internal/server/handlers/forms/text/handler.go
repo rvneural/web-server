@@ -35,7 +35,7 @@ func (n *TextProcessingHandler) HandleForm(c *gin.Context) {
 	id = strings.TrimSpace(id)
 	var dbError error
 	if len(id) != 0 {
-		dbError = n.dbWorker.RegisterOperation(id)
+		dbError = n.dbWorker.RegisterOperation(id, "text")
 	}
 
 	// Получаем текст и промт

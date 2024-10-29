@@ -62,7 +62,7 @@ func (n *RecognitionHandler) HandleForm(c *gin.Context) {
 	id = strings.TrimSpace(id)
 	var dbError error
 	if len(id) != 0 {
-		dbError = n.dbWorker.RegisterOperation(id)
+		dbError = n.dbWorker.RegisterOperation(id, "audio")
 	}
 
 	var Request models.Request

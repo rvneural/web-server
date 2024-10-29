@@ -7,7 +7,7 @@ import (
 )
 
 type DBWorker interface {
-	RegisterOperation(uniqID string) error
+	RegisterOperation(uniqID string, operation_type string) error
 	SetResult(uniqID string, data []byte) error
 	GetResult(uniqID string) (dbResult dbModel.DBResult, err error)
 }

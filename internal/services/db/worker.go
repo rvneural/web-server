@@ -35,7 +35,7 @@ func (w *Worker) connectToDB() (*sqlx.DB, error) {
 	return sqlx.Connect("postgres", connectionData)
 }
 
-func (w *Worker) RegisterOperation(uniqID string) error {
+func (w *Worker) RegisterOperation(uniqID string, operation_type string) error {
 
 	uniqID = strings.TrimSpace(uniqID)
 	if len(uniqID) == 0 || len(uniqID) > 35 {
@@ -48,7 +48,7 @@ func (w *Worker) RegisterOperation(uniqID string) error {
 	}
 	defer db.Close()
 
-	_, err = db.Exec("INSERT INTO "+w.table_name+" (operation_id, in_progress) VALUES ($1, $2)", uniqID, true)
+	_, err = db.Exec("INSERT INTO "+w.table_name+" (operation_id, in_progress, type) VALUES ($1, $2, $3)", uniqID, true, operation_type)
 	return err
 }
 

@@ -32,7 +32,7 @@ func (n *ImageGenerationHandler) HandleForm(c *gin.Context) {
 	id = strings.TrimSpace(id)
 	var dbError error
 	if len(id) != 0 {
-		dbError = n.dbWorker.RegisterOperation(id)
+		dbError = n.dbWorker.RegisterOperation(id, "image")
 	}
 
 	prompt := c.Request.FormValue("prompt")

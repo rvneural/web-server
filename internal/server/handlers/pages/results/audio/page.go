@@ -36,6 +36,8 @@ func (r *RecognitionResult) GetPage(c *gin.Context) {
 	if err != nil {
 		r.notFoundOperation.GetPage(c, id)
 		return
+	} else if res.OPERATION_TYPE != "audio" {
+		c.Redirect(http.StatusMovedPermanently, "/operation/"+res.OPERATION_TYPE+"/"+res.OPERATION_ID)
 	} else if res.IN_PROGRESS {
 		r.progressOperation.GetPage(c, id)
 		return

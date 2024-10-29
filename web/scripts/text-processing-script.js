@@ -202,40 +202,53 @@ async function sendRequestURL() {
     } catch (error) {
         console.error('Ошибка при выполнении запроса:', error);
     }
-}
+} 
+    
+document.getElementById('rewriteButton').onclick = async function() { 
+    const popup = document.getElementById('popup');
+    const popupMessage = document.getElementById('popupMessage');
 
-document.getElementById('rewriteButton').onclick = async function() {  
+    // Показываем всплывающее окно
+    popup.style.display = 'block';
+    popup.classList.remove('slide-out'); // Убедитесь, что класс анимации удален перед показом
+
     const url_page = await sendRequestURL();
-        // Создаем элемент ссылки
-        const link = document.createElement('a');
+    
+    // Создаем элемент ссылки
+    const link = document.createElement('a');
     link.href = url_page; // Устанавливаем URL
     link.target = '_blank'; // Открываем в новом окне
     link.textContent = 'ТУТ'; // Устанавливаем текст ссылки как "тут"
 
-    // Получаем элемент для всплывающего сообщения
-    const popupMessage = document.getElementById('popupMessage');
-    
-    // Удаляем предыдущие содержимое и добавляем новое
-    popupMessage.innerHTML = `Ссылка на ваш запрос `; // Устанавливаем текст до ссылки
+    // Удаляем предыдущее содержимое и добавляем новое
+    popupMessage.innerHTML = `Ссылка на ваш запрос: `; // Устанавливаем текст до ссылки
     popupMessage.appendChild(link); // Добавляем ссылку в сообщение
+};
 
-    // Показываем всплывающее окно
-    document.getElementById('popup').style.display = 'block';
-    popup.style.display = 'block';
-    popup.classList.add('popup');    
-    };
+function resetPopup() {
+    const popup = document.getElementById('popup');
+    const popupMessage = document.getElementById('popupMessage');
+
+    // Скрыть всплывающее окно
+    popup.style.display = 'none'; 
+    
+    // Удалить класс анимации, если он есть
+    popup.classList.remove('slide-out'); 
+    
+    // Очистить сообщение
+    popupMessage.innerHTML = ''; 
+}
 
 // Обработчик для кнопки закрытия всплывающего окна
 document.getElementById('closePopup').onclick = function() {
-    var popup = document.querySelector('.popup');
+    const popup = document.getElementById('popup');
     popup.classList.add('slide-out');
-    
+
     // Удаляем элемент после завершения анимации
     popup.addEventListener('animationend', function() {
-        popup.style.display = 'none';
-    });
+        resetPopup(); // Сброс состояния после анимации
+    }, { once: true }); // Убедитесь, что обработчик вызывается только один раз
 };
-
 
 // Обработчик для кнопки копирования
 document.getElementById('copyLinkButton').onclick = function() {
@@ -244,8 +257,8 @@ document.getElementById('copyLinkButton').onclick = function() {
         .then(() => {
             const copyButton = document.getElementById('copyLinkButton');
             copyButton.innerText = 'Скопировано'; // Меняем текст кнопки
-            // Уведомление об успешном копировании
             
+            // Уведомление об успешном копировании
             setTimeout(() => {
                 copyButton.innerText = 'Скопировать'; // Возвращаем текст кнопки
             }, 2000);

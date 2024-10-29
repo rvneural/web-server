@@ -283,7 +283,13 @@ document.getElementById('recognizeButton').onclick = async function() {
 
 // Обработчик для кнопки закрытия всплывающего окна
 document.getElementById('closePopup').onclick = function() {
-    document.getElementById('popup').style.display = 'none'; // Скрываем всплывающее окно
+    var popup = document.querySelector('.popup');
+    popup.classList.add('slide-out');
+    
+    // Удаляем элемент после завершения анимации
+    popup.addEventListener('animationend', function() {
+        popup.style.display = 'none';
+    });
 };
 
 // Обработчик для кнопки копирования

@@ -9,6 +9,17 @@
   }
 }
 
+@keyframes slideOut {
+  from {
+      transform: translateY(0); /* Начальная позиция - ниже */
+      opacity: 1; /* Начальная непрозрачность */
+  }
+  to {
+      transform: translateY(100%); /* Конечная позиция - на месте */
+      opacity: 0; /* Конечная непрозрачность */
+  }
+}
+
 .work-group{
     display: grid;
     background-color: transparent;
@@ -117,4 +128,8 @@ a {
   color: rgb(0, 255, 208); 
   font-weight: bold;
   background: transparent !important;
+}
+
+.popup.slide-out {
+  animation: slideOut 0.5s forwards;
 }

@@ -14,7 +14,6 @@ import (
 	"WebServer/internal/server/handlers/interfaces"
 
 	"github.com/gin-gonic/gin"
-	ginsession "github.com/go-session/gin-session"
 )
 
 type ImageGenerationHandler struct {
@@ -51,6 +50,7 @@ func (n *ImageGenerationHandler) HandleForm(c *gin.Context) {
 
 	if err != nil {
 		log.Println(err)
+		go n.saveErrorToDB(id, err.Error())
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -58,6 +58,7 @@ func (n *ImageGenerationHandler) HandleForm(c *gin.Context) {
 	httpRequest, err := http.NewRequest("POST", config.URL, bytes.NewBuffer(byteRequets))
 	if err != nil {
 		log.Println(err)
+		go n.saveErrorToDB(id, err.Error())
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -71,6 +72,7 @@ func (n *ImageGenerationHandler) HandleForm(c *gin.Context) {
 
 	if err != nil {
 		log.Println(err)
+		go n.saveErrorToDB(id, err.Error())
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -81,6 +83,7 @@ func (n *ImageGenerationHandler) HandleForm(c *gin.Context) {
 
 	if err != nil {
 		log.Println(err)
+		go n.saveErrorToDB(id, err.Error())
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -90,35 +93,43 @@ func (n *ImageGenerationHandler) HandleForm(c *gin.Context) {
 
 	if err != nil {
 		log.Println(err)
+		go n.saveErrorToDB(id, err.Error())
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	if dbError == nil && len(id) != 0 {
-		dbResult := dbModel.DBResult{
-			Prompt:    prompt,
-			Seed:      model.Image.Seed,
-			B64string: model.Image.B64String,
+	go func(id string, dbError error) {
+		if dbError == nil && len(id) != 0 {
+			dbResult := dbModel.DBResult{
+				Prompt:    prompt,
+				Seed:      model.Image.Seed,
+				B64string: model.Image.B64String,
+			}
+			dbByteRes, err := json.Marshal(dbResult)
+			if err == nil {
+				n.dbWorker.SetResult(id, dbByteRes)
+			}
 		}
-		dbByteRes, err := json.Marshal(dbResult)
-		if err == nil {
-			n.dbWorker.SetResult(id, dbByteRes)
-		}
-	}
+	}(id, dbError)
 
 	if dbError != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": dbError.Error()})
 	}
 
 	c.JSON(http.StatusOK, model)
+}
 
-	store := ginsession.FromContext(c)
-	store.Set("generation-image", model.Image.B64String)
-	store.Set("generation-seed", model.Image.Seed)
-	store.Set("generation-prompt", prompt)
-
-	err = store.Save()
-	if err != nil {
-		log.Panicln("Can't save session: " + err.Error())
+func (n *ImageGenerationHandler) saveErrorToDB(id string, dbError string) {
+	if len(id) == 0 {
+		return
+	}
+	dbResult := dbModel.DBResult{
+		Prompt:    dbError,
+		Seed:      "",
+		B64string: "",
+	}
+	dbByteRes, err := json.Marshal(dbResult)
+	if err == nil {
+		n.dbWorker.SetResult(id, dbByteRes)
 	}
 }

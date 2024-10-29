@@ -66,6 +66,7 @@ func (n *TextProcessingHandler) HandleForm(c *gin.Context) {
 
 		resonse.OldText = text
 		resonse.NewText = err.Error()
+		go n.saveErrorToDB(id, err.Error(), prompt, text)
 		c.JSON(http.StatusBadRequest, resonse)
 		return
 	}
@@ -77,6 +78,7 @@ func (n *TextProcessingHandler) HandleForm(c *gin.Context) {
 		log.Println(err)
 		resonse.OldText = text
 		resonse.NewText = err.Error()
+		go n.saveErrorToDB(id, err.Error(), prompt, text)
 		c.JSON(http.StatusBadRequest, resonse)
 		return
 	}
@@ -92,6 +94,7 @@ func (n *TextProcessingHandler) HandleForm(c *gin.Context) {
 		log.Println(err)
 		resonse.OldText = text
 		resonse.NewText = err.Error()
+		go n.saveErrorToDB(id, err.Error(), prompt, text)
 		c.JSON(http.StatusNotAcceptable, resonse)
 		return
 	}
@@ -104,6 +107,7 @@ func (n *TextProcessingHandler) HandleForm(c *gin.Context) {
 		log.Println(err)
 		resonse.OldText = text
 		resonse.NewText = err.Error()
+		go n.saveErrorToDB(id, err.Error(), prompt, text)
 		c.JSON(http.StatusInternalServerError, resonse)
 		return
 	}
@@ -115,22 +119,40 @@ func (n *TextProcessingHandler) HandleForm(c *gin.Context) {
 		log.Println(err)
 		resonse.OldText = text
 		resonse.NewText = err.Error()
+		go n.saveErrorToDB(id, err.Error(), prompt, text)
 		c.JSON(http.StatusInternalServerError, resonse)
 		return
 	}
 
-	if dbError == nil && len(id) != 0 {
-		ddbResult := dbModel.DBResult{
-			OldText: model.OldText,
-			NewText: model.NewText,
-			Prompt:  prompt,
+	go func(id string, dbError error) {
+		if dbError == nil && len(id) != 0 {
+			ddbResult := dbModel.DBResult{
+				OldText: model.OldText,
+				NewText: model.NewText,
+				Prompt:  prompt,
+			}
+			byteDbResult, err := json.Marshal(ddbResult)
+			if err == nil {
+				n.dbWorker.SetResult(id, byteDbResult)
+			}
 		}
-		byteDbResult, err := json.Marshal(ddbResult)
-		if err == nil {
-			n.dbWorker.SetResult(id, byteDbResult)
-		}
-	}
+	}(id, dbError)
 
 	// Отправляем ответ в виде JSON клиенту
 	c.JSON(http.StatusOK, model)
+}
+
+func (n *TextProcessingHandler) saveErrorToDB(id string, errorMsg string, prompt string, oldText string) {
+	if len(id) == 0 {
+		return
+	}
+	dbResult := dbModel.DBResult{
+		OldText: oldText,
+		NewText: errorMsg,
+		Prompt:  prompt,
+	}
+	byteDbResult, err := json.Marshal(dbResult)
+	if err == nil {
+		n.dbWorker.SetResult(id, byteDbResult)
+	}
 }

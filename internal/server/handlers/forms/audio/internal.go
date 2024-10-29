@@ -3,6 +3,7 @@ package audio
 import (
 	config "WebServer/internal/config/services/audio2text-service"
 	models "WebServer/internal/models/audio"
+	dbModel "WebServer/internal/models/db/results/audio"
 	"bytes"
 	"encoding/json"
 	"io"
@@ -57,4 +58,18 @@ func (n *RecognitionHandler) recognize(request models.Request) models.Response {
 		return ans
 	}
 	return s_ans
+}
+
+func (n *RecognitionHandler) saveErrorToDB(id string, errorMsg string) {
+	if len(id) == 0 {
+		return
+	}
+	errorResult := dbModel.DBResult{
+		RawText:  errorMsg,
+		NormText: errorMsg,
+	}
+	byteErr, err := json.Marshal(errorResult)
+	if err == nil {
+		n.dbWorker.SetResult(id, byteErr)
+	}
 }

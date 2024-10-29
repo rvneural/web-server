@@ -73,8 +73,8 @@ func (n *RecognitionHandler) HandleForm(c *gin.Context) {
 	} else {
 		Request, err = n.handleFileRecognition(c)
 		if err != nil {
-			dbError = err
-			log.Println("Error sending recognition response", err)
+			go log.Println("Error sending recognition response", err)
+			go n.saveErrorToDB(id, err.Error())
 			c.JSON(http.StatusBadRequest, gin.H{"error": err})
 			return
 		}
@@ -84,16 +84,18 @@ func (n *RecognitionHandler) HandleForm(c *gin.Context) {
 
 	response := n.recognize(Request)
 
-	if dbError == nil && len(id) != 0 {
-		dbResult := dbModel.DBResult{
-			RawText:  response.RawText,
-			NormText: response.NormText,
+	go func(id string, dbError error) {
+		if dbError == nil && len(id) != 0 {
+			dbResult := dbModel.DBResult{
+				RawText:  response.RawText,
+				NormText: response.NormText,
+			}
+			byteData, err := json.Marshal(dbResult)
+			if err == nil {
+				n.dbWorker.SetResult(id, byteData)
+			}
 		}
-		byteData, err := json.Marshal(dbResult)
-		if err == nil {
-			n.dbWorker.SetResult(id, byteData)
-		}
-	}
+	}(id, dbError)
 
 	// Отправляем запрос на распознавание текста
 	c.JSON(http.StatusOK, response)

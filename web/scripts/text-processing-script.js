@@ -82,7 +82,7 @@ processButton.addEventListener('click', async () => {
 })
 
 // Функция переписывания текста
-async function rewriteText(userText, userPromt, id){
+async function rewriteText(userText, userPromt){
     const formData = new FormData();
     formData.append('id', id);
     formData.append('text', userText)

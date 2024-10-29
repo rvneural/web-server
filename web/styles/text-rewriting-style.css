@@ -89,27 +89,31 @@
 }
 
 #closePopup {
-  width: 100px;           
-  height: 40px;           
-  padding: 10px 15px;     
-  border: #2b3845; 
+  width: 80%; /* Ширина 80% от родительского элемента */
+  max-width: 100px; /* Максимальная ширина кнопок */
+  height: 40px; /* Фиксированная высота */
+  padding: 10px;     
+  border: none; 
   background-color: #2b3845; 
   color: white;           
   cursor: pointer;        
   box-sizing: border-box; 
   transition: background-color 0.3s; 
+  text-align: center; 
 }
 
 #copyLinkButton {
-  width: 100px;           
-  height: 40px;           
-  padding: 10px 15px;     
-  border: #2b3845; 
+  width: 80%; /* Ширина 80% от родительского элемента */
+  max-width: 100px; /* Максимальная ширина кнопок */
+  height: 40px; /* Фиксированная высота */
+  padding: 10px;     
+  border: none; 
   background-color: #2b3845; 
   color: white;           
   cursor: pointer;        
   box-sizing: border-box; 
   transition: background-color 0.3s; 
+  text-align: center; 
 }
 
 #copyLinkButton:hover{

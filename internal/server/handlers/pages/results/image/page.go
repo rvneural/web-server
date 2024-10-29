@@ -4,7 +4,6 @@ import (
 	model "WebServer/internal/models/db/results/image"
 	"WebServer/internal/server/handlers/interfaces"
 	"encoding/json"
-	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -45,7 +44,6 @@ func (r *RecognitionResult) GetPage(c *gin.Context) {
 
 	result := model.DBResult{}
 
-	log.Println(string(res.DATA))
 	err = json.Unmarshal(res.DATA, &result)
 
 	if err != nil {

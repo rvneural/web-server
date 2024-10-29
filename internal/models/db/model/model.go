@@ -1,7 +1,7 @@
 package model
 
 type DBResult struct {
-	ID          int64
-	IN_PROGRESS bool
-	DATA        interface{}
+	OPERATION_ID int    `db:"operation_id"`
+	IN_PROGRESS  bool   `db:"in_progress"`
+	DATA         []byte `db:"data"`
 }

@@ -1,5 +1,14 @@
 package db
 
+import (
+	"fmt"
+
+	model "WebServer/internal/models/db/model"
+
+	"github.com/jmoiron/sqlx"
+	_ "github.com/lib/pq"
+)
+
 type Worker struct {
 	host       string
 	port       string
@@ -18,4 +27,45 @@ func NewWorker(host, port, login, password, db_name, table_name string) *Worker 
 		db_name:    db_name,
 		table_name: table_name,
 	}
+}
+
+func (w *Worker) connectToDB() (*sqlx.DB, error) {
+	connectionData := fmt.Sprintf("user=%s dbname=%s sslmode=disable password=%s host=%s port=%s", w.login, w.db_name, w.password, w.host, w.port)
+	return sqlx.Connect("postgres", connectionData)
+}
+
+func (w *Worker) RegisterOperation(uniqID string) error {
+	db, err := w.connectToDB()
+	if err != nil {
+		return err
+	}
+	defer db.Close()
+
+	_, err = db.Exec("INSERT INTO $1 (operation_id, in_progress) VALUES ($2, $3)", w.table_name, uniqID, true)
+	return err
+}
+
+func (w *Worker) SetResult(uniqID string, Data interface{}) error {
+	return nil
+}
+
+func (w *Worker) GetResult(uniqID string) (dbResult model.DBResult, err error) {
+	db, err := w.connectToDB()
+	if err != nil {
+		return model.DBResult{}, err
+	}
+	defer db.Close()
+
+	dbResults := []model.DBResult{}
+
+	err = db.Select(&dbResults, "SELECT * FROM $1 WHERE operation_id = $2 LIMIT 1", w.table_name, uniqID)
+	if err != nil {
+		return model.DBResult{}, err
+	}
+
+	if len(dbResults) == 0 {
+		return model.DBResult{}, fmt.Errorf("no results")
+	}
+
+	return dbResults[0], nil
 }

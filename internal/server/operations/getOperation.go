@@ -2,6 +2,7 @@ package operations
 
 import (
 	"net/http"
+	"slices"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -12,11 +13,15 @@ type IDGeneratoer interface {
 }
 
 type Operation struct {
-	generator IDGeneratoer
+	generator     IDGeneratoer
+	acceptedTypes []string
 }
 
 func New(generator IDGeneratoer) *Operation {
-	return &Operation{generator: generator}
+	return &Operation{
+		generator:     generator,
+		acceptedTypes: []string{"image", "audio", "text", "test"},
+	}
 }
 
 // TODO: incorrect name of function
@@ -24,7 +29,7 @@ func (o *Operation) GetPage(c *gin.Context) {
 
 	operationType := strings.ToLower(c.Param("type"))
 
-	if operationType != "image" && operationType != "audio" && operationType != "text" {
+	if !slices.Contains(o.acceptedTypes, operationType) {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "invalid operation type",
 		})
@@ -32,13 +37,6 @@ func (o *Operation) GetPage(c *gin.Context) {
 	}
 
 	id := o.generator.Generate()
-
-	/*var urn string
-	if strings.ToLower(os.Getenv("TLS_MODE")) == "true" {
-		urn = "https://" + config.DOMAIN
-	} else {
-		urn = "localhost"
-	}*/
 
 	c.JSON(http.StatusOK, gin.H{
 		"id":  id,

@@ -35,6 +35,11 @@ func (w *Worker) connectToDB() (*sqlx.DB, error) {
 }
 
 func (w *Worker) RegisterOperation(uniqID string) error {
+
+	if len(uniqID) == 0 || len(uniqID) > 35 {
+		return fmt.Errorf("uniqID is empty or too big")
+	}
+
 	db, err := w.connectToDB()
 	if err != nil {
 		return err
@@ -45,11 +50,28 @@ func (w *Worker) RegisterOperation(uniqID string) error {
 	return err
 }
 
-func (w *Worker) SetResult(uniqID string, Data interface{}) error {
-	return nil
+func (w *Worker) SetResult(uniqID string, data []byte) error {
+
+	if len(uniqID) == 0 || len(uniqID) > 35 {
+		return fmt.Errorf("uniqID is empty or too big")
+	}
+
+	db, err := w.connectToDB()
+	if err != nil {
+		return err
+	}
+	defer db.Close()
+
+	_, err = db.Exec("UPDATE $1 SET result=$2, in_progress=$3 WHERE operation_id = $4", w.table_name, data, false, uniqID)
+	return err
 }
 
 func (w *Worker) GetResult(uniqID string) (dbResult model.DBResult, err error) {
+
+	if len(uniqID) == 0 || len(uniqID) > 35 {
+		return model.DBResult{}, fmt.Errorf("uniqID is empty or too big")
+	}
+
 	db, err := w.connectToDB()
 	if err != nil {
 		return model.DBResult{}, err

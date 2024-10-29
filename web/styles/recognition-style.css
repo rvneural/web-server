@@ -146,12 +146,6 @@
   transition: background-color 0.3s; 
 }
 
-#button-copied {
-  background-color: #4CAF50; /* Зеленый цвет для "Скопировано" */
-  color: white; /* Белый текст */
-  cursor: not-allowed; /* Указатель "недоступно" */
-}
-
 #copyLinkButton {
   background-color: #2b3845;
   color: white; 
@@ -162,8 +156,12 @@
   transition: background-color 0.3s; 
 }
 
+#copyLinkButton:hover{
+  background-color: #9f9f9f;
+}
+
 #closePopup:hover {
-  background-color: #2b3845; 
+  background-color: #9f9f9f; 
 }
 
 #closePopup:focus {

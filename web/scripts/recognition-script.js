@@ -78,7 +78,6 @@ async function recognize(){
     }
     
     formData.append('language', language.value) // Язык
-    formData.append('auto', autoCheckBox.checked) 
 
     // Показываем окно о начале расшифровки
     alert("Началась расшифровка файла. В зависимости от его размера, процесс может занять доительное время. В среднем 1 минута расшифровывается 10 секунд")
@@ -294,14 +293,10 @@ document.getElementById('copyLinkButton').onclick = function() {
         .then(() => {
             const copyButton = document.getElementById('copyLinkButton');
             copyButton.innerText = 'Скопировано'; // Меняем текст кнопки
-            copyButton.setAttribute('disabled', ''); // Блокируем кнопку
-            copyButton.classList.add('button-copied'); // Меняем цвет кнопки
-
             // Уведомление об успешном копировании
+            
             setTimeout(() => {
                 copyButton.innerText = 'Скопировать'; // Возвращаем текст кнопки
-                copyButton.removeAttribute('disabled'); // Разблокируем кнопку
-                copyButton.classList.remove('button-copied'); // Возвращаем исходный цвет
             }, 2000);
         })
         .catch(err => {

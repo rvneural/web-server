@@ -186,10 +186,10 @@ async function sendRequestURL() {
         const link = document.createElement('a');
         link.href = url_page; // Устанавливаем URL
         link.target = '_blank'; // Открываем в новом окне
-        link.textContent = 'ТУТ'; // Устанавливаем текст ссылки как "тут"
+        link.textContent = 'по этой ссылке';
     
         // Удаляем предыдущее содержимое и добавляем новое
-        popupMessage.innerHTML = `Ссылка на ваш запрос: `; // Устанавливаем текст до ссылки
+        popupMessage.innerHTML = `Результат операции будет доступен<br>`; // Устанавливаем текст до ссылки
         popupMessage.appendChild(link); // Добавляем ссылку в сообщение
     };
     

@@ -3,6 +3,11 @@ package text
 import (
 	config "WebServer/internal/config/services/text2text-service"
 	models "WebServer/internal/models/text"
+	"strings"
+
+	dbModel "WebServer/internal/models/db/results/text"
+	"WebServer/internal/server/handlers/interfaces"
+
 	"bytes"
 	"encoding/json"
 	"io"
@@ -14,15 +19,25 @@ import (
 
 type TextProcessingHandler struct {
 	DefaultPrompt string
+	dbWorker      interfaces.DBWorker
 }
 
-func New(prompt string) *TextProcessingHandler {
+func New(prompt string, dbWorker interfaces.DBWorker) *TextProcessingHandler {
 	return &TextProcessingHandler{
 		DefaultPrompt: prompt,
+		dbWorker:      dbWorker,
 	}
 }
 
 func (n *TextProcessingHandler) HandleForm(c *gin.Context) {
+
+	id := c.Request.FormValue("id")
+	id = strings.TrimSpace(id)
+	var dbError error
+	if len(id) != 0 {
+		dbError = n.dbWorker.RegisterOperation(id)
+	}
+
 	// Получаем текст и промт
 	text := c.Request.FormValue("text")
 	var prompt string
@@ -102,6 +117,18 @@ func (n *TextProcessingHandler) HandleForm(c *gin.Context) {
 		resonse.NewText = err.Error()
 		c.JSON(http.StatusInternalServerError, resonse)
 		return
+	}
+
+	if dbError == nil && len(id) != 0 {
+		ddbResult := dbModel.DBResult{
+			OldText: model.OldText,
+			NewText: model.NewText,
+			Prompt:  prompt,
+		}
+		byteDbResult, err := json.Marshal(ddbResult)
+		if err == nil {
+			n.dbWorker.SetResult(id, byteDbResult)
+		}
 	}
 
 	// Отправляем ответ в виде JSON клиенту

@@ -2,6 +2,9 @@ package audio
 
 import (
 	models "WebServer/internal/models/audio"
+	dbModel "WebServer/internal/models/db/results/audio"
+	"WebServer/internal/server/handlers/interfaces"
+	"encoding/json"
 	"io"
 	"log"
 	"net/http"
@@ -11,14 +14,18 @@ import (
 )
 
 type RecognitionHandler struct {
+	dbWorker interfaces.DBWorker
 }
 
-func New() *RecognitionHandler {
-	return &RecognitionHandler{}
+func New(dbWorker interfaces.DBWorker) *RecognitionHandler {
+	return &RecognitionHandler{
+		dbWorker: dbWorker,
+	}
 }
 
 func (n *RecognitionHandler) handleFileRecognition(c *gin.Context) (models.Request, error) {
 	var Request models.Request
+
 	file, _, err := c.Request.FormFile("file")
 	if err != nil {
 		return Request, err
@@ -50,6 +57,14 @@ func (n *RecognitionHandler) handleURLRecognition(c *gin.Context) models.Request
 }
 
 func (n *RecognitionHandler) HandleForm(c *gin.Context) {
+
+	id := c.Request.FormValue("id")
+	id = strings.TrimSpace(id)
+	var dbError error
+	if len(id) != 0 {
+		dbError = n.dbWorker.RegisterOperation(id)
+	}
+
 	var Request models.Request
 	var err error = nil
 	url := c.Request.FormValue("url")
@@ -58,6 +73,7 @@ func (n *RecognitionHandler) HandleForm(c *gin.Context) {
 	} else {
 		Request, err = n.handleFileRecognition(c)
 		if err != nil {
+			dbError = err
 			log.Println("Error sending recognition response", err)
 			c.JSON(http.StatusBadRequest, gin.H{"error": err})
 			return
@@ -66,6 +82,19 @@ func (n *RecognitionHandler) HandleForm(c *gin.Context) {
 
 	Request.Dialog = (strings.ToLower(c.Request.FormValue("dialog")) == "true")
 
+	response := n.recognize(Request)
+
+	if dbError == nil && len(id) != 0 {
+		dbResult := dbModel.DBResult{
+			RawText:  response.RawText,
+			NormText: response.NormText,
+		}
+		byteData, err := json.Marshal(dbResult)
+		if err == nil {
+			n.dbWorker.SetResult(id, byteData)
+		}
+	}
+
 	// Отправляем запрос на распознавание текста
-	c.JSON(http.StatusOK, n.recognize(Request))
+	c.JSON(http.StatusOK, response)
 }

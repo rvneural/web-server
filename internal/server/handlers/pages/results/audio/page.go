@@ -51,8 +51,6 @@ func (r *RecognitionResult) GetPage(c *gin.Context) {
 		return
 	}
 
-	log.Println("Norm text:", result.NormText)
-
 	c.HTML(http.StatusOK, "recognition-result.html", gin.H{
 		"title":     "Результаты расшифровки",
 		"style":     style,

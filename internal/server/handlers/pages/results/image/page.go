@@ -1,7 +1,10 @@
 package image
 
 import (
+	model "WebServer/internal/models/db/results/image"
 	"WebServer/internal/server/handlers/interfaces"
+	"encoding/json"
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -27,23 +30,31 @@ func (r *RecognitionResult) GetPage(c *gin.Context) {
 
 	id := c.Param("id")
 
-	if len(id) < 10 {
+	res, err := r.dbWorker.GetResult(id)
+
+	if err != nil {
 		r.notFoundOperation.GetPage(c, id)
 		return
-	} else if len(id) > 35 {
+	} else if res.IN_PROGRESS {
 		r.progressOperation.GetPage(c, id)
 		return
 	}
 
-	prompt := "Some prompt for ID: " + id
-	seed := 321321321321
-	image := "/web/static/img/templates/9-16.png"
+	result := model.DBResult{}
+
+	log.Println(string(res.DATA))
+	err = json.Unmarshal(res.DATA, &result)
+
+	if err != nil {
+		r.notFoundOperation.GetPage(c, id)
+		return
+	}
 
 	c.HTML(http.StatusOK, "image-generation-result.html", gin.H{
 		"title":  "Результаты генерации",
 		"style":  style,
-		"prompt": prompt,
-		"seed":   seed,
-		"image":  image,
+		"prompt": result.Prompt,
+		"seed":   result.Seed,
+		"image":  result.B64string,
 	})
 }

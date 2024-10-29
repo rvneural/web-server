@@ -8,19 +8,34 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"strings"
+
+	dbModel "WebServer/internal/models/db/results/image"
+	"WebServer/internal/server/handlers/interfaces"
 
 	"github.com/gin-gonic/gin"
 	ginsession "github.com/go-session/gin-session"
 )
 
 type ImageGenerationHandler struct {
+	dbWorker interfaces.DBWorker
 }
 
-func New() *ImageGenerationHandler {
-	return &ImageGenerationHandler{}
+func New(dbWorker interfaces.DBWorker) *ImageGenerationHandler {
+	return &ImageGenerationHandler{
+		dbWorker: dbWorker,
+	}
 }
 
 func (n *ImageGenerationHandler) HandleForm(c *gin.Context) {
+
+	id := c.Request.FormValue("id")
+	id = strings.TrimSpace(id)
+	var dbError error
+	if len(id) != 0 {
+		dbError = n.dbWorker.RegisterOperation(id)
+	}
+
 	prompt := c.Request.FormValue("prompt")
 	seed := c.Request.FormValue("seed")
 	widthRatio := c.Request.FormValue("widthRatio")
@@ -77,6 +92,22 @@ func (n *ImageGenerationHandler) HandleForm(c *gin.Context) {
 		log.Println(err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
+	}
+
+	if dbError == nil && len(id) != 0 {
+		dbResult := dbModel.DBResult{
+			Prompt:    prompt,
+			Seed:      model.Image.Seed,
+			B64string: model.Image.B64String,
+		}
+		dbByteRes, err := json.Marshal(dbResult)
+		if err == nil {
+			n.dbWorker.SetResult(id, dbByteRes)
+		}
+	}
+
+	if dbError != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": dbError.Error()})
 	}
 
 	c.JSON(http.StatusOK, model)

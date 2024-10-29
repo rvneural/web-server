@@ -76,10 +76,10 @@ func (a *App) init() {
 	a.Endpoint.RegisterResult("/text/:id", textResult.New(notFoundOperationPageP, progressOperationPageP, dataBaseWorker))
 	a.Endpoint.RegisterResult("/image/:id", imageResult.New(notFoundOperationPageP, progressOperationPageP, dataBaseWorker))
 
-	a.Endpoint.RegisterForm("/recognize", audioFormHandler.New())
-	a.Endpoint.RegisterForm("/rewriteFromWeb", textFormHandler.New("{{ rewrite }}"))
-	a.Endpoint.RegisterForm("/processTextFromWeb", textFormHandler.New(""))
-	a.Endpoint.RegisterForm("/generateImage", imageFormHandler.New())
+	a.Endpoint.RegisterForm("/recognize", audioFormHandler.New(dataBaseWorker))
+	a.Endpoint.RegisterForm("/rewriteFromWeb", textFormHandler.New("{{ rewrite }}", dataBaseWorker))
+	a.Endpoint.RegisterForm("/processTextFromWeb", textFormHandler.New("", dataBaseWorker))
+	a.Endpoint.RegisterForm("/generateImage", imageFormHandler.New(dataBaseWorker))
 	a.Endpoint.RegisterForm("/upscaleImage", imageUpscalerFormHandler.New())
 	a.Endpoint.RegisterForm("/photopea", photopea.New())
 

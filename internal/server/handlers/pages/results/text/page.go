@@ -1,7 +1,10 @@
 package text
 
 import (
+	model "WebServer/internal/models/db/results/text"
 	"WebServer/internal/server/handlers/interfaces"
+	"encoding/json"
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -26,23 +29,31 @@ func (r *RecognitionResult) GetPage(c *gin.Context) {
 
 	id := c.Param("id")
 
-	if len(id) < 10 {
+	res, err := r.dbWorker.GetResult(id)
+
+	if err != nil {
 		r.notFoundOperation.GetPage(c, id)
 		return
-	} else if len(id) > 35 {
+	} else if res.IN_PROGRESS {
 		r.progressOperation.GetPage(c, id)
 		return
 	}
 
-	old_text := "Some old text for ID: " + id
-	new_text := "Some new text for ID: " + id
-	prompt := "Some prompt for ID: " + id
+	result := model.DBResult{}
+
+	log.Println(string(res.DATA))
+	err = json.Unmarshal(res.DATA, &result)
+
+	if err != nil {
+		r.notFoundOperation.GetPage(c, id)
+		return
+	}
 
 	c.HTML(http.StatusOK, "text-processing-result.html", gin.H{
 		"title":    "Результаты обработки",
 		"style":    style,
-		"old_text": old_text,
-		"new_text": new_text,
-		"prompt":   prompt,
+		"old_text": result.OldText,
+		"new_text": result.NewText,
+		"prompt":   result.Prompt,
 	})
 }

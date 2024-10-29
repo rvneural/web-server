@@ -38,6 +38,7 @@ func (r *RecognitionResult) GetPage(c *gin.Context) {
 		return
 	} else if res.OPERATION_TYPE != "audio" {
 		c.Redirect(http.StatusMovedPermanently, "/operation/"+res.OPERATION_TYPE+"/"+res.OPERATION_ID)
+		return
 	} else if res.IN_PROGRESS {
 		r.progressOperation.GetPage(c, id)
 		return

@@ -30,6 +30,9 @@ import (
 	notFoundOperationPage "WebServer/internal/server/handlers/pages/results/notfound"
 	progressOperationPage "WebServer/internal/server/handlers/pages/results/progress"
 
+	dbConfig "WebServer/internal/config/db"
+	dbWorker "WebServer/internal/services/db"
+
 	"log"
 )
 
@@ -65,9 +68,13 @@ func (a *App) init() {
 	notFoundOperationPageP := notFoundOperationPage.New()
 	progressOperationPageP := progressOperationPage.New()
 
-	a.Endpoint.RegisterResult("/audio/:id", audioResult.New(notFoundOperationPageP, progressOperationPageP, nil))
-	a.Endpoint.RegisterResult("/text/:id", textResult.New(notFoundOperationPageP, progressOperationPageP, nil))
-	a.Endpoint.RegisterResult("/image/:id", imageResult.New(notFoundOperationPageP, progressOperationPageP, nil))
+	dataBaseWorker := dbWorker.New(
+		dbConfig.HOST, dbConfig.PORT, dbConfig.LOGIN, dbConfig.PASSWORD, dbConfig.DB_NAME, dbConfig.RESULT_TABLE_NAME,
+	)
+
+	a.Endpoint.RegisterResult("/audio/:id", audioResult.New(notFoundOperationPageP, progressOperationPageP, dataBaseWorker))
+	a.Endpoint.RegisterResult("/text/:id", textResult.New(notFoundOperationPageP, progressOperationPageP, dataBaseWorker))
+	a.Endpoint.RegisterResult("/image/:id", imageResult.New(notFoundOperationPageP, progressOperationPageP, dataBaseWorker))
 
 	a.Endpoint.RegisterForm("/recognize", audioFormHandler.New())
 	a.Endpoint.RegisterForm("/rewriteFromWeb", textFormHandler.New("{{ rewrite }}"))

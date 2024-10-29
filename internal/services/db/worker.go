@@ -19,7 +19,7 @@ type Worker struct {
 	table_name string
 }
 
-func NewWorker(host, port, login, password, db_name, table_name string) *Worker {
+func New(host, port, login, password, db_name, table_name string) *Worker {
 	return &Worker{
 		host:       host,
 		port:       port,
@@ -82,9 +82,9 @@ func (w *Worker) GetResult(uniqID string) (dbResult model.DBResult, err error) {
 	}
 	defer db.Close()
 
-	dbResults := []model.DBResult{}
+	dbResults := make([]model.DBResult, 0, 2)
 
-	err = db.Select(&dbResults, "SELECT * FROM "+w.table_name+" WHERE operation_id = $1 LIMIT 1", uniqID)
+	err = db.Select(&dbResults, "SELECT * FROM "+w.table_name+" WHERE operation_id = $1", uniqID)
 	if err != nil {
 		return model.DBResult{}, err
 	}

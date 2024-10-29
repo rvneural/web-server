@@ -2,7 +2,11 @@ package audio
 
 import (
 	"WebServer/internal/server/handlers/interfaces"
+	"encoding/json"
+	"log"
 	"net/http"
+
+	model "WebServer/internal/models/db/results/audio"
 
 	"github.com/gin-gonic/gin"
 )
@@ -37,10 +41,22 @@ func (r *RecognitionResult) GetPage(c *gin.Context) {
 		return
 	}
 
+	result := model.DBResult{}
+
+	log.Println(string(res.DATA))
+	err = json.Unmarshal(res.DATA, &result)
+
+	if err != nil {
+		r.notFoundOperation.GetPage(c, id)
+		return
+	}
+
+	log.Println("Norm text:", result.NormText)
+
 	c.HTML(http.StatusOK, "recognition-result.html", gin.H{
 		"title":     "Результаты расшифровки",
 		"style":     style,
-		"raw_text":  raw_text,
-		"norm_text": norm_text,
+		"raw_text":  result.RawText,
+		"norm_text": result.NormText,
 	})
 }

@@ -63,7 +63,7 @@ processButton.addEventListener('click', async () => {
   // Подготовка
   lockElements()
   progress = true
-  showPopupWithLink()
+  await showPopupWithLink()
 
   outputArea.value = 'Обрабатываем текст...'
   outputArea.classList.add("loader");

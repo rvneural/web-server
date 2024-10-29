@@ -48,7 +48,7 @@ generateImageButton.addEventListener('click', async() => {
     prompt = inputArea.value.trim()
     seed = randomSeed.checked? 'random' : seedArea.value.trim().replaceAll('-', '').replaceAll('.', '').replaceAll(',', '')
     ratio = rationSelect.value.split('-')
-    showPopupWithLink()
+    await showPopupWithLink()
 
 
     lockElements()

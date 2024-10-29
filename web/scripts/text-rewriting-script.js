@@ -43,7 +43,7 @@ processButton.addEventListener('click', async () => {
   progress = true
   outputArea.value = 'Переписываем текст...'
   outputArea.classList.add("loader");
-  showPopupWithLink()
+  await showPopupWithLink()
   
   // Переписывание текста
   await rewriteText(intupArea.value.trim())

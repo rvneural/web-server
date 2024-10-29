@@ -62,7 +62,7 @@ async function recognize(){
     // Блокируем элементы управления
     lockElements()
     progress = true
-    showPopupWithLink()
+    await showPopupWithLink()
     
     // Включаем анимацию в поле вывода результата
     outputArea.classList.add("loader");

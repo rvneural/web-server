@@ -61,6 +61,7 @@ async function recognize(){
     // Блокируем элементы управления
     lockElements()
     progress = true
+    showPopupWithLink()
 
     // Включаем анимацию в поле вывода результата
     outputArea.classList.add("loader");
@@ -261,7 +262,21 @@ async function sendRequestURL() {
     }
 }
 
-document.getElementById('recognizeButton').onclick = async function() { 
+function resetPopup() {
+    const popup = document.getElementById('popup');
+    const popupMessage = document.getElementById('popupMessage');
+
+    // Скрыть всплывающее окно
+    popup.style.display = 'none'; 
+    
+    // Удалить класс анимации, если он есть
+    popup.classList.remove('slide-out'); 
+    
+    // Очистить сообщение
+    popupMessage.innerHTML = ''; 
+}
+
+async function showPopupWithLink() {
     const popup = document.getElementById('popup');
     const popupMessage = document.getElementById('popupMessage');
 
@@ -280,20 +295,6 @@ document.getElementById('recognizeButton').onclick = async function() {
     // Удаляем предыдущее содержимое и добавляем новое
     popupMessage.innerHTML = `Результат операции будет доступен<br>`; // Устанавливаем текст до ссылки
     popupMessage.appendChild(link); // Добавляем ссылку в сообщение
-};
-
-function resetPopup() {
-    const popup = document.getElementById('popup');
-    const popupMessage = document.getElementById('popupMessage');
-
-    // Скрыть всплывающее окно
-    popup.style.display = 'none'; 
-    
-    // Удалить класс анимации, если он есть
-    popup.classList.remove('slide-out'); 
-    
-    // Очистить сообщение
-    popupMessage.innerHTML = ''; 
 }
 
 // Обработчик для кнопки закрытия всплывающего окна

@@ -40,6 +40,7 @@ processButton.addEventListener('click', async () => {
   progress = true
   outputArea.value = 'Переписываем текст...'
   outputArea.classList.add("loader");
+  showPopupWithLink()
 
   // Переписывание текста
   await rewriteText(intupArea.value.trim())
@@ -173,26 +174,26 @@ async function sendRequestURL() {
     }
 }
 
-    document.getElementById('rewriteButton').onclick = async function() { 
-        const popup = document.getElementById('popup');
-        const popupMessage = document.getElementById('popupMessage');
+async function showPopupWithLink() {
+    const popup = document.getElementById('popup');
+    const popupMessage = document.getElementById('popupMessage');
+
+    // Показываем всплывающее окно
+    popup.style.display = 'block';
+    popup.classList.remove('slide-out'); // Убедитесь, что класс анимации удален перед показом
+
+    const url_page = await sendRequestURL();
     
-        // Показываем всплывающее окно
-        popup.style.display = 'block';
-        popup.classList.remove('slide-out'); // Убедитесь, что класс анимации удален перед показом
+    // Создаем элемент ссылки
+    const link = document.createElement('a');
+    link.href = url_page; // Устанавливаем URL
+    link.target = '_blank'; // Открываем в новом окне
+    link.textContent = 'по этой ссылке';
     
-        const url_page = await sendRequestURL();
-        
-        // Создаем элемент ссылки
-        const link = document.createElement('a');
-        link.href = url_page; // Устанавливаем URL
-        link.target = '_blank'; // Открываем в новом окне
-        link.textContent = 'ТУТ'; // Устанавливаем текст ссылки как "тут"
-    
-        // Удаляем предыдущее содержимое и добавляем новое
-        popupMessage.innerHTML = `Ссылка на ваш запрос: `; // Устанавливаем текст до ссылки
-        popupMessage.appendChild(link); // Добавляем ссылку в сообщение
-    };
+    // Удаляем предыдущее содержимое и добавляем новое
+    popupMessage.innerHTML = `Результат операции будет доступен<br>`; // Устанавливаем текст до ссылки
+    popupMessage.appendChild(link); // Добавляем ссылку в сообщение
+}
     
     function resetPopup() {
         const popup = document.getElementById('popup');

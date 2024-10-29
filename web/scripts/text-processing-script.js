@@ -229,3 +229,22 @@ document.getElementById('rewriteButton').onclick = async function() {
 document.getElementById('closePopup').onclick = function() {
     document.getElementById('popup').style.display = 'none'; // Скрываем всплывающее окно
 };
+
+
+// Обработчик для кнопки копирования
+document.getElementById('copyLinkButton').onclick = function() {
+    const url_page = document.querySelector('#popupMessage a').href; // Получаем URL из ссылки
+    navigator.clipboard.writeText(url_page) // Копируем URL в буфер обмена
+        .then(() => {
+            const copyButton = document.getElementById('copyLinkButton');
+            copyButton.innerText = 'Скопировано'; // Меняем текст кнопки
+            // Уведомление об успешном копировании
+            
+            setTimeout(() => {
+                copyButton.innerText = 'Скопировать'; // Возвращаем текст кнопки
+            }, 2000);
+        })
+        .catch(err => {
+            console.error('Ошибка при копировании: ', err);
+        });
+};

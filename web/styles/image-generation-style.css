@@ -174,8 +174,11 @@
     width: 40px;
     height: 40px;
   }
-
-.popup {
+  .none-display{
+    display: none;
+  }
+  
+  .popup {
     position: fixed;
     bottom: 20px;
     right: 20px;
@@ -194,17 +197,35 @@
   }
   
   #closePopup {
-    background-color: #2b3845;
-    color: white; 
-    border: none; 
-    padding: 10px 15px; 
-    border-radius: 5px; 
-    cursor: pointer; 
+    width: 100px;           
+    height: 40px;           
+    padding: 10px 15px;     
+    border: #2b3845; 
+    background-color: #2b3845; 
+    color: white;           
+    cursor: pointer;        
+    box-sizing: border-box; 
     transition: background-color 0.3s; 
   }
   
-  #closePopup:hover {
+  #copyLinkButton {
+    width: 100px;           
+    height: 40px;           
+    padding: 10px 15px;     
+    border: #2b3845; 
     background-color: #2b3845; 
+    color: white;           
+    cursor: pointer;        
+    box-sizing: border-box; 
+    transition: background-color 0.3s; 
+  }
+  
+  #copyLinkButton:hover{
+    background-color: #9f9f9f;
+  }
+  
+  #closePopup:hover {
+    background-color: #9f9f9f; 
   }
   
   #closePopup:focus {

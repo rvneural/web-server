@@ -15,6 +15,7 @@ const urlInput = document.getElementById('urlInput') // Поле ввода сс
 const language = document.getElementById("languageSelect") // Поле выбора языка
 const fileTypeSelect = document.getElementById("fileTypeSelect") // Поле выбора типа файла
 
+var id = ""
 
 var normText = "" // Глобальная переменная, хранящая оригинал нормализованного текста с сервера
 var rawText = "" // Глобальная переменная, хранящая оригинал не нормализованного текста с сервера
@@ -57,12 +58,12 @@ async function recognize(){
         alert('Вы не ввели ссылку')
         return
     }
-    
+
     // Блокируем элементы управления
     lockElements()
     progress = true
     showPopupWithLink()
-
+    
     // Включаем анимацию в поле вывода результата
     outputArea.classList.add("loader");
     outputArea.value = "Идет расшифровка"
@@ -255,6 +256,7 @@ async function sendRequestURL() {
 
         // Получаем URL из ответа
         const url = data.url;
+        id = data.id
 
         return url; // Возвращаем URL
     } catch (error) {

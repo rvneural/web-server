@@ -8,6 +8,8 @@ const generateImageButton = document.getElementById('generateImageButton')
 const outputImage = document.getElementById('outputImage')
 const seedValue = document.getElementById('seedValue')
 
+var id = ""
+
 var progress = false
 
 var images = new Map()
@@ -59,8 +61,8 @@ generateImageButton.addEventListener('click', async() => {
     heightRatio = ratio[1]
 
     const formData = new FormData();
-    formData.append('prompt', prompt)
     formData.append('id', id)
+    formData.append('prompt', prompt)
     formData.append('seed', seed)
     formData.append('widthRatio', widthRatio)
     formData.append('heightRatio', heightRatio)
@@ -171,6 +173,7 @@ async function sendRequestURL() {
 
         // Получаем URL из ответа
         const url = data.url;
+        id = data.id;
 
         return url; // Возвращаем URL
     } catch (error) {

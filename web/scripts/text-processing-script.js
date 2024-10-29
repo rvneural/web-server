@@ -14,6 +14,8 @@ var currentText = ""
 
 var progress = false
 
+var id = ""
+
 window.onbeforeunload = function() {
     if(progress){
         return "Текст все еще обрабатывается. Вы уверены, что хотите закрыть страницу?"
@@ -66,6 +68,8 @@ processButton.addEventListener('click', async () => {
   outputArea.value = 'Обрабатываем текст...'
   outputArea.classList.add("loader");
 
+
+  
   // Переписывание текста
   await rewriteText(intupArea.value.trim(), promtArea.value.trim())
 
@@ -78,7 +82,7 @@ processButton.addEventListener('click', async () => {
 })
 
 // Функция переписывания текста
-async function rewriteText(userText, userPromt){
+async function rewriteText(userText, userPromt, id){
     const formData = new FormData();
     formData.append('id', id);
     formData.append('text', userText)
@@ -199,6 +203,7 @@ async function sendRequestURL() {
 
         // Получаем URL из ответа
         const url = data.url;
+        id = data.id
 
         return url; // Возвращаем URL
     } catch (error) {

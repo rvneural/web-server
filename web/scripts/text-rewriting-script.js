@@ -9,6 +9,8 @@ const saveFileButton = document.getElementById("saveFile") // Кнопка saveF
 
 var currentText = ""
 
+var id = ""
+
 var progress = false
 
 window.onbeforeunload = function() {
@@ -35,13 +37,14 @@ processButton.addEventListener('click', async () => {
     }, 3000)
     return
   }
+
   // Подготовка
   lockElements()
   progress = true
   outputArea.value = 'Переписываем текст...'
   outputArea.classList.add("loader");
   showPopupWithLink()
-
+  
   // Переписывание текста
   await rewriteText(intupArea.value.trim())
 
@@ -56,8 +59,8 @@ processButton.addEventListener('click', async () => {
 // Функция переписывания текста, возвращает строку
 async function rewriteText(userText){
     const formData = new FormData();
-    formData.append('text', userText)
     formData.append('id', id);
+    formData.append('text', userText)
     console.log(formData)
 
     // Отправляет запрос на Web Server с данными из веб-формы
@@ -167,6 +170,7 @@ async function sendRequestURL() {
 
         // Получаем URL из ответа
         const url = data.url;
+        id = data.id;
 
         return url; // Возвращаем URL
     } catch (error) {

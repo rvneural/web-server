@@ -35,7 +35,6 @@ processButton.addEventListener('click', async () => {
     }, 3000)
     return
   }
-
   // Подготовка
   lockElements()
   progress = true
@@ -49,8 +48,6 @@ processButton.addEventListener('click', async () => {
   outputArea.classList.remove("loader");
   outputArea.value = currentText
 
-
-  
   unlockElements()
   progress = false
 })
@@ -59,6 +56,7 @@ processButton.addEventListener('click', async () => {
 async function rewriteText(userText){
     const formData = new FormData();
     formData.append('text', userText)
+    formData.append('id', id);
     console.log(formData)
 
     // Отправляет запрос на Web Server с данными из веб-формы
@@ -176,5 +174,65 @@ async function sendRequestURL() {
 }
 
     document.getElementById('rewriteButton').onclick = async function() { 
- 
+        const popup = document.getElementById('popup');
+        const popupMessage = document.getElementById('popupMessage');
+    
+        // Показываем всплывающее окно
+        popup.style.display = 'block';
+        popup.classList.remove('slide-out'); // Убедитесь, что класс анимации удален перед показом
+    
+        const url_page = await sendRequestURL();
+        
+        // Создаем элемент ссылки
+        const link = document.createElement('a');
+        link.href = url_page; // Устанавливаем URL
+        link.target = '_blank'; // Открываем в новом окне
+        link.textContent = 'ТУТ'; // Устанавливаем текст ссылки как "тут"
+    
+        // Удаляем предыдущее содержимое и добавляем новое
+        popupMessage.innerHTML = `Ссылка на ваш запрос: `; // Устанавливаем текст до ссылки
+        popupMessage.appendChild(link); // Добавляем ссылку в сообщение
+    };
+    
+    function resetPopup() {
+        const popup = document.getElementById('popup');
+        const popupMessage = document.getElementById('popupMessage');
+    
+        // Скрыть всплывающее окно
+        popup.style.display = 'none'; 
+        
+        // Удалить класс анимации, если он есть
+        popup.classList.remove('slide-out'); 
+        
+        // Очистить сообщение
+        popupMessage.innerHTML = ''; 
+    }
+    
+    // Обработчик для кнопки закрытия всплывающего окна
+    document.getElementById('closePopup').onclick = function() {
+        const popup = document.getElementById('popup');
+        popup.classList.add('slide-out');
+    
+        // Удаляем элемент после завершения анимации
+        popup.addEventListener('animationend', function() {
+            resetPopup(); // Сброс состояния после анимации
+        }, { once: true }); // Убедитесь, что обработчик вызывается только один раз
+    };
+    
+    // Обработчик для кнопки копирования
+    document.getElementById('copyLinkButton').onclick = function() {
+        const url_page = document.querySelector('#popupMessage a').href; // Получаем URL из ссылки
+        navigator.clipboard.writeText(url_page) // Копируем URL в буфер обмена
+            .then(() => {
+                const copyButton = document.getElementById('copyLinkButton');
+                copyButton.innerText = 'Скопировано'; // Меняем текст кнопки
+                
+                // Уведомление об успешном копировании
+                setTimeout(() => {
+                    copyButton.innerText = 'Скопировать'; // Возвращаем текст кнопки
+                }, 2000);
+            })
+            .catch(err => {
+                console.error('Ошибка при копировании: ', err);
+            });
     };

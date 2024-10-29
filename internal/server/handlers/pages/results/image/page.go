@@ -53,6 +53,8 @@ func (r *RecognitionResult) GetPage(c *gin.Context) {
 		return
 	}
 
+	log.Println(result.B64string)
+
 	c.HTML(http.StatusOK, "image-generation-result.html", gin.H{
 		"title":  "Результаты генерации",
 		"style":  style,

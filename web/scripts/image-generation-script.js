@@ -39,8 +39,8 @@ generateImageButton.addEventListener('click', async() => {
         return
     }
 
-    if (inputArea.value.trim().length > 256) {
-        alert('Длина текста не может превышать 256 символов' + '\nТекущая длина текста: '+ inputArea.value.trim().length + ' символов')
+    if (inputArea.value.trim().length > 300) {
+        alert('Длина текста не может превышать 300 символов' + '\nТекущая длина текста: '+ inputArea.value.trim().length + ' символов')
         return
     }
 

@@ -60,6 +60,7 @@ generateImageButton.addEventListener('click', async() => {
 
     const formData = new FormData();
     formData.append('prompt', prompt)
+    formData.append('id', id)
     formData.append('seed', seed)
     formData.append('widthRatio', widthRatio)
     formData.append('heightRatio', heightRatio)

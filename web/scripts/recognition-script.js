@@ -57,7 +57,7 @@ async function recognize(){
         alert('Вы не ввели ссылку')
         return
     }
-
+    
     // Блокируем элементы управления
     lockElements()
     progress = true
@@ -77,6 +77,7 @@ async function recognize(){
         formData.append('url', urlInput.value) // Ссылка
     }
     
+    formData.append('id', id);
     formData.append('language', language.value) // Язык
 
     // Показываем окно о начале расшифровки

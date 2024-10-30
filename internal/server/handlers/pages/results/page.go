@@ -4,6 +4,7 @@ import (
 	"WebServer/internal/server/handlers/interfaces"
 	"encoding/json"
 	"net/http"
+	"net/url"
 
 	modelAudio "WebServer/internal/models/db/results/audio"
 	modelImage "WebServer/internal/models/db/results/image"
@@ -71,11 +72,12 @@ func (r *Result) GetPage(c *gin.Context) {
 		}
 
 		c.HTML(http.StatusOK, "recognition-result.html", gin.H{
-			"title":     "Результаты расшифровки",
-			"style":     style,
-			"filename":  result.FileName,
-			"raw_text":  result.RawText,
-			"norm_text": result.NormText,
+			"title":      "Результаты расшифровки",
+			"style":      style,
+			"isValidURL": r.IsValidURL,
+			"filename":   result.FileName,
+			"raw_text":   result.RawText,
+			"norm_text":  result.NormText,
 		})
 		return
 	case "text":
@@ -100,5 +102,11 @@ func (r *Result) GetPage(c *gin.Context) {
 	default:
 		r.notFoundOperation.GetPage(c, id)
 	}
+
+}
+
+func (c *Result) IsValidURL(str string) bool {
+	_, err := url.ParseRequestURI(str)
+	return err == nil
 
 }

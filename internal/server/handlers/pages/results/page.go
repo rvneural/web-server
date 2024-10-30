@@ -4,6 +4,7 @@ import (
 	"WebServer/internal/server/handlers/interfaces"
 	"encoding/json"
 	"net/http"
+	"strings"
 
 	modelAudio "WebServer/internal/models/db/results/audio"
 	modelImage "WebServer/internal/models/db/results/image"
@@ -55,7 +56,7 @@ func (r *Result) GetPage(c *gin.Context) {
 		c.HTML(http.StatusOK, "image-generation-result.html", gin.H{
 			"title":  "Результаты генерации",
 			"style":  style,
-			"prompt": result.Prompt,
+			"prompt": strings.ReplaceAll(result.Prompt, "&#34;", "\""),
 			"seed":   result.Seed,
 			"image":  result.B64string,
 		})
@@ -74,8 +75,8 @@ func (r *Result) GetPage(c *gin.Context) {
 			"title":     "Результаты расшифровки",
 			"style":     style,
 			"filename":  result.FileName,
-			"raw_text":  result.RawText,
-			"norm_text": result.NormText,
+			"raw_text":  strings.ReplaceAll(result.RawText, "&#34;", "\""),
+			"norm_text": strings.ReplaceAll(result.NormText, "&#34;", "\""),
 		})
 		return
 	case "text":
@@ -92,9 +93,9 @@ func (r *Result) GetPage(c *gin.Context) {
 		c.HTML(http.StatusOK, "text-processing-result.html", gin.H{
 			"title":    "Результаты обработки",
 			"style":    style,
-			"old_text": result.OldText,
-			"new_text": result.NewText,
-			"prompt":   result.Prompt,
+			"old_text": strings.ReplaceAll(result.OldText, "&#34;", "\""),
+			"new_text": strings.ReplaceAll(result.NewText, "&#34;", "\""),
+			"prompt":   strings.ReplaceAll(result.Prompt, "&#34;", "\""),
 		})
 		return
 	default:

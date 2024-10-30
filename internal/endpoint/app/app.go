@@ -97,9 +97,14 @@ func (a *App) Register404Page(handler PageHandler) {
 	a.engine.NoRoute(cache.CachePage(a.store, 5*time.Minute, handler.GetPage))
 }
 
-func (a *App) RegisterResult(pattern string, handler PageHandler) {
+func (a *App) RegisterResultWithCache(pattern string, handler PageHandler) {
 	log.Println("Registering result handler for pattern", pattern)
 	a.result.GET(pattern, cache.CachePage(a.store, 5*time.Minute, handler.GetPage))
+}
+
+func (a *App) RegisterResultNoCache(pattern string, handler PageHandler) {
+	log.Println("Registering result handler for pattern", pattern)
+	a.result.GET(pattern, handler.GetPage)
 }
 
 func (a *App) RegisterPageWithCache(pattern string, handler PageHandler) {

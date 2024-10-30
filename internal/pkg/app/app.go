@@ -63,8 +63,6 @@ func (a *App) init() {
 	a.Endpoint.RegisterPageWithCache("/text", textProcessingPage.New())
 	a.Endpoint.RegisterPageWithCache("/upscale", upscalePage.New())
 
-	a.Endpoint.RegisterPageNoCache("/get/operation", newID.New(idgenerator.New(a.idMaxLen)))
-
 	a.Endpoint.RegisterPageNoCache("/stats", stats.New())
 
 	notFoundOperationPageP := notFoundOperationPage.New()
@@ -74,7 +72,8 @@ func (a *App) init() {
 		dbConfig.HOST, dbConfig.PORT, dbConfig.LOGIN, dbConfig.PASSWORD, dbConfig.DB_NAME, dbConfig.RESULT_TABLE_NAME,
 	)
 
-	a.Endpoint.RegisterResult("/:id", result.New(notFoundOperationPageP, progressOperationPageP, dataBaseWorker))
+	a.Endpoint.RegisterResultNoCache("/get", newID.New(idgenerator.New(a.idMaxLen)))
+	a.Endpoint.RegisterResultWithCache("/:id", result.New(notFoundOperationPageP, progressOperationPageP, dataBaseWorker))
 
 	a.Endpoint.RegisterForm("/recognize", audioFormHandler.New(dataBaseWorker))
 	a.Endpoint.RegisterForm("/rewriteFromWeb", textFormHandler.New("{{ rewrite }}", dataBaseWorker))

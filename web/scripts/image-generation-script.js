@@ -102,21 +102,25 @@ generateImageButton.addEventListener('click', async() => {
 
     unlockElements()
 
-    setImage("data:image/png;base64," + data.image.b64String, prompt, data.image.seed)
+    // Генерация названия для картинки
+    const imageName = `${prompt.replace(/\s+/g, '_')}_${seed}.png`; // Заменяем пробелы на подчеркивания
 
-    // Add file name to outputImage element
-    outputImage.alt = data.image.prompt + ".png"
+    // Устанавливаем изображение
+    setImage(imagedata="data:image/png;base64," + data.image.b64String, alt=imageName, seed=data.image.seed);
 
-    seedValue.innerText = data.image.seed
-    progress = false
+    seedValue.innerText = data.image.seed;
+    progress = false;
 })
 
-function setImage(data, seed='image') {
-    outputImage.src = data
-    outputImage.alt = inputArea.value
-    downloadLink.href = data
-    // Add tag fileName to outputImage element
-    outputImage.setAttribute('filename', seed.trim() + ".png")
+function setImage(imagedata, alt = 'neuron-nexus', seed='image') {
+    outputImage.src = imagedata;
+    outputImage.alt = alt; // Используем переданный alt для описания изображения
+
+    // Генерация названия для картинки
+    const imageName = `${alt.replace(/\s+/g, '_')}_${seed}.png`; // Заменяем пробелы на подчеркивания
+
+    // Устанавливаем имя файла в data-атрибут
+    outputImage.setAttribute('data-filename', imageName);
 }
 
 function lockElements() {

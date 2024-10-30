@@ -95,3 +95,15 @@ func (w *Worker) GetResult(uniqID string) (dbResult model.DBResult, err error) {
 
 	return dbResults[0], nil
 }
+
+func (w *Worker) GetAllOperations() (dbResult []model.DBResult, err error) {
+	dbResult = make([]model.DBResult, 0, 10)
+	db, err := w.connectToDB()
+	if err != nil {
+		return dbResult, err
+	}
+	defer db.Close()
+
+	err = db.Select(&dbResult, "SELECT * FROM "+w.table_name)
+	return dbResult, err
+}

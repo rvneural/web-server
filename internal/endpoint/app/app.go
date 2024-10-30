@@ -25,6 +25,8 @@ import (
 	roll "github.com/rollbar/rollbar-go"
 
 	stats "github.com/semihalev/gin-stats"
+
+	"github.com/dvwright/xss-mw"
 )
 
 type App struct {
@@ -48,6 +50,10 @@ type FormHandler interface {
 func New() *App {
 	gin.SetMode(gin.ReleaseMode)
 	router := gin.Default()
+
+	// Use XSS protection
+	var xssMdlwr xss.XssMw
+	router.Use(xssMdlwr.RemoveXss())
 
 	// Use Recovery
 	router.Use(gin.Recovery())

@@ -31,6 +31,8 @@ import (
 	dbConfig "WebServer/internal/config/db"
 	dbWorker "WebServer/internal/services/db"
 
+	adminOperationList "WebServer/internal/server/handlers/pages/admin/operations"
+
 	"WebServer/internal/server/handlers/pages/stats"
 
 	"log"
@@ -71,6 +73,8 @@ func (a *App) init() {
 	dataBaseWorker := dbWorker.New(
 		dbConfig.HOST, dbConfig.PORT, dbConfig.LOGIN, dbConfig.PASSWORD, dbConfig.DB_NAME, dbConfig.RESULT_TABLE_NAME,
 	)
+
+	a.Endpoint.RegisterAdminPageNoCahce("/operations", adminOperationList.New(dataBaseWorker))
 
 	a.Endpoint.RegisterResultNoCache("/get", newID.New(idgenerator.New(a.idMaxLen)))
 	a.Endpoint.RegisterResultWithCache("/:id", result.New(notFoundOperationPageP, progressOperationPageP, dataBaseWorker))

@@ -82,7 +82,7 @@ func New() *App {
 
 	a := router.Group("/admin")
 	a.Use(gin.BasicAuth(gin.Accounts{
-		"admin": "2984543Aas.",
+		config.ADMIN_LOGIN: config.ADMIN_PASSWORD,
 	}))
 
 	router.StaticFS("/web/", http.Dir("../../web"))

@@ -5,6 +5,8 @@ const randomSeed = document.getElementById('randomSeed')
 
 const generateImageButton = document.getElementById('generateImageButton')
 
+const downloadLink = document.getElementById('downloadLink')
+
 const outputImage = document.getElementById('outputImage')
 const seedValue = document.getElementById('seedValue')
 
@@ -22,6 +24,7 @@ window.onbeforeunload = function() {
 
 window.onload = function() {
     document.getElementById('imagePage').style.backgroundColor = "#494E56"
+    downloadLink.href = outputImage.src
 }
 
 generateImageButton.addEventListener('click', async() => {
@@ -108,10 +111,10 @@ generateImageButton.addEventListener('click', async() => {
     progress = false
 })
 
-function setImage(data, alt = '', seed='image') {
+function setImage(data, seed='image') {
     outputImage.src = data
     outputImage.alt = inputArea.value
-
+    downloadLink.href = data
     // Add tag fileName to outputImage element
     outputImage.setAttribute('filename', seed.trim() + ".png")
 }

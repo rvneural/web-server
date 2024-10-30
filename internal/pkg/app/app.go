@@ -74,7 +74,9 @@ func (a *App) init() {
 		dbConfig.HOST, dbConfig.PORT, dbConfig.LOGIN, dbConfig.PASSWORD, dbConfig.DB_NAME, dbConfig.RESULT_TABLE_NAME,
 	)
 
-	a.Endpoint.RegisterAdminPageNoCahce("/operations", adminOperationList.New(dataBaseWorker))
+	a.Endpoint.RegisterAdminPageNoCahce("/operations/:limit", adminOperationList.New(dataBaseWorker))
+	a.Endpoint.RegisterAdminPageNoCahce("/operations/:limit/:type", adminOperationList.NewLimitOperationsWithType(dataBaseWorker))
+	a.Endpoint.RegisterAdminPageNoCahce("/operations", adminOperationList.NewNoLimit())
 
 	a.Endpoint.RegisterResultNoCache("/get", newID.New(idgenerator.New(a.idMaxLen)))
 	a.Endpoint.RegisterResultWithCache("/:id", result.New(notFoundOperationPageP, progressOperationPageP, dataBaseWorker))

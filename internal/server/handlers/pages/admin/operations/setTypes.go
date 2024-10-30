@@ -8,30 +8,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type OperationListElement struct {
-	ID           int    `json:"id"`
-	OPERATION_ID string `json:"operation_id"`
-	URI          string `json:"uri"`
-	FINISHED     bool   `json:"finished"`
-	TYPE         string `json:"type"`
-}
-
-type AllOperations struct {
-	Operations []OperationListElement `json:"operations"`
-}
-
-type AdminOperationListStruct struct {
+type LimitOperationsWithType struct {
 	dbWorker interfaces.DBWorker
 }
 
-func New(dbWorker interfaces.DBWorker) *AdminOperationListStruct {
-	return &AdminOperationListStruct{
-		dbWorker: dbWorker,
-	}
+func NewLimitOperationsWithType(dbWorker interfaces.DBWorker) *LimitOperationsWithType {
+	return &LimitOperationsWithType{dbWorker: dbWorker}
 }
 
-func (a *AdminOperationListStruct) GetPage(c *gin.Context) {
-
+func (l *LimitOperationsWithType) GetPage(c *gin.Context) {
 	var limit int
 	str_limit := c.Param("limit")
 	limit, err := strconv.Atoi(str_limit)
@@ -39,8 +24,9 @@ func (a *AdminOperationListStruct) GetPage(c *gin.Context) {
 		c.Redirect(http.StatusSeeOther, "/admin/operations/0")
 		return
 	}
+	operation_type := c.Param("type")
 
-	operations, err := a.dbWorker.GetAllOperations(limit, "")
+	operations, err := l.dbWorker.GetAllOperations(limit, operation_type)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),

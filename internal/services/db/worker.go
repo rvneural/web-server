@@ -2,6 +2,8 @@ package db
 
 import (
 	"fmt"
+	"log"
+	"strconv"
 	"strings"
 
 	model "WebServer/internal/models/db/model"
@@ -96,7 +98,7 @@ func (w *Worker) GetResult(uniqID string) (dbResult model.DBResult, err error) {
 	return dbResults[0], nil
 }
 
-func (w *Worker) GetAllOperations() (dbResult []model.DBResult, err error) {
+func (w *Worker) GetAllOperations(limit int, operation_type string) (dbResult []model.DBResult, err error) {
 	dbResult = make([]model.DBResult, 0, 10)
 	db, err := w.connectToDB()
 	if err != nil {
@@ -104,6 +106,20 @@ func (w *Worker) GetAllOperations() (dbResult []model.DBResult, err error) {
 	}
 	defer db.Close()
 
-	err = db.Select(&dbResult, "SELECT * FROM "+w.table_name)
+	request := "SELECT * FROM " + w.table_name
+
+	if operation_type != "" {
+		log.Println(operation_type)
+		request += " WHERE type = '" + strings.ToLower(strings.TrimSpace(operation_type)) + "'"
+	}
+
+	request += " ORDER BY id DESC"
+
+	if limit > 0 {
+		request += " LIMIT " + strconv.Itoa(limit)
+	}
+
+	log.Println(request)
+	err = db.Select(&dbResult, request)
 	return dbResult, err
 }

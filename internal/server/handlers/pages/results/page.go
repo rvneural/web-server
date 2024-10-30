@@ -73,6 +73,7 @@ func (r *Result) GetPage(c *gin.Context) {
 		c.HTML(http.StatusOK, "recognition-result.html", gin.H{
 			"title":     "Результаты расшифровки",
 			"style":     style,
+			"filename":  result.FileName,
 			"raw_text":  result.RawText,
 			"norm_text": result.NormText,
 		})

@@ -60,6 +60,7 @@ func (n *RecognitionHandler) HandleForm(c *gin.Context) {
 
 	id := c.Request.FormValue("id")
 	id = strings.TrimSpace(id)
+	filename := c.Request.FormValue("filename")
 	var dbError error
 	if len(id) != 0 {
 		dbError = n.dbWorker.RegisterOperation(id, "audio")
@@ -89,6 +90,7 @@ func (n *RecognitionHandler) HandleForm(c *gin.Context) {
 			dbResult := dbModel.DBResult{
 				RawText:  response.RawText,
 				NormText: response.NormText,
+				FileName: filename,
 			}
 			byteData, err := json.Marshal(dbResult)
 			if err == nil {

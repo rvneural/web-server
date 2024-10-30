@@ -33,14 +33,15 @@ func New(dbWorker interfaces.DBWorker) *AdminOperationListStruct {
 func (a *AdminOperationListStruct) GetPage(c *gin.Context) {
 
 	var limit int
-	str_limit := c.Param("limit")
+	str_limit := c.DefaultQuery("limit", "0")
 	limit, err := strconv.Atoi(str_limit)
-	if err != nil || limit < 0 {
-		c.Redirect(http.StatusSeeOther, "/admin/operations/0")
-		return
+	if err != nil {
+		limit = 0
 	}
 
-	operations, err := a.dbWorker.GetAllOperations(limit, "")
+	operation_type := c.DefaultQuery("type", "")
+
+	operations, err := a.dbWorker.GetAllOperations(limit, operation_type)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),

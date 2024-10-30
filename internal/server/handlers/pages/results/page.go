@@ -53,12 +53,17 @@ func (r *Result) GetPage(c *gin.Context) {
 			return
 		}
 
+		if result.Name == "" {
+			result.Name = "image.png"
+		}
+
 		c.HTML(http.StatusOK, "image-generation-result.html", gin.H{
 			"title":  "Результаты генерации",
 			"style":  style,
 			"prompt": strings.ReplaceAll(result.Prompt, "&#34;", "\""),
 			"seed":   result.Seed,
 			"image":  result.B64string,
+			"name":   result.Name,
 		})
 		return
 	case "audio":

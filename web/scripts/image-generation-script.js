@@ -24,7 +24,6 @@ window.onbeforeunload = function() {
 
 window.onload = function() {
     document.getElementById('imagePage').style.backgroundColor = "#494E56"
-    downloadLink.href = outputImage.src
 }
 
 generateImageButton.addEventListener('click', async() => {
@@ -55,10 +54,6 @@ generateImageButton.addEventListener('click', async() => {
 
 
     lockElements()
-    console.log('Запрос на генерацию изображения...')
-    console.log('prompt', prompt)
-    console.log('seed', seed)
-    console.log('ratio', ratio)
 
     widthRatio = ratio[0]
     heightRatio = ratio[1]
@@ -102,25 +97,21 @@ generateImageButton.addEventListener('click', async() => {
 
     unlockElements()
 
-    // Генерация названия для картинки
-    const imageName = `${prompt.replace(/\s+/g, '_')}_${seed}.png`; // Заменяем пробелы на подчеркивания
+    imageName = prompt + ".png"
 
     // Устанавливаем изображение
-    setImage(imagedata="data:image/png;base64," + data.image.b64String, alt=imageName, seed=data.image.seed);
+    setImage(imagedata="data:image/png;base64," + data.image.b64String, alt=imageName);
 
     seedValue.innerText = data.image.seed;
     progress = false;
 })
 
-function setImage(imagedata, alt = 'neuron-nexus', seed='image') {
+function setImage(imagedata, alt = 'neuron-nexus') {
     outputImage.src = imagedata;
     outputImage.alt = alt; // Используем переданный alt для описания изображения
 
-    // Генерация названия для картинки
-    const imageName = `${alt.replace(/\s+/g, '_')}_${seed}.png`; // Заменяем пробелы на подчеркивания
-
-    // Устанавливаем имя файла в data-атрибут
-    outputImage.setAttribute('data-filename', imageName);
+    downloadLink.href = imagedata;
+    downloadLink.download = alt;
 }
 
 function lockElements() {
@@ -237,7 +228,7 @@ async function showPopupWithLink() {
     copyButton.textContent = 'Скопировать';
     copyButton.className = 'copy-link-button'; // Добавляем класс для стилей
     copyButton.onclick = () => {
-        navigator.clipboard.writeText(url_page) // Копируем URL в буфер обмена
+        navigator.clipboard.writeText(link.href) // Копируем URL в буфер обмена
             .then(() => {
                 copyButton.innerText = 'Скопировано'; // Меняем текст кнопки
                 setTimeout(() => {

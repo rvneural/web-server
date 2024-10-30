@@ -10,7 +10,7 @@
         </div>
         <div class="output-image-group">
             <img src="data:image/png;base64,{{.image}}">
-            <a href="data:image/png;base64,{{.image}}" download="image.png">Скачать изображение</a>
+            <a href="data:image/png;base64,{{.image}}" download="{{.name}}">Скачать изображение</a>
         </div>
     </div>
 {{template "footer.html" .}}

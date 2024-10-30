@@ -72,3 +72,14 @@ input[type="url"], input[type="text"], input[type="password"], input[type="numbe
 form{
     background: transparent;
 }
+
+a {
+    background-color: transparent;
+    background: transparent;
+    text-decoration: none;
+}
+
+a:hover{
+    text-decoration: underline;
+    background-color: transparent;
+}

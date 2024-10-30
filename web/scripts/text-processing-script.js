@@ -260,7 +260,7 @@ async function showPopupWithLink() {
     copyButton.textContent = 'Скопировать';
     copyButton.className = 'copy-link-button'; // Добавляем класс для стилей
     copyButton.onclick = () => {
-        navigator.clipboard.writeText(url_page) // Копируем URL в буфер обмена
+        navigator.clipboard.writeText(link.href) // Копируем URL в буфер обмена
             .then(() => {
                 copyButton.innerText = 'Скопировано'; // Меняем текст кнопки
                 setTimeout(() => {

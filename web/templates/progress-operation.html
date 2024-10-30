@@ -4,8 +4,9 @@
         <img class="loading" src="/web/static/img/loading.svg">
     </div>
     <div class="mainbox">
-        <p class="special">ЗАПРОС ЕЩЕ ВЫПОЛНЯЕТСЯ.</p>
-        <p class="second">Попробуйте обновить страницу позже.</p>
+        <p class="special">ЗАПРОС ЕЩЕ ВЫПОЛНЯЕТСЯ</p>
+        <p class="second">Попробуйте <a href="{{.url}}">обновить</a> страницу позже</p>
+        <p class="second">ID вашей операции: {{.id}}</p>
     </div>
 </div>
 {{template "footer.html" .}}

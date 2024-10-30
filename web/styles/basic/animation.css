@@ -9,5 +9,5 @@
   }
 
   .need-enter{
-    border: solid 6px red;
+    outline: solid 3px red;   
   }

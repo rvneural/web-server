@@ -1,7 +1,11 @@
 {{template "header.html" .}}
 <div class="work-group">
     <div class="filenameurl">
+        {{if isValidURL .filename}}
         <p>Обработан файл: <a href="{{.filename}}" target="_blank">{{.filename}}</a></p>
+    {{else}}
+        <p>Обработан файл: {{.filename}}</p>
+    {{end}}    
     </div>    
     <div class="input-text-group">
         <p>Нормализованный текст</p>

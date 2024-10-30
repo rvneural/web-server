@@ -4,6 +4,7 @@ import (
 	"crypto/tls"
 	"log"
 	"net/http"
+	"text/template"
 
 	config "WebServer/internal/config/app"
 
@@ -70,6 +71,11 @@ func New() *App {
 
 	// Create cache
 	store := persistence.NewInMemoryStore(time.Hour)
+
+	// Add URL validation function
+	router.SetFuncMap(template.FuncMap{
+		"isValidURL": isValidURL,
+	})
 
 	// Use rollbar
 	roll.SetToken(config.ROLLBAR_TOKEN)

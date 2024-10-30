@@ -3,6 +3,7 @@ package app
 import (
 	"log"
 	"net/http"
+	"net/url"
 )
 
 func (a *App) startRedirection() error {
@@ -15,4 +16,9 @@ func (a *App) startRedirection() error {
 		}),
 	}
 	return httpServer.ListenAndServe()
+}
+
+func isValidURL(str string) bool {
+	_, err := url.ParseRequestURI(str)
+	return err == nil
 }

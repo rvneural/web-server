@@ -2,18 +2,39 @@
 .work-group{
     display: grid;
     background-color: transparent;
-    grid-template-columns: 5fr 5fr;
+    grid-template:
+      "a a" 5%
+      "b c" auto;
     gap: 1%;
+  }
+
+  .filenameurl{
+    grid-area: a;
+    display: flex;
+    align-items: center;
+  }
+
+  .filenameurl a{
+    background: none;
+    color: rgb(0, 255, 208);
+  }
+
+  .filenameurl p{
+    flex: 1;
+    font-size: 20px;
+    text-align: center;
   }
   
   .input-text-group{
     grid-template-rows: 0.5fr 12fr;
     display: grid;
+    grid-area: b;
   }
   
   .output-text-group{
     grid-template-rows: 0.5fr 12fr;
     display: grid;
+    grid-area: c;
   }
   
   .input-text-group p{

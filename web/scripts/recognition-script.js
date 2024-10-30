@@ -73,10 +73,12 @@ async function recognize(){
     if (fileTypeSelect.value == "file"){
         const file = fileInput.files[0];
         formData.append('file', file); // Файл
+        formData.append('filename', fileInput.files[0].name)
         parts = file.name.split('.')
         formData.append('fileType', parts.at(-1)) // Тип файла
     } else {
         formData.append('url', urlInput.value) // Ссылка
+        formData.append('filename', urlInput.value)
     }
     
     formData.append('id', id);

@@ -1,6 +1,8 @@
 {{template "header.html" .}}
 <div class="work-group">
-    
+    <div class="filenameurl">
+        <p>Обработан файл: <a href="{{.filename}}" target="_blank">{{.filename}}</a></p>
+    </div>    
     <div class="input-text-group">
         <p>Нормализованный текст</p>
         <textarea class="output-area" id="inputArea">{{.norm_text}}</textarea>

@@ -112,10 +112,6 @@ func (n *ImageGenerationHandler) HandleForm(c *gin.Context) {
 		}
 	}(id, dbError)
 
-	if dbError != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": dbError.Error()})
-	}
-
 	c.JSON(http.StatusOK, model)
 }
 

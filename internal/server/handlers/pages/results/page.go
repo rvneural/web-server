@@ -74,7 +74,7 @@ func (r *Result) GetPage(c *gin.Context) {
 		c.HTML(http.StatusOK, "recognition-result.html", gin.H{
 			"title":      "Результаты расшифровки",
 			"style":      style,
-			"isValidURL": r.IsValidURL,
+			"isValidURL": r.isValidURL,
 			"filename":   result.FileName,
 			"raw_text":   result.RawText,
 			"norm_text":  result.NormText,
@@ -105,7 +105,7 @@ func (r *Result) GetPage(c *gin.Context) {
 
 }
 
-func (c *Result) IsValidURL(str string) bool {
+func (c *Result) isValidURL(str string) bool {
 	_, err := url.ParseRequestURI(str)
 	return err == nil
 

@@ -14,6 +14,9 @@ type OperationListElement struct {
 	URI          string `json:"uri"`
 	FINISHED     bool   `json:"finished"`
 	TYPE         string `json:"type"`
+	CREATED_AT   string `json:"creation_date"`
+	FINISH_DATE  string `json:"finish_date"`
+	DURATION     string `json:"duration"`
 }
 
 type AllOperations struct {
@@ -44,7 +47,8 @@ func (a *AdminOperationListStruct) GetPage(c *gin.Context) {
 	operations, err := a.dbWorker.GetAllOperations(limit, operation_type)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": err.Error(),
+			"error":       err.Error(),
+			"description": "Ошибка при чтении",
 		})
 	}
 
@@ -57,10 +61,11 @@ func (a *AdminOperationListStruct) GetPage(c *gin.Context) {
 			URI:          "/operation/" + operation.OPERATION_ID,
 			FINISHED:     !operation.IN_PROGRESS,
 			TYPE:         operation.OPERATION_TYPE,
+			CREATED_AT:   operation.CREATION_DATE.Format("02.01.2006 15:04:05"),
+			FINISH_DATE:  operation.FINISH_DATE.Format("02.01.2006 15:04:05"),
+			DURATION:     operation.FINISH_DATE.Sub(operation.CREATION_DATE).String(),
 		}
 	}
 
-	c.JSON(http.StatusOK, AllOperations{
-		Operations: JSONoperations,
-	})
+	c.JSON(http.StatusOK, JSONoperations)
 }

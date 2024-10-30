@@ -5,6 +5,7 @@ import (
 	"log"
 	"strconv"
 	"strings"
+	"time"
 
 	model "WebServer/internal/models/db/model"
 
@@ -50,7 +51,7 @@ func (w *Worker) RegisterOperation(uniqID string, operation_type string) error {
 	}
 	defer db.Close()
 
-	_, err = db.Exec("INSERT INTO "+w.table_name+" (operation_id, in_progress, type) VALUES ($1, $2, $3)", uniqID, true, operation_type)
+	_, err = db.Exec("INSERT INTO "+w.table_name+" (operation_id, in_progress, type, creation_date, finish_date) VALUES ($1, $2, $3, $4, $5)", uniqID, true, operation_type, time.Now(), time.Now())
 	return err
 }
 
@@ -67,7 +68,7 @@ func (w *Worker) SetResult(uniqID string, data []byte) error {
 	}
 	defer db.Close()
 
-	_, err = db.Exec("UPDATE "+w.table_name+" SET data = $1, in_progress = $2 WHERE operation_id = $3", data, false, uniqID)
+	_, err = db.Exec("UPDATE "+w.table_name+" SET data = $1, in_progress = $2, finish_date = $3 WHERE operation_id = $4", data, false, time.Now(), uniqID)
 	return err
 }
 

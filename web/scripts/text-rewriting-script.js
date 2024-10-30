@@ -213,16 +213,23 @@ async function showPopupWithLink() {
         popupMessage.innerHTML = ''; 
     }
     
-    // Обработчик для кнопки закрытия всплывающего окна
     document.getElementById('closePopup').onclick = function() {
+        closePopup();
+    };
+    
+    // Функция для закрытия всплывающего окна
+    function closePopup() {
         const popup = document.getElementById('popup');
         popup.classList.add('slide-out');
     
         // Удаляем элемент после завершения анимации
         popup.addEventListener('animationend', function() {
             resetPopup(); // Сброс состояния после анимации
-        }, { once: true }); // Убедитесь, что обработчик вызывается только один раз
-    };
+        }, { once: true });
+    }
+    
+    // Закрываем всплывающее окно через 15 секунд
+    setTimeout(closePopup, 20000);
     
     // Обработчик для кнопки копирования
     document.getElementById('copyLinkButton').onclick = function() {

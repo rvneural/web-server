@@ -267,6 +267,7 @@
   
   a {
     color: rgb(0, 255, 208); 
+    font-size: 20px;
     font-weight: bold;
     background: transparent !important;
   }

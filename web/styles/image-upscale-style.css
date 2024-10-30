@@ -52,6 +52,9 @@
   .output-group{
     align-items: center;
     justify-content: center;
+    flex-direction: column;
+    font-size: 20px;
+    font-weight: bold;
   }
 
   .output-group img{
@@ -65,4 +68,10 @@
     border: 1px solid black;
     border-radius: 5px;
   }
+
+  a {
+    background-color: transparent !important; /* Убираем фон */ 
+    margin: 0 0 10px 0;
+    color: rgb(0, 255, 208); 
+}
   

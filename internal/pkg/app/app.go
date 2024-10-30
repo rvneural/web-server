@@ -63,7 +63,7 @@ func (a *App) init() {
 	a.Endpoint.RegisterPageWithCache("/text", textProcessingPage.New())
 	a.Endpoint.RegisterPageWithCache("/upscale", upscalePage.New())
 
-	a.Endpoint.RegisterPageNoCache("/stats", stats.New())
+	a.Endpoint.RegisterAdminPageNoCahce("/stats", stats.New())
 
 	notFoundOperationPageP := notFoundOperationPage.New()
 	progressOperationPageP := progressOperationPage.New()

@@ -30,6 +30,7 @@ import (
 type App struct {
 	engine *gin.Engine
 	result *gin.RouterGroup
+	admin  *gin.RouterGroup
 	store  *persistence.InMemoryStore
 
 	login    string
@@ -47,6 +48,9 @@ type FormHandler interface {
 func New() *App {
 	gin.SetMode(gin.ReleaseMode)
 	router := gin.Default()
+
+	// Use Recovery
+	router.Use(gin.Recovery())
 
 	// Use session
 	//cookieStore := cookie.NewStore([]byte(config.SESSION_SECRET))
@@ -70,12 +74,18 @@ func New() *App {
 
 	r := router.Group("/operation")
 
+	a := router.Group("/admin")
+	a.Use(gin.BasicAuth(gin.Accounts{
+		"admin": "2984543Aas.",
+	}))
+
 	router.StaticFS("/web/", http.Dir("../../web"))
 	router.LoadHTMLGlob("../../web/templates/*.html")
 
 	return &App{
 		engine: router,
 		result: r,
+		admin:  a,
 		store:  store,
 	}
 }
@@ -120,6 +130,11 @@ func (a *App) RegisterPageNoCache(pattern string, handler PageHandler) {
 func (a *App) RegisterForm(pattern string, handler FormHandler) {
 	log.Println("Registering form handler for pattern", pattern)
 	a.engine.POST(pattern, handler.HandleForm)
+}
+
+func (a *App) RegisterAdminPageNoCahce(pattern string, handler PageHandler) {
+	log.Println("Registering admin page handler for pattern", pattern)
+	a.admin.GET(pattern, handler.GetPage)
 }
 
 func (a *App) StartLocal() {

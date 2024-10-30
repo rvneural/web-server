@@ -179,12 +179,11 @@ async function sendRequestURL() {
 }
 
 async function showPopupWithLink() {
-    const popup = document.getElementById('popup');
-    const popupMessage = document.getElementById('popupMessage');
+    const popupContainer = document.getElementById('popupContainer'); // Контейнер для всплывающих окон
 
-    // Показываем всплывающее окно
-    popup.style.display = 'block';
-    popup.classList.remove('slide-out'); // Убедитесь, что класс анимации удален перед показом
+    // Создаем новое всплывающее окно
+    const popup = document.createElement('div');
+    popup.className = 'popup'; // Добавляем класс для стилей
 
     const url_page = await sendRequestURL();
     
@@ -194,45 +193,29 @@ async function showPopupWithLink() {
     link.target = '_blank'; // Открываем в новом окне
     link.textContent = 'по этой ссылке';
     
-    // Удаляем предыдущее содержимое и добавляем новое
-    popupMessage.innerHTML = `Результат операции будет доступен<br>`; // Устанавливаем текст до ссылки
-    popupMessage.appendChild(link); // Добавляем ссылку в сообщение
-}
-    
-    function resetPopup() {
-        const popup = document.getElementById('popup');
-        const popupMessage = document.getElementById('popupMessage');
-    
-        // Скрыть всплывающее окно
-        popup.style.display = 'none'; 
-        
-        // Удалить класс анимации, если он есть
-        popup.classList.remove('slide-out'); 
-        
-        // Очистить сообщение
-        popupMessage.innerHTML = ''; 
-    }
-    
-    // Обработчик для кнопки закрытия всплывающего окна
-    document.getElementById('closePopup').onclick = function() {
-        const popup = document.getElementById('popup');
-        popup.classList.add('slide-out');
-    
-        // Удаляем элемент после завершения анимации
-        popup.addEventListener('animationend', function() {
-            resetPopup(); // Сброс состояния после анимации
-        }, { once: true }); // Убедитесь, что обработчик вызывается только один раз
-    };
-    
-    // Обработчик для кнопки копирования
-    document.getElementById('copyLinkButton').onclick = function() {
-        const url_page = document.querySelector('#popupMessage a').href; // Получаем URL из ссылки
+    // Устанавливаем содержимое всплывающего окна
+    popup.innerHTML = `Результат операции будет доступен<br>`;
+    popup.appendChild(link); // Добавляем ссылку в сообщение
+
+    // Создаем контейнер для кнопок
+    const buttonContainer = document.createElement('div');
+    buttonContainer.className = 'button-container'; // Класс для стилизации кнопок
+
+    // Создаем кнопку "Закрыть"
+    const closeButton = document.createElement('button');
+    closeButton.textContent = 'Закрыть';
+    closeButton.className = 'closePopup'; // Добавляем класс для стилей
+    closeButton.onclick = () => closePopup(popup); // Обработчик для закрытия
+    buttonContainer.appendChild(closeButton); // Добавляем кнопку в контейнер
+
+    // Создаем кнопку "Скопировать"
+    const copyButton = document.createElement('button');
+    copyButton.textContent = 'Скопировать';
+    copyButton.className = 'copy-link-button'; // Добавляем класс для стилей
+    copyButton.onclick = () => {
         navigator.clipboard.writeText(url_page) // Копируем URL в буфер обмена
             .then(() => {
-                const copyButton = document.getElementById('copyLinkButton');
                 copyButton.innerText = 'Скопировано'; // Меняем текст кнопки
-                
-                // Уведомление об успешном копировании
                 setTimeout(() => {
                     copyButton.innerText = 'Скопировать'; // Возвращаем текст кнопки
                 }, 2000);
@@ -241,3 +224,24 @@ async function showPopupWithLink() {
                 console.error('Ошибка при копировании: ', err);
             });
     };
+    buttonContainer.appendChild(copyButton); // Добавляем кнопку в контейнер
+
+    // Добавляем контейнер кнопок в всплывающее окно
+    popup.appendChild(buttonContainer);
+
+    // Добавляем новое всплывающее окно в контейнер
+    popupContainer.appendChild(popup);
+
+    // Закрываем всплывающее окно через 20 секунд
+    setTimeout(() => closePopup(popup), 20000);
+}
+
+// Функция для закрытия всплывающего окна
+function closePopup(popup) {
+    popup.classList.add('slide-out'); // Добавляем класс для анимации исчезновения
+
+    // Удаляем элемент после завершения анимации
+    popup.addEventListener('animationend', function() {
+        popup.remove(); // Удаляем всплывающее окно из DOM
+    }, { once: true });
+}

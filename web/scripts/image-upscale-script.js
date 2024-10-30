@@ -2,6 +2,8 @@ const inputFile = document.getElementById("fileInput")
 const outputImage = document.getElementById("image")
 const upscaleButton = document.getElementById("upscaleButton")
 
+const downloadLink = document.getElementById('downloadLink')
+
 var progress = false
 
 window.onbeforeunload = function () {
@@ -13,6 +15,7 @@ window.onbeforeunload = function () {
 window.onload = function () {
     document.getElementById('upscalePage').style.backgroundColor = "#494E56"
     upscaleButton.setAttribute("disabled", "")
+    downloadLink.href = outputImage.src
 }
 
 inputFile.addEventListener("change", function () {
@@ -48,6 +51,7 @@ upscaleButton.addEventListener("click", async function () {
         return
     }
     outputImage.src = data.url
+    downloadLink.href = data.url
     upscaleButton.removeAttribute("disabled")
     progress = false
 })

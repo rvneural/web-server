@@ -17,9 +17,7 @@ import (
 	photopea "WebServer/internal/server/handlers/forms/photopea"
 	textFormHandler "WebServer/internal/server/handlers/forms/text"
 
-	audioResult "WebServer/internal/server/handlers/pages/results/audio"
-	imageResult "WebServer/internal/server/handlers/pages/results/image"
-	textResult "WebServer/internal/server/handlers/pages/results/text"
+	result "WebServer/internal/server/handlers/pages/results"
 
 	notFound "WebServer/internal/server/handlers/pages/404"
 
@@ -32,6 +30,8 @@ import (
 
 	dbConfig "WebServer/internal/config/db"
 	dbWorker "WebServer/internal/services/db"
+
+	"WebServer/internal/server/handlers/pages/stats"
 
 	"log"
 )
@@ -57,13 +57,15 @@ func (a *App) init() {
 	a.password = os.Getenv("PASSWORD")
 	a.tlsMode = os.Getenv("TLS_MODE") == "true"
 
-	a.Endpoint.RegisterPage("/", recognitionFromFilePage.New())
-	a.Endpoint.RegisterPage("/image", imageGenerationPage.New())
-	a.Endpoint.RegisterPage("/rewrite", rewritePage.New())
-	a.Endpoint.RegisterPage("/text", textProcessingPage.New())
-	a.Endpoint.RegisterPage("/upscale", upscalePage.New())
+	a.Endpoint.RegisterPageWithCache("/", recognitionFromFilePage.New())
+	a.Endpoint.RegisterPageWithCache("/image", imageGenerationPage.New())
+	a.Endpoint.RegisterPageWithCache("/rewrite", rewritePage.New())
+	a.Endpoint.RegisterPageWithCache("/text", textProcessingPage.New())
+	a.Endpoint.RegisterPageWithCache("/upscale", upscalePage.New())
 
-	a.Endpoint.RegisterIDGenerator("/get/operation/:type", newID.New(idgenerator.New(a.idMaxLen)))
+	a.Endpoint.RegisterPageNoCache("/get/operation", newID.New(idgenerator.New(a.idMaxLen)))
+
+	a.Endpoint.RegisterPageNoCache("/stats", stats.New())
 
 	notFoundOperationPageP := notFoundOperationPage.New()
 	progressOperationPageP := progressOperationPage.New()
@@ -72,9 +74,7 @@ func (a *App) init() {
 		dbConfig.HOST, dbConfig.PORT, dbConfig.LOGIN, dbConfig.PASSWORD, dbConfig.DB_NAME, dbConfig.RESULT_TABLE_NAME,
 	)
 
-	a.Endpoint.RegisterResult("/audio/:id", audioResult.New(notFoundOperationPageP, progressOperationPageP, dataBaseWorker))
-	a.Endpoint.RegisterResult("/text/:id", textResult.New(notFoundOperationPageP, progressOperationPageP, dataBaseWorker))
-	a.Endpoint.RegisterResult("/image/:id", imageResult.New(notFoundOperationPageP, progressOperationPageP, dataBaseWorker))
+	a.Endpoint.RegisterResult("/:id", result.New(notFoundOperationPageP, progressOperationPageP, dataBaseWorker))
 
 	a.Endpoint.RegisterForm("/recognize", audioFormHandler.New(dataBaseWorker))
 	a.Endpoint.RegisterForm("/rewriteFromWeb", textFormHandler.New("{{ rewrite }}", dataBaseWorker))

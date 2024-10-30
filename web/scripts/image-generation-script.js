@@ -159,7 +159,7 @@ randomSeed.addEventListener('change', (e) => {
 async function sendRequestURL() {
     try {
         // Отправляем GET-запрос на сервер
-        const resp = await fetch('get/operation/image', {
+        const resp = await fetch('get/operation', {
             method: 'GET',
         });
 

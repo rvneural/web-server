@@ -242,7 +242,7 @@ saveFileButton.addEventListener('click', (event)=>{
 async function sendRequestURL() {
     try {
         // Отправляем GET-запрос на сервер
-        const resp = await fetch('get/operation/audio', {
+        const resp = await fetch('get/operation', {
             method: 'GET',
         });
 

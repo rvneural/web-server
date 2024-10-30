@@ -189,7 +189,7 @@ saveFileButton.addEventListener('click', async () => {
 async function sendRequestURL() {
     try {
         // Отправляем GET-запрос на сервер
-        const resp = await fetch('get/operation/text', {
+        const resp = await fetch('get/operation', {
             method: 'GET',
         });
 

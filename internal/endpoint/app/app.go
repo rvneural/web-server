@@ -16,13 +16,15 @@ import (
 	"golang.org/x/crypto/acme"
 	"golang.org/x/crypto/acme/autocert"
 
-	"github.com/gin-contrib/sessions"
-	"github.com/gin-contrib/sessions/cookie"
+	//"github.com/gin-contrib/sessions"
+	//"github.com/gin-contrib/sessions/cookie"
 
 	"github.com/gin-contrib/gzip"
 
 	"github.com/gin-contrib/rollbar"
 	roll "github.com/rollbar/rollbar-go"
+
+	stats "github.com/semihalev/gin-stats"
 )
 
 type App struct {
@@ -43,15 +45,18 @@ type FormHandler interface {
 }
 
 func New() *App {
-	gin.SetMode(gin.TestMode)
+	gin.SetMode(gin.ReleaseMode)
 	router := gin.Default()
 
 	// Use session
-	cookieStore := cookie.NewStore([]byte(config.SESSION_SECRET))
-	router.Use(sessions.Sessions("neuron-nexus-session", cookieStore))
+	//cookieStore := cookie.NewStore([]byte(config.SESSION_SECRET))
+	//router.Use(sessions.Sessions("neuron-nexus-session", cookieStore))
 
 	// Use GZIP compression
 	router.Use(gzip.Gzip(gzip.DefaultCompression))
+
+	// Use stats
+	router.Use(stats.RequestStats())
 
 	// Create cache
 	store := persistence.NewInMemoryStore(time.Hour)
@@ -89,7 +94,7 @@ func (a *App) SetBasicAuth(login, password string) {
 
 func (a *App) Register404Page(handler PageHandler) {
 	log.Println("Registering 404 page")
-	a.engine.NoRoute(cache.CachePage(a.store, time.Minute, handler.GetPage))
+	a.engine.NoRoute(cache.CachePage(a.store, 5*time.Minute, handler.GetPage))
 }
 
 func (a *App) RegisterResult(pattern string, handler PageHandler) {
@@ -97,12 +102,12 @@ func (a *App) RegisterResult(pattern string, handler PageHandler) {
 	a.result.GET(pattern, cache.CachePage(a.store, 5*time.Minute, handler.GetPage))
 }
 
-func (a *App) RegisterPage(pattern string, handler PageHandler) {
+func (a *App) RegisterPageWithCache(pattern string, handler PageHandler) {
 	log.Println("Registering handler for pattern", pattern)
-	a.engine.GET(pattern, cache.CachePage(a.store, 20*time.Minute, handler.GetPage))
+	a.engine.GET(pattern, cache.CachePage(a.store, 5*time.Minute, handler.GetPage))
 }
 
-func (a *App) RegisterIDGenerator(pattern string, handler PageHandler) {
+func (a *App) RegisterPageNoCache(pattern string, handler PageHandler) {
 	log.Println("Registering ID generator handler for pattern", pattern)
 	a.engine.GET(pattern, handler.GetPage)
 }

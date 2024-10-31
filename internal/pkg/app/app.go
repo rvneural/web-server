@@ -69,7 +69,8 @@ func (a *App) init() {
 	a.Endpoint.RegisterAdminPageNoCahce("/stats", stats.New())
 
 	dataBaseWorker := dbWorker.New(
-		dbConfig.HOST, dbConfig.PORT, dbConfig.LOGIN, dbConfig.PASSWORD, dbConfig.DB_NAME, dbConfig.RESULT_TABLE_NAME,
+		dbConfig.HOST, dbConfig.PORT, dbConfig.LOGIN, dbConfig.PASSWORD, dbConfig.DB_NAME,
+		dbConfig.RESULT_TABLE_NAME, a.logger,
 	)
 
 	a.Endpoint.RegisterAdminPageNoCahce("/operations", adminOperationList.New(dataBaseWorker))

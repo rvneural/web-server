@@ -2,6 +2,7 @@ package db
 
 import (
 	"fmt"
+	"log/slog"
 	"strconv"
 	"strings"
 	"time"
@@ -19,9 +20,10 @@ type Worker struct {
 	password   string
 	db_name    string
 	table_name string
+	logger     *slog.Logger
 }
 
-func New(host, port, login, password, db_name, table_name string) *Worker {
+func New(host, port, login, password, db_name, table_name string, logger *slog.Logger) *Worker {
 	return &Worker{
 		host:       host,
 		port:       port,
@@ -29,6 +31,7 @@ func New(host, port, login, password, db_name, table_name string) *Worker {
 		password:   password,
 		db_name:    db_name,
 		table_name: table_name,
+		logger:     logger,
 	}
 }
 
@@ -46,11 +49,15 @@ func (w *Worker) RegisterOperation(uniqID string, operation_type string) error {
 
 	db, err := w.connectToDB()
 	if err != nil {
+		w.logger.Error("Connection to DataBase", "error", err)
 		return err
 	}
 	defer db.Close()
 
 	_, err = db.Exec("INSERT INTO "+w.table_name+" (operation_id, in_progress, type, creation_date, finish_date) VALUES ($1, $2, $3, $4, $5)", uniqID, true, operation_type, time.Now(), time.Now())
+	if err != nil {
+		w.logger.Error("Insert operation to DataBase", "error", err)
+	}
 	return err
 }
 
@@ -63,11 +70,15 @@ func (w *Worker) SetResult(uniqID string, data []byte) error {
 
 	db, err := w.connectToDB()
 	if err != nil {
+		w.logger.Error("Connection to DataBase", "error", err)
 		return err
 	}
 	defer db.Close()
 
 	_, err = db.Exec("UPDATE "+w.table_name+" SET data = $1, in_progress = $2, finish_date = $3 WHERE operation_id = $4", data, false, time.Now(), uniqID)
+	if err != nil {
+		w.logger.Error("Update operation to DataBase", "error", err)
+	}
 	return err
 }
 
@@ -80,6 +91,7 @@ func (w *Worker) GetResult(uniqID string) (dbResult model.DBResult, err error) {
 
 	db, err := w.connectToDB()
 	if err != nil {
+		w.logger.Error("Connection to DataBase", "error", err)
 		return model.DBResult{}, err
 	}
 	defer db.Close()
@@ -88,6 +100,7 @@ func (w *Worker) GetResult(uniqID string) (dbResult model.DBResult, err error) {
 
 	err = db.Select(&dbResults, "SELECT * FROM "+w.table_name+" WHERE operation_id = $1", uniqID)
 	if err != nil {
+		w.logger.Error("Get operation from DataBase", "error", err)
 		return model.DBResult{}, err
 	}
 
@@ -102,6 +115,7 @@ func (w *Worker) GetAllOperations(limit int, operation_type string) (dbResult []
 	dbResult = make([]model.DBResult, 0, 10)
 	db, err := w.connectToDB()
 	if err != nil {
+		w.logger.Error("Connection to DataBase", "error", err)
 		return dbResult, err
 	}
 	defer db.Close()
@@ -119,6 +133,9 @@ func (w *Worker) GetAllOperations(limit int, operation_type string) (dbResult []
 	}
 
 	err = db.Select(&dbResult, request)
+	if err != nil {
+		w.logger.Error("Get operation from DataBase", "error", err)
+	}
 	return dbResult, err
 }
 
@@ -130,10 +147,14 @@ func (w *Worker) GetOperation(uniqID string) (dbResult model.DBResult, err error
 
 	db, err := w.connectToDB()
 	if err != nil {
+		w.logger.Error("Connection to DataBase", "error", err)
 		return model.DBResult{}, err
 	}
 	defer db.Close()
 
 	err = db.Get(&dbResult, "SELECT * FROM "+w.table_name+" WHERE operation_id = $1 LIMIT 1", uniqID)
+	if err != nil {
+		w.logger.Error("Get operation from DataBase", "error", err)
+	}
 	return dbResult, err
 }

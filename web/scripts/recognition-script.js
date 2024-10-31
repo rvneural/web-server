@@ -85,7 +85,7 @@ async function recognize(){
     formData.append('language', language.value) // Язык
 
     // Показываем окно о начале расшифровки
-    alert("Началась расшифровка файла. В зависимости от его размера, процесс может занять доительное время. В среднем 1 минута расшифровывается 10 секунд")
+    //alert("Началась расшифровка файла. В зависимости от его размера, процесс может занять доительное время. В среднем 1 минута расшифровывается 10 секунд")
 
     // Отправляет запрос на Web Server с данными из веб-формы
     const resp = await fetch('/recognize', {
@@ -109,7 +109,6 @@ async function recognize(){
     } else {
         outputArea.value = data.rawText
     }
-    console.log(data)
 
     // Разблокирем элементы управления
     unlockElements()
@@ -192,13 +191,11 @@ copyTextButton.addEventListener('click', async (event)=>{
 
     // Убираем из текста двойные переносы строк
     var text = outputArea.value.trim().replaceAll('\n\n', '\n')
-    console.log("Text for copying: ", text)
 
     // Пытаемся отправить текст в clipboard
     try{
         // Доступно только по протоколу HTTPS
         await navigator.clipboard.writeText(text)
-        console.log('Текст скопирован')
         copyTextButton.innerText = "Скопировано"
         setTimeout(() => {
             copyTextButton.innerText = "Скопировать"
@@ -281,25 +278,28 @@ function resetPopup() {
 }
 
 async function showPopupWithLink() {
-    const popupContainer = document.getElementById('popupContainer'); // Контейнер для всплывающих окон
+    const popupContainer = document.getElementById('popupContainer');
 
     // Показать контейнер, если он неактивен
     if (!popupContainer.classList.contains('popup-active')) {
         popupContainer.classList.add('popup-active');
     }
 
+    // Применяем анимацию к существующим всплывающим окнам
+    
+
     // Создаем новое всплывающее окно
     const popup = document.createElement('div');
     popup.className = 'popup'; // Добавляем класс для стилей
 
     const url_page = await sendRequestURL();
-    
+
     // Создаем элемент ссылки
     const link = document.createElement('a');
     link.href = url_page; // Устанавливаем URL
     link.target = '_blank'; // Открываем в новом окне
     link.textContent = 'по этой ссылке';
-    
+
     // Устанавливаем содержимое всплывающего окна
     popup.innerHTML = `Результат операции будет доступен<br>`;
     popup.appendChild(link); // Добавляем ссылку в сообщение
@@ -336,25 +336,50 @@ async function showPopupWithLink() {
     // Добавляем контейнер кнопок в всплывающее окно
     popup.appendChild(buttonContainer);
 
-    // Добавляем новое всплывающее окно в контейнер в начало
-    popupContainer.insertBefore(popup, popupContainer.firstChild);
+    const existingPopups = popupContainer.getElementsByClassName('popup');
+    for (let popup of existingPopups) {
+        popup.classList.add('slide-up'); // Добавляем класс для анимации
+    }
+    // Ждем завершения анимации (0.5s)
+    await new Promise(resolve => setTimeout(resolve, 500));
+    for (let popup of existingPopups) {
+        popup.classList.remove('slide-up'); // Добавляем класс для анимации
+    }
+    // Добавляем новое всплывающее окно в контейнер
+    popupContainer.appendChild(popup);
+
+    popup.classList.add('slide-in'); // Добавляем класс для анимации появления
+    await new Promise(resolve => setTimeout(resolve, 500));
+    popup.classList.remove('slide-in');
 
     // Закрываем всплывающее окно через 20 секунд
     setTimeout(() => closePopup(popup), 20000);
 }
 
 // Функция для закрытия всплывающего окна
-function closePopup(popup) {
+async function closePopup(popup) {
     popup.classList.add('slide-out'); // Добавляем класс для анимации исчезновения
 
     // Удаляем элемент после завершения анимации
-    popup.addEventListener('animationend', function() {
-        popup.remove(); // Удаляем всплывающее окно из DOM
+    popup.addEventListener('animationend', async function() {
+       
 
         // Проверяем, есть ли еще всплывающие окна
         const popupContainer = document.getElementById('popupContainer');
+        const popups = Array.from(popupContainer.children);
+        
         if (popupContainer.children.length === 0) {
             popupContainer.classList.remove('popup-active'); // Скрываем контейнер, если нет активных окон
         }
+            // Спускаем все окна, находящиеся выше закрытого
+            let popupIndex = popups.indexOf(popup);
+            popup.remove(); // Удаляем всплывающее окно из DOM
+            for (let i = popupIndex - 1; i > -1; i--) {
+                popups[i].classList.add('slide-down'); // Добавляем анимацию спуска
+            }
+            await new Promise(resolve => setTimeout(resolve, 500));
+            for (let i = popupIndex - 1; i > -1; i--) {
+                popups[i].classList.remove('slide-down'); // Добавляем анимацию спуска
+            }
     }, { once: true });
 }

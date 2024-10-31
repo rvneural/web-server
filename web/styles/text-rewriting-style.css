@@ -20,6 +20,24 @@
   }
 }
 
+@keyframes slideDOWN {
+  from {
+      transform: translateY(-100%); /* Начальная позиция - ниже */
+  }
+  to {
+      transform: translateY(0); /* Конечная позиция - на месте */
+  }
+}
+
+@keyframes slideUP {
+  from {
+    transform: translateY(0); /* Начальная позиция - ниже */
+}
+to {
+    transform: translateY(-100%); /* Конечная позиция - на месте */
+}
+}
+
 .work-group{
     display: grid;
     background-color: transparent;
@@ -101,6 +119,9 @@
     margin-bottom: 0px; /* Отступ между попапами */
     flex-direction: column; /* Располагаем элементы вертикально */
     align-items: center; /* Центрируем содержимое по горизонтали */
+  }
+  
+  .popup.slide-in {
     animation: slideIn 0.5s forwards; /* Анимация появления */
   }
   
@@ -152,4 +173,12 @@
     font-size: 20px;
     font-weight: bold;
     background: transparent !important;
+  }
+  
+  .popup.slide-up {
+    animation: slideUP 0.5s forwards; /* Анимация поднятия */
+  }
+  
+  .popup.slide-down {
+    animation: slideDOWN 0.5s backwards; /* Анимация опускания */
   }

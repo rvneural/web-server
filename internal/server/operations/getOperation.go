@@ -11,14 +11,12 @@ type IDGeneratoer interface {
 }
 
 type Operation struct {
-	generator     IDGeneratoer
-	acceptedTypes []string
+	generator IDGeneratoer
 }
 
 func New(generator IDGeneratoer) *Operation {
 	return &Operation{
-		generator:     generator,
-		acceptedTypes: []string{"image", "audio", "text", "test"},
+		generator: generator,
 	}
 }
 

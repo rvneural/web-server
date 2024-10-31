@@ -283,6 +283,11 @@ function resetPopup() {
 async function showPopupWithLink() {
     const popupContainer = document.getElementById('popupContainer'); // Контейнер для всплывающих окон
 
+    // Показать контейнер, если он неактивен
+    if (!popupContainer.classList.contains('popup-active')) {
+        popupContainer.classList.add('popup-active');
+    }
+
     // Создаем новое всплывающее окно
     const popup = document.createElement('div');
     popup.className = 'popup'; // Добавляем класс для стилей
@@ -331,8 +336,8 @@ async function showPopupWithLink() {
     // Добавляем контейнер кнопок в всплывающее окно
     popup.appendChild(buttonContainer);
 
-    // Добавляем новое всплывающее окно в контейнер
-    popupContainer.appendChild(popup);
+    // Добавляем новое всплывающее окно в контейнер в начало
+    popupContainer.insertBefore(popup, popupContainer.firstChild);
 
     // Закрываем всплывающее окно через 20 секунд
     setTimeout(() => closePopup(popup), 20000);
@@ -345,5 +350,11 @@ function closePopup(popup) {
     // Удаляем элемент после завершения анимации
     popup.addEventListener('animationend', function() {
         popup.remove(); // Удаляем всплывающее окно из DOM
+
+        // Проверяем, есть ли еще всплывающие окна
+        const popupContainer = document.getElementById('popupContainer');
+        if (popupContainer.children.length === 0) {
+            popupContainer.classList.remove('popup-active'); // Скрываем контейнер, если нет активных окон
+        }
     }, { once: true });
 }

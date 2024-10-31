@@ -191,39 +191,43 @@
   }
   
   .popup-container {
+    display: flex; /* Изменяем на flex для размещения попапов */
     position: fixed;
-    bottom: 20px;
-    right: 20px;
+    bottom: -100px; /* Изначально скрываем за экраном */
+    right: 20px; /* Расположение от правого края */
     width: 300px;
-    background:none;
+    background: none;
     padding: 30px;
-    z-index: 1000;
     color: white;
-    display: none;
-    animation: slideIn 0.5s forwards;
-    display: flex;
+    transition: bottom 0.5s ease; /* Плавный переход при активации */
     flex-direction: column;
     gap: 5px;
     align-items: flex-end;
+    z-index: 0; /* Убедимся, что контейнер поверх других элементов */
   }
-
+  
+  .popup-active {
+    flex: 0;
+    bottom: 5px; /* Позиция при активации */
+    padding: 0px;
+  }
+  
   .popup {
     background-color: #485867b6;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     padding: 30px;
     color: white;
-    width: 300px;
+    width: 100%; /* Занимаем всю ширину контейнера */
     display: flex;
-    margin-bottom: 5px; /* Отступ между попапами */
-    margin-right: 10px;
+    margin-bottom: 0px; /* Отступ между попапами */
     flex-direction: column; /* Располагаем элементы вертикально */
     align-items: center; /* Центрируем содержимое по горизонтали */
     animation: slideIn 0.5s forwards; /* Анимация появления */
   }
-
+  
   .popup.slide-out {
     animation: slideOut 0.5s forwards; /* Анимация исчезновения */
-}
+  }
   
   .popup p {
     margin: 0 0 10px;
@@ -237,11 +241,11 @@
     margin-top: 10px; /* Отступ сверху для разделения от текста */
     gap: 0;
   }
-
+  
   .button-container button {
     margin: 0; /* Убираем отступы между кнопками */
   }
-
+  
   .popup button {
     flex: 1; /* Кнопки займут равное пространство */
     max-width: 100px; /* Максимальная ширина кнопок */
@@ -256,21 +260,17 @@
     text-align: center; 
     margin: 0;
   }
-
-.popup button:hover {
+  
+  .popup button:hover {
     background-color: #9f9f9f; 
-}
-
-.popup button:focus {
+  }
+  
+  .popup button:focus {
     outline: none; 
-}
+  }
   
   a {
     font-size: 20px;
     font-weight: bold;
     background: transparent !important;
-  }
-
-  .popup.slide-out {
-    animation: slideOut 0.5s forwards;
   }

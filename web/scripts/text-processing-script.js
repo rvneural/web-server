@@ -228,6 +228,11 @@ function resetPopup() {
 async function showPopupWithLink() {
     const popupContainer = document.getElementById('popupContainer'); // Контейнер для всплывающих окон
 
+    // Показать контейнер, если он неактивен
+    if (!popupContainer.classList.contains('popup-active')) {
+        popupContainer.classList.add('popup-active');
+    }
+
     // Создаем новое всплывающее окно
     const popup = document.createElement('div');
     popup.className = 'popup'; // Добавляем класс для стилей
@@ -290,5 +295,11 @@ function closePopup(popup) {
     // Удаляем элемент после завершения анимации
     popup.addEventListener('animationend', function() {
         popup.remove(); // Удаляем всплывающее окно из DOM
+
+        // Проверяем, есть ли еще всплывающие окна
+        const popupContainer = document.getElementById('popupContainer');
+        if (popupContainer.children.length === 0) {
+            popupContainer.classList.remove('popup-active'); // Скрываем контейнер, если нет активных окон
+        }
     }, { once: true });
 }

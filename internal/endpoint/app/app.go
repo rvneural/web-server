@@ -1,6 +1,12 @@
 package app
 
 import (
+	"log/slog"
+
+	sloggin "github.com/samber/slog-gin"
+
+	"os"
+
 	"crypto/tls"
 	"log"
 	"net/http"
@@ -35,6 +41,8 @@ type App struct {
 	result *gin.RouterGroup
 	admin  *gin.RouterGroup
 	store  *persistence.InMemoryStore
+
+	logger *slog.Logger
 
 	login    string
 	password string
@@ -94,12 +102,22 @@ func New() *App {
 	router.StaticFS("/web/", http.Dir("../../web"))
 	router.LoadHTMLGlob("../../web/templates/*.html")
 
+	logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
+
+	// Use logger
+	router.Use(sloggin.New(logger))
+
 	return &App{
 		engine: router,
 		result: r,
 		admin:  a,
 		store:  store,
+		logger: logger,
 	}
+}
+
+func (a *App) GetLogger() *slog.Logger {
+	return a.logger
 }
 
 func (a *App) SetBasicAuth(login, password string) {
@@ -107,7 +125,7 @@ func (a *App) SetBasicAuth(login, password string) {
 	a.password = password
 
 	if a.login != "" && a.password != "" {
-		log.Println("Using authorization")
+		a.logger.Info("Using authorization")
 		a.engine.Use(gin.BasicAuth(gin.Accounts{
 			login: password,
 		}))
@@ -115,42 +133,42 @@ func (a *App) SetBasicAuth(login, password string) {
 }
 
 func (a *App) Register404Page(handler PageHandler) {
-	log.Println("Registering 404 page")
+	a.logger.Info("Registering 404 handler")
 	a.engine.NoRoute(cache.CachePage(a.store, 5*time.Minute, handler.GetPage))
 }
 
 func (a *App) RegisterResultWithCache(pattern string, handler PageHandler) {
-	log.Println("Registering result handler for pattern", pattern)
+	a.logger.Info("Registering result handler for", "pattern", pattern)
 	a.result.GET(pattern, cache.CachePage(a.store, 5*time.Minute, handler.GetPage))
 }
 
 func (a *App) RegisterResultNoCache(pattern string, handler PageHandler) {
-	log.Println("Registering result handler for pattern", pattern)
+	a.logger.Info("Registering result handler no cache for", "pattern", pattern)
 	a.result.GET(pattern, handler.GetPage)
 }
 
 func (a *App) RegisterPageWithCache(pattern string, handler PageHandler) {
-	log.Println("Registering handler for pattern", pattern)
+	a.logger.Info("Registering page handler with cache for", "pattern", pattern)
 	a.engine.GET(pattern, cache.CachePage(a.store, 5*time.Minute, handler.GetPage))
 }
 
 func (a *App) RegisterPageNoCache(pattern string, handler PageHandler) {
-	log.Println("Registering ID generator handler for pattern", pattern)
+	a.logger.Info("Registering page handler no cache for", "pattern", pattern)
 	a.engine.GET(pattern, handler.GetPage)
 }
 
 func (a *App) RegisterForm(pattern string, handler FormHandler) {
-	log.Println("Registering form handler for pattern", pattern)
+	a.logger.Info("Registering form handler for", "pattern", pattern)
 	a.engine.POST(pattern, handler.HandleForm)
 }
 
 func (a *App) RegisterAdminPageNoCahce(pattern string, handler PageHandler) {
-	log.Println("Registering admin page handler for pattern", pattern)
+	a.logger.Info("Registering admin page handler no cache for", "pattern", pattern)
 	a.admin.GET(pattern, handler.GetPage)
 }
 
 func (a *App) StartLocal() {
-	log.Println("Starting local server...")
+	a.logger.Info("Starting local server...")
 	httpServer := &http.Server{
 		Addr:    config.HTTP_PORT,
 		Handler: a.engine,
@@ -159,7 +177,7 @@ func (a *App) StartLocal() {
 }
 
 func (a *App) StartTLS() {
-	log.Println("Starting TLS server...")
+	a.logger.Info("Starting TLS server...")
 
 	m := &autocert.Manager{
 		Cache:      autocert.DirCache("../../var/www/.cache"),

@@ -2,7 +2,7 @@ package upscale
 
 import (
 	"io"
-	"log"
+	"log/slog"
 	"net/http"
 	"os"
 	"strings"
@@ -22,31 +22,34 @@ type Response struct {
 }
 
 type ImageUpscaler struct {
+	logger *slog.Logger
 }
 
-func New() *ImageUpscaler {
-	return &ImageUpscaler{}
+func New(logger *slog.Logger) *ImageUpscaler {
+	return &ImageUpscaler{
+		logger: logger,
+	}
 }
 
 func (i *ImageUpscaler) HandleForm(c *gin.Context) {
 	imgFile, header, err := c.Request.FormFile("image")
 
 	if err != nil {
-		log.Println(err)
+		i.logger.Error("Getting file from form", "error", err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
 	imgBytes, err := io.ReadAll(imgFile)
 	if err != nil {
-		log.Println(err)
+		i.logger.Error("Reading file from form", "error", err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
 	file, err := os.Create(header.Filename)
 	if err != nil {
-		log.Println(err)
+		i.logger.Error("Creating file", "error", err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -55,7 +58,7 @@ func (i *ImageUpscaler) HandleForm(c *gin.Context) {
 
 	_, err = file.Write(imgBytes)
 	if err != nil {
-		log.Println(err)
+		i.logger.Error("Writing file", "error", err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -63,14 +66,14 @@ func (i *ImageUpscaler) HandleForm(c *gin.Context) {
 	upscaler := imageupscaler.New()
 	err = upscaler.SetImage(header.Filename)
 	if err != nil {
-		log.Println(err)
+		i.logger.Error("Setting image", "error", err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
 	renderFile, err := os.Create("../../web/uploads/upscaled-" + strings.ReplaceAll(header.Filename, " ", "-") + ".jpg")
 	if err != nil {
-		log.Println(err)
+		i.logger.Error("Creating file", "error", err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}

@@ -6,7 +6,7 @@ import (
 	"WebServer/internal/server/handlers/interfaces"
 	"encoding/json"
 	"io"
-	"log"
+	"log/slog"
 	"net/http"
 	"strings"
 
@@ -15,11 +15,13 @@ import (
 
 type RecognitionHandler struct {
 	dbWorker interfaces.DBWorker
+	logger   *slog.Logger
 }
 
-func New(dbWorker interfaces.DBWorker) *RecognitionHandler {
+func New(dbWorker interfaces.DBWorker, logger *slog.Logger) *RecognitionHandler {
 	return &RecognitionHandler{
 		dbWorker: dbWorker,
+		logger:   logger,
 	}
 }
 
@@ -36,7 +38,7 @@ func (n *RecognitionHandler) handleFileRecognition(c *gin.Context) (models.Reque
 	fileType := c.Request.FormValue("fileType")
 	fileData, err := io.ReadAll(file)
 	if err != nil {
-		log.Println(err)
+		n.logger.Error("Error reading file", "error", err)
 		return Request, err
 	}
 
@@ -74,7 +76,7 @@ func (n *RecognitionHandler) HandleForm(c *gin.Context) {
 	} else {
 		Request, err = n.handleFileRecognition(c)
 		if err != nil {
-			go log.Println("Error sending recognition response", err)
+			go n.logger.Error("Error sending recognition response", "error", err)
 			go n.saveErrorToDB(id, err.Error())
 			c.JSON(http.StatusBadRequest, gin.H{"error": err})
 			return

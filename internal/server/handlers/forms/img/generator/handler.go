@@ -6,7 +6,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"io"
-	"log"
+	"log/slog"
 	"net/http"
 	"strings"
 
@@ -18,11 +18,13 @@ import (
 
 type ImageGenerationHandler struct {
 	dbWorker interfaces.DBWorker
+	logger   *slog.Logger
 }
 
-func New(dbWorker interfaces.DBWorker) *ImageGenerationHandler {
+func New(dbWorker interfaces.DBWorker, logger *slog.Logger) *ImageGenerationHandler {
 	return &ImageGenerationHandler{
 		dbWorker: dbWorker,
+		logger:   logger,
 	}
 }
 
@@ -49,7 +51,7 @@ func (n *ImageGenerationHandler) HandleForm(c *gin.Context) {
 	byteRequets, err := json.Marshal(request)
 
 	if err != nil {
-		log.Println(err)
+		n.logger.Error("Marshalling request", "error", err)
 		go n.saveErrorToDB(id, err.Error())
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -57,7 +59,7 @@ func (n *ImageGenerationHandler) HandleForm(c *gin.Context) {
 
 	httpRequest, err := http.NewRequest("POST", config.URL, bytes.NewBuffer(byteRequets))
 	if err != nil {
-		log.Println(err)
+		n.logger.Error("Creating request", "error", err)
 		go n.saveErrorToDB(id, err.Error())
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -71,7 +73,7 @@ func (n *ImageGenerationHandler) HandleForm(c *gin.Context) {
 	resp, err := client.Do(httpRequest)
 
 	if err != nil {
-		log.Println(err)
+		n.logger.Error("Sending request", "error", err)
 		go n.saveErrorToDB(id, err.Error())
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -82,7 +84,7 @@ func (n *ImageGenerationHandler) HandleForm(c *gin.Context) {
 	byteResp, err := io.ReadAll(resp.Body)
 
 	if err != nil {
-		log.Println(err)
+		n.logger.Error("Reading response", "error", err)
 		go n.saveErrorToDB(id, err.Error())
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -92,7 +94,7 @@ func (n *ImageGenerationHandler) HandleForm(c *gin.Context) {
 	err = json.Unmarshal(byteResp, &model)
 
 	if err != nil {
-		log.Println(err)
+		n.logger.Error("Unmarshalling response", "error", err)
 		go n.saveErrorToDB(id, err.Error())
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return

@@ -1,6 +1,7 @@
 package app
 
 import (
+	"log/slog"
 	"os"
 
 	endpoint "WebServer/internal/endpoint/app"
@@ -34,8 +35,6 @@ import (
 	adminOperationList "WebServer/internal/server/handlers/pages/admin/operations"
 
 	"WebServer/internal/server/handlers/pages/stats"
-
-	"log"
 )
 
 type App struct {
@@ -44,6 +43,7 @@ type App struct {
 	password string
 	tlsMode  bool
 	idMaxLen int
+	logger   *slog.Logger
 }
 
 func New() *App {
@@ -58,6 +58,7 @@ func (a *App) init() {
 	a.login = os.Getenv("LOGIN")
 	a.password = os.Getenv("PASSWORD")
 	a.tlsMode = os.Getenv("TLS_MODE") == "true"
+	a.logger = a.Endpoint.GetLogger()
 
 	a.Endpoint.RegisterPageWithCache("/", recognitionFromFilePage.New())
 	a.Endpoint.RegisterPageWithCache("/image", imageGenerationPage.New())
@@ -76,12 +77,12 @@ func (a *App) init() {
 	a.Endpoint.RegisterResultNoCache("/get", newID.New(idgenerator.New(a.idMaxLen)))
 	a.Endpoint.RegisterResultWithCache("/:id", result.New(notFoundOperationPage.New(), progressOperationPage.New(), dataBaseWorker))
 
-	a.Endpoint.RegisterForm("/recognize", audioFormHandler.New(dataBaseWorker))
-	a.Endpoint.RegisterForm("/rewriteFromWeb", textFormHandler.New("{{ rewrite }}", dataBaseWorker))
-	a.Endpoint.RegisterForm("/processTextFromWeb", textFormHandler.New("", dataBaseWorker))
-	a.Endpoint.RegisterForm("/generateImage", imageFormHandler.New(dataBaseWorker))
-	a.Endpoint.RegisterForm("/upscaleImage", imageUpscalerFormHandler.New())
-	a.Endpoint.RegisterForm("/photopea", photopea.New())
+	a.Endpoint.RegisterForm("/recognize", audioFormHandler.New(dataBaseWorker, a.logger))
+	a.Endpoint.RegisterForm("/rewriteFromWeb", textFormHandler.New("{{ rewrite }}", dataBaseWorker, a.logger))
+	a.Endpoint.RegisterForm("/processTextFromWeb", textFormHandler.New("", dataBaseWorker, a.logger))
+	a.Endpoint.RegisterForm("/generateImage", imageFormHandler.New(dataBaseWorker, a.logger))
+	a.Endpoint.RegisterForm("/upscaleImage", imageUpscalerFormHandler.New(a.logger))
+	a.Endpoint.RegisterForm("/photopea", photopea.New(a.logger))
 
 	a.Endpoint.Register404Page(notFound.New())
 }
@@ -95,10 +96,10 @@ func (a *App) Run() {
 	}
 
 	if a.tlsMode {
-		log.Println("Starting endpoint with TLS...")
+		a.logger.Info("Starting endpoint with TLS...")
 		a.Endpoint.StartTLS()
 	} else {
-		log.Println("Starting endpoint locally...")
+		a.logger.Info("Starting endpoint without TLS...")
 		a.Endpoint.StartLocal()
 	}
 }

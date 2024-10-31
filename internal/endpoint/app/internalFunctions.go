@@ -2,13 +2,12 @@ package app
 
 import (
 	config "WebServer/internal/config/app"
-	"log"
 	"net/http"
 	"net/url"
 )
 
 func (a *App) startRedirection() error {
-	log.Println("starting redirect")
+	a.logger.Info("Starting redirection server")
 	httpServer := &http.Server{
 		Addr: ":http",
 		Handler: http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

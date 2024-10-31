@@ -3,6 +3,7 @@ package text
 import (
 	config "WebServer/internal/config/services/text2text-service"
 	models "WebServer/internal/models/text"
+	"log/slog"
 	"strings"
 
 	dbModel "WebServer/internal/models/db/results/text"
@@ -11,7 +12,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"io"
-	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -20,12 +20,14 @@ import (
 type TextProcessingHandler struct {
 	DefaultPrompt string
 	dbWorker      interfaces.DBWorker
+	logger        *slog.Logger
 }
 
-func New(prompt string, dbWorker interfaces.DBWorker) *TextProcessingHandler {
+func New(prompt string, dbWorker interfaces.DBWorker, logger *slog.Logger) *TextProcessingHandler {
 	return &TextProcessingHandler{
 		DefaultPrompt: prompt,
 		dbWorker:      dbWorker,
+		logger:        logger,
 	}
 }
 
@@ -62,7 +64,7 @@ func (n *TextProcessingHandler) HandleForm(c *gin.Context) {
 	data, err := json.Marshal(request)
 
 	if err != nil {
-		log.Println(err)
+		n.logger.Error("Marshalling request", "error", err)
 
 		resonse.OldText = text
 		resonse.NewText = err.Error()
@@ -75,7 +77,7 @@ func (n *TextProcessingHandler) HandleForm(c *gin.Context) {
 	httpRequest, err := http.NewRequest("POST", config.URL, bytes.NewBuffer(data))
 
 	if err != nil {
-		log.Println(err)
+		n.logger.Error("Creating request", "error", err)
 		resonse.OldText = text
 		resonse.NewText = err.Error()
 		go n.saveErrorToDB(id, err.Error(), prompt, text)
@@ -91,7 +93,7 @@ func (n *TextProcessingHandler) HandleForm(c *gin.Context) {
 	resp, err := client.Do(httpRequest)
 
 	if err != nil {
-		log.Println(err)
+		n.logger.Error("Sending request", "error", err)
 		resonse.OldText = text
 		resonse.NewText = err.Error()
 		go n.saveErrorToDB(id, err.Error(), prompt, text)
@@ -104,7 +106,7 @@ func (n *TextProcessingHandler) HandleForm(c *gin.Context) {
 	byteAns, err := io.ReadAll(resp.Body)
 
 	if err != nil {
-		log.Println(err)
+		n.logger.Error("Reading response", "error", err)
 		resonse.OldText = text
 		resonse.NewText = err.Error()
 		go n.saveErrorToDB(id, err.Error(), prompt, text)
@@ -116,7 +118,7 @@ func (n *TextProcessingHandler) HandleForm(c *gin.Context) {
 	err = json.Unmarshal(byteAns, &model)
 
 	if err != nil {
-		log.Println(err)
+		n.logger.Error("Unmarshalling response", "error", err)
 		resonse.OldText = text
 		resonse.NewText = err.Error()
 		go n.saveErrorToDB(id, err.Error(), prompt, text)

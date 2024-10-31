@@ -35,6 +35,29 @@ func New(dbWorker interfaces.DBWorker) *AdminOperationListStruct {
 
 func (a *AdminOperationListStruct) GetPage(c *gin.Context) {
 
+	operationID := c.DefaultQuery("operation", "")
+	if operationID != "" {
+		operation, err := a.dbWorker.GetOperation(operationID)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"error":       err.Error(),
+				"description": "Ошибка при чтении",
+			})
+			return
+		}
+		c.JSON(http.StatusOK, OperationListElement{
+			ID:           operation.ID,
+			OPERATION_ID: operation.OPERATION_ID,
+			URI:          "/operation/" + operation.OPERATION_ID,
+			FINISHED:     !operation.IN_PROGRESS,
+			TYPE:         operation.OPERATION_TYPE,
+			CREATED_AT:   operation.CREATION_DATE.Format("02.01.2006 15:04:05"),
+			FINISH_DATE:  operation.FINISH_DATE.Format("02.01.2006 15:04:05"),
+			DURATION:     operation.FINISH_DATE.Sub(operation.CREATION_DATE).String(),
+		})
+		return
+	}
+
 	var limit int
 	str_limit := c.DefaultQuery("limit", "0")
 	limit, err := strconv.Atoi(str_limit)

@@ -124,3 +124,19 @@ func (w *Worker) GetAllOperations(limit int, operation_type string) (dbResult []
 	err = db.Select(&dbResult, request)
 	return dbResult, err
 }
+
+func (w *Worker) GetOperation(uniqID string) (dbResult model.DBResult, err error) {
+	uniqID = strings.ToLower(strings.TrimSpace(uniqID))
+	if len(uniqID) == 0 || len(uniqID) > 35 {
+		return model.DBResult{}, fmt.Errorf("uniqID is empty or too big")
+	}
+
+	db, err := w.connectToDB()
+	if err != nil {
+		return model.DBResult{}, err
+	}
+	defer db.Close()
+
+	err = db.Get(&dbResult, "SELECT * FROM "+w.table_name+" WHERE operation_id = $1 LIMIT 1", uniqID)
+	return dbResult, err
+}

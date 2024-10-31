@@ -11,6 +11,7 @@ type DBWorker interface {
 	SetResult(uniqID string, data []byte) error
 	GetResult(uniqID string) (dbResult dbModel.DBResult, err error)
 	GetAllOperations(limit int, operation_type string) (dbOperations []dbModel.DBResult, err error)
+	GetOperation(uniqID string) (dbResult dbModel.DBResult, err error)
 }
 
 type NoResultPage interface {

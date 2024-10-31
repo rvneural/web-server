@@ -75,6 +75,7 @@ func (a *App) init() {
 	)
 
 	a.Endpoint.RegisterAdminPageNoCahce("/operations", adminOperationList.New(dataBaseWorker))
+	// TODO: добавить возможность выбора метрики для конкретной операции
 
 	a.Endpoint.RegisterResultNoCache("/get", newID.New(idgenerator.New(a.idMaxLen)))
 	a.Endpoint.RegisterResultWithCache("/:id", result.New(notFoundOperationPageP, progressOperationPageP, dataBaseWorker))

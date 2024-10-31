@@ -127,7 +127,8 @@ func (a *App) SetBasicAuth(login, password string) {
 	if a.login != "" && a.password != "" {
 		a.logger.Info("Using authorization")
 		a.engine.Use(gin.BasicAuth(gin.Accounts{
-			login: password,
+			config.ADMIN_LOGIN: config.ADMIN_PASSWORD,
+			login:              password,
 		}))
 	}
 }

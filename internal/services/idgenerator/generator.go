@@ -23,8 +23,8 @@ func (g *Generator) Generate() string {
 
 	id := make([]rune, length)
 	for i := range id {
+		id[i] = g.letters[rand.Intn(len(g.letters))]
 		if i == len(id)-1 || i == 0 {
-			id[i] = g.letters[rand.Intn(len(g.letters))]
 			for id[i] == '-' {
 				id[i] = g.letters[rand.Intn(len(g.letters))]
 			}

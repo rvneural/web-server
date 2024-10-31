@@ -93,7 +93,7 @@ func (a *AdminOperationListStruct) getListOfOperations(c *gin.Context) {
 			ID:           operation.ID,
 			OPERATION_ID: operation.OPERATION_ID,
 			URI:          "/operation/" + operation.OPERATION_ID,
-			URL:          c.Request.Host + "/operation/" + operation.OPERATION_ID,
+			URL:          c.Request.Pattern + "---" + c.Request.Host + "/operation/" + operation.OPERATION_ID,
 			FINISHED:     !operation.IN_PROGRESS,
 			TYPE:         operation.OPERATION_TYPE,
 			CREATED_AT:   operation.CREATION_DATE.Format("02.01.2006 15:04:05"),

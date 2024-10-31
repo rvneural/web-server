@@ -248,9 +248,16 @@ async function showPopupWithLink() {
     link.target = '_blank'; // Открываем в новом окне
     link.textContent = 'по этой ссылке';
 
+    try{
+        navigator.clipboard.writeText(link.href)
+    } catch (err){
+        console.log('Ошибка копирования текста:', err)
+    }
+
     // Устанавливаем содержимое всплывающего окна
     popup.innerHTML = `Результат операции будет доступен<br>`;
     popup.appendChild(link); // Добавляем ссылку в сообщение
+    popup.innerHTML += `Она скопирована в буфер обмена`;
 
     // Создаем контейнер для кнопок
     const buttonContainer = document.createElement('div');

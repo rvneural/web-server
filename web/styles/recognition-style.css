@@ -22,20 +22,18 @@
 
 .work-group{
   display: grid;
-  grid-template-rows: 1fr 1fr 1fr 22fr;
+  grid-template-rows: 1fr 1fr 1fr 20fr;
   background: transparent;
-  row-gap: 1%;
+  row-gap: 0.5%;
 }
 
 .file-group{
   display: flex;
   justify-items: end;
   align-items: center;
-  max-height: 25px;
 }
 
 .url-group{
-  max-height: 20px;
   display: flex;
   justify-content: start;
 }
@@ -43,7 +41,6 @@
 .language-group{
   justify-items: end;
   align-items: center;
-  max-height: 25px;
   display: flex;
 }
 
@@ -51,7 +48,6 @@
   align-items: center;
   justify-content: end;
   display: flex;
-  max-height: 25px;
 }
 
 .output-group{

@@ -30,14 +30,14 @@
   .input-group{
     display: grid;
     grid-template-rows: 3fr 1fr;
-    row-gap: 1%;
+    row-gap: 0.5%;
     background: transparent;
   }
 
   .output-image-group{
     display: grid;
     grid-template-rows: 4fr 0.1fr 0.1fr;
-    row-gap: 1%;
+    row-gap: 0.5%;
     background: transparent;
   }
 
@@ -52,7 +52,7 @@
 .settings-area{
     background: transparent;
     display: grid;
-    row-gap: 5%;
+    row-gap: 2%;
     grid-template-rows: 0.1fr 1fr 0.4fr;
 }
 

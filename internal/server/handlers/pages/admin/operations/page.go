@@ -9,9 +9,10 @@ import (
 )
 
 type OperationListElement struct {
-	ID           int    `json:"id"`
+	ID           int64  `json:"id"`
 	OPERATION_ID string `json:"operation_id"`
 	URI          string `json:"uri"`
+	URL          string `json:"url"`
 	FINISHED     bool   `json:"finished"`
 	TYPE         string `json:"type"`
 	CREATED_AT   string `json:"creation_date"`
@@ -49,6 +50,7 @@ func (a *AdminOperationListStruct) GetPage(c *gin.Context) {
 			ID:           operation.ID,
 			OPERATION_ID: operation.OPERATION_ID,
 			URI:          "/operation/" + operation.OPERATION_ID,
+			URL:          c.Request.URL.Scheme + "://" + c.Request.URL.Host + "/operation/" + operation.OPERATION_ID,
 			FINISHED:     !operation.IN_PROGRESS,
 			TYPE:         operation.OPERATION_TYPE,
 			CREATED_AT:   operation.CREATION_DATE.Format("02.01.2006 15:04:05"),
@@ -82,6 +84,7 @@ func (a *AdminOperationListStruct) GetPage(c *gin.Context) {
 			ID:           operation.ID,
 			OPERATION_ID: operation.OPERATION_ID,
 			URI:          "/operation/" + operation.OPERATION_ID,
+			URL:          c.Request.URL.Scheme + "://" + c.Request.URL.Host + "/operation/" + operation.OPERATION_ID,
 			FINISHED:     !operation.IN_PROGRESS,
 			TYPE:         operation.OPERATION_TYPE,
 			CREATED_AT:   operation.CREATION_DATE.Format("02.01.2006 15:04:05"),

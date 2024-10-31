@@ -8,7 +8,7 @@
             <textarea class="output-area" id="promtArea" placeholder="Введите сюда задачу для нейросети: ЧТО НУЖНО СДЕЛАТЬ С ЭТИМ ТЕКСТОМ"></textarea>
             </div>
             <div class="template">
-            <p>Выбрать готовый шаблон:</p>
+            <p class = "templateP">Выбрать готовый шаблон:</p>
             <select id="promtSelect">
                 {{range .templates}}
                     <option value="{{.Value}}">{{.Name}}</option>

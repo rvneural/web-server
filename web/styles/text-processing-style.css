@@ -167,6 +167,11 @@
     margin: 0; /* Убираем отступы между кнопками */
   }
 
+  .templateP {
+    margin-left: 10px;
+    margin-right: 5px;
+  }
+
   .popup button {
     flex: 1; /* Кнопки займут равное пространство */
     max-width: 100px; /* Максимальная ширина кнопок */

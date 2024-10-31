@@ -104,7 +104,7 @@ func (n *ImageGenerationHandler) HandleForm(c *gin.Context) {
 				Prompt:    prompt,
 				Seed:      model.Image.Seed,
 				B64string: model.Image.B64String,
-				Name:      strings.ReplaceAll(strings.TrimSpace(prompt), " ", "-") + ".png",
+				Name:      strings.ReplaceAll(strings.TrimSpace(prompt), " ", "-") + ".jpg",
 			}
 			dbByteRes, err := json.Marshal(dbResult)
 			if err == nil {

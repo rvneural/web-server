@@ -36,3 +36,7 @@
         background-color: transparent;
         animation: rotate 10s linear infinite;
     }
+
+    .repeat-url{
+        background: transparent;
+    }

@@ -54,7 +54,7 @@ func (r *Result) GetPage(c *gin.Context) {
 		}
 
 		if result.Name == "" {
-			result.Name = "image.png"
+			result.Name = "image.jpg"
 		}
 
 		c.HTML(http.StatusOK, "image-generation-result.html", gin.H{

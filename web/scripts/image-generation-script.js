@@ -97,10 +97,10 @@ generateImageButton.addEventListener('click', async() => {
 
     unlockElements()
 
-    imageName = prompt + ".png"
+    imageName = prompt + ".jpg"
 
     // Устанавливаем изображение
-    setImage(imagedata="data:image/png;base64," + data.image.b64String, alt=imageName);
+    setImage(imagedata="data:image/jpeg;base64," + data.image.b64String, alt=imageName);
 
     seedValue.innerText = data.image.seed;
     progress = false;

@@ -76,7 +76,7 @@ func (a *App) init() {
 	a.Endpoint.RegisterAdminPageNoCahce("/operations", adminOperationList.New(dataBaseWorker))
 
 	a.Endpoint.RegisterResultNoCache("/get", newID.New(idgenerator.New(a.idMaxLen)))
-	a.Endpoint.RegisterResultWithCache("/:id", result.New(notFoundOperationPage.New(), progressOperationPage.New(), dataBaseWorker))
+	a.Endpoint.RegisterResultWithCache("/:id", result.New(notFoundOperationPage.New(), progressOperationPage.New(), dataBaseWorker, a.logger))
 
 	a.Endpoint.RegisterForm("/recognize", audioFormHandler.New(dataBaseWorker, a.logger))
 	a.Endpoint.RegisterForm("/rewriteFromWeb", textFormHandler.New("{{ rewrite }}", dataBaseWorker, a.logger))

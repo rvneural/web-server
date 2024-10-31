@@ -3,6 +3,7 @@ package audio
 import (
 	"WebServer/internal/server/handlers/interfaces"
 	"encoding/json"
+	"log/slog"
 	"net/http"
 	"strings"
 
@@ -17,13 +18,15 @@ type Result struct {
 	notFoundOperation interfaces.NoResultPage
 	progressOperation interfaces.NoResultPage
 	dbWorker          interfaces.DBWorker
+	logger            *slog.Logger
 }
 
-func New(notFoundOperation, progressOperation interfaces.NoResultPage, dbWorker interfaces.DBWorker) *Result {
+func New(notFoundOperation, progressOperation interfaces.NoResultPage, dbWorker interfaces.DBWorker, logger *slog.Logger) *Result {
 	return &Result{
 		notFoundOperation: notFoundOperation,
 		progressOperation: progressOperation,
 		dbWorker:          dbWorker,
+		logger:            logger,
 	}
 }
 
@@ -34,6 +37,7 @@ func (r *Result) GetPage(c *gin.Context) {
 	res, err := r.dbWorker.GetResult(id)
 
 	if err != nil {
+		r.logger.Error("Getting result from DB", "error", err)
 		r.notFoundOperation.GetPage(c, id)
 		return
 	} else if res.IN_PROGRESS {
@@ -49,6 +53,7 @@ func (r *Result) GetPage(c *gin.Context) {
 		err = json.Unmarshal(res.DATA, &result)
 
 		if err != nil {
+			r.logger.Error("Unmarshalling result", "error", err)
 			r.notFoundOperation.GetPage(c, id)
 			return
 		}
@@ -72,6 +77,7 @@ func (r *Result) GetPage(c *gin.Context) {
 		err = json.Unmarshal(res.DATA, &result)
 
 		if err != nil {
+			r.logger.Error("Unmarshalling result", "error", err)
 			r.notFoundOperation.GetPage(c, id)
 			return
 		}
@@ -91,6 +97,7 @@ func (r *Result) GetPage(c *gin.Context) {
 		err = json.Unmarshal(res.DATA, &result)
 
 		if err != nil {
+			r.logger.Error("Unmarshalling result", "error", err)
 			r.notFoundOperation.GetPage(c, id)
 			return
 		}

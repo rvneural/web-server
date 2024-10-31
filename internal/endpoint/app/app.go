@@ -23,8 +23,8 @@ import (
 	"golang.org/x/crypto/acme"
 	"golang.org/x/crypto/acme/autocert"
 
-	//"github.com/gin-contrib/sessions"
-	//"github.com/gin-contrib/sessions/cookie"
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-contrib/sessions/cookie"
 
 	"github.com/gin-contrib/gzip"
 
@@ -68,8 +68,8 @@ func New() *App {
 	router.Use(gin.Recovery())
 
 	// Use session
-	//cookieStore := cookie.NewStore([]byte(config.SESSION_SECRET))
-	//router.Use(sessions.Sessions("neuron-nexus-session", cookieStore))
+	cookieStore := cookie.NewStore([]byte(config.SESSION_SECRET))
+	router.Use(sessions.Sessions("neuron-nexus-session", cookieStore))
 
 	// Use GZIP compression
 	router.Use(gzip.Gzip(gzip.DefaultCompression))

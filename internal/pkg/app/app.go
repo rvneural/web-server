@@ -60,6 +60,10 @@ func (a *App) init() {
 	a.tlsMode = os.Getenv("TLS_MODE") == "true"
 	a.logger = a.Endpoint.GetLogger()
 
+	if a.login != "" && a.password != "" {
+		a.Endpoint.SetBasicAuth(a.login, a.password)
+	}
+
 	a.Endpoint.RegisterPageWithCache("/", recognitionFromFilePage.New())
 	a.Endpoint.RegisterPageWithCache("/image", imageGenerationPage.New())
 	a.Endpoint.RegisterPageWithCache("/rewrite", rewritePage.New())
@@ -91,10 +95,6 @@ func (a *App) init() {
 func (a *App) Run() {
 
 	a.init()
-
-	if a.login != "" && a.password != "" {
-		a.Endpoint.SetBasicAuth(a.login, a.password)
-	}
 
 	if a.tlsMode {
 		a.logger.Info("Starting endpoint with TLS...")

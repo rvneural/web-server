@@ -2,7 +2,6 @@ package db
 
 import (
 	"fmt"
-	"log"
 	"strconv"
 	"strings"
 	"time"
@@ -110,7 +109,6 @@ func (w *Worker) GetAllOperations(limit int, operation_type string) (dbResult []
 	request := "SELECT * FROM " + w.table_name
 
 	if operation_type != "" {
-		log.Println(operation_type)
 		request += " WHERE type = '" + strings.ToLower(strings.TrimSpace(operation_type)) + "'"
 	}
 
@@ -120,7 +118,6 @@ func (w *Worker) GetAllOperations(limit int, operation_type string) (dbResult []
 		request += " LIMIT " + strconv.Itoa(limit)
 	}
 
-	log.Println(request)
 	err = db.Select(&dbResult, request)
 	return dbResult, err
 }

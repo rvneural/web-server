@@ -52,3 +52,27 @@
             flex: 1;
             margin: 5px 5px 5px 0;
         }
+
+        .button-save{
+            grid-area: d;
+            display: flex;
+            justify-content: center;
+            background: transparent;
+          }
+        
+          .save-button{
+            flex: 1;
+            background-color: #707784;
+            border: none;
+            color:aliceblue;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 20px;
+          }
+        
+          .save-button:hover{
+            cursor: pointer;
+            background-color: #494E56;
+          }

@@ -148,6 +148,11 @@ func (a *App) RegisterResultNoCache(pattern string, handler PageHandler) {
 	a.result.GET(pattern, handler.GetPage)
 }
 
+func (a *App) RegisterResultFormHandler(pattern string, handler FormHandler) {
+	a.logger.Info("Registering result form handler for", "pattern", pattern)
+	a.result.POST(pattern, handler.HandleForm)
+}
+
 func (a *App) RegisterPageWithCache(pattern string, handler PageHandler) {
 	a.logger.Info("Registering page handler with cache for", "pattern", pattern)
 	a.engine.GET(pattern, cache.CachePage(a.store, 5*time.Minute, handler.GetPage))

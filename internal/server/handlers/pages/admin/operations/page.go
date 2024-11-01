@@ -18,6 +18,7 @@ type OperationListElement struct {
 	CREATED_AT   string `json:"creation_date"`
 	FINISH_DATE  string `json:"finish_date"`
 	DURATION     string `json:"duration"`
+	VERSION      int64  `json:"version"`
 }
 
 type AllOperations struct {
@@ -64,6 +65,7 @@ func (a *AdminOperationListStruct) getSpecificOperation(c *gin.Context) {
 		CREATED_AT:   operation.CREATION_DATE.Format("02.01.2006 15:04:05"),
 		FINISH_DATE:  operation.FINISH_DATE.Format("02.01.2006 15:04:05"),
 		DURATION:     operation.FINISH_DATE.Sub(operation.CREATION_DATE).String(),
+		VERSION:      operation.VERSION,
 	})
 	return
 }
@@ -99,6 +101,7 @@ func (a *AdminOperationListStruct) getListOfOperations(c *gin.Context) {
 			CREATED_AT:   operation.CREATION_DATE.Format("02.01.2006 15:04:05"),
 			FINISH_DATE:  operation.FINISH_DATE.Format("02.01.2006 15:04:05"),
 			DURATION:     operation.FINISH_DATE.Sub(operation.CREATION_DATE).String(),
+			VERSION:      operation.VERSION,
 		}
 	}
 

@@ -16,12 +16,15 @@ const language = document.getElementById("languageSelect") // Поле выбо�
 const fileTypeSelect = document.getElementById("fileTypeSelect") // Поле выбора типа файла
 
 var id = ""
+var file_name = ""
 
 var normText = "" // Глобальная переменная, хранящая оригинал нормализованного текста с сервера
 var rawText = "" // Глобальная переменная, хранящая оригинал не нормализованного текста с сервера
 
 var currentNormText = "" // Глобальная переменная, хранящая измененный нормализованный текст
 var currentRawText = "" // Глобальная переменная, хранящая исходный не нормализованный текст
+
+var version = 1
 
 var progress = false
 
@@ -74,11 +77,13 @@ async function recognize(){
         const file = fileInput.files[0];
         formData.append('file', file); // Файл
         formData.append('filename', fileInput.files[0].name)
+        file_name = fileInput.files[0].name
         parts = file.name.split('.')
         formData.append('fileType', parts.at(-1)) // Тип файла
     } else {
         formData.append('url', urlInput.value) // Ссылка
         formData.append('filename', urlInput.value)
+        file_name = urlInput.value
     }
     
     formData.append('id', id);
@@ -184,6 +189,8 @@ resetButton.addEventListener('click', (event)=>{
         outputArea.value = rawText
         currentRawText = rawText
     }
+
+    saveFileButton.click()
 })
 
 // Обработка копирования текста
@@ -221,21 +228,50 @@ copyTextButton.addEventListener('click', async (event)=>{
 })
 
 // Обработка сохранения файла
-saveFileButton.addEventListener('click', (event)=>{
+saveFileButton.addEventListener('click', async (event)=>{
 
-    // Создаем BLOB и убираем двойные переносы строк в тексте
-    const blob = new Blob([outputArea.value.trim().replaceAll('\n\n', '\n')], {type: 'text/plain'})
+    var dbVersion = await getVersion()
+    console.log(dbVersion)
+    if (version === dbVersion){
+        version += 1
+    } else {
+        alert('База данных была обновлена. Перейдите на страницу https://neuron-nexus.ru/operarion/'+id + ", чтобы получить обновленный документ.")
+        return
+    }
 
-    // Создаем документ и ссылку на скачиваение
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
+    if (normalizeCheckBox.checked){
+        currentNormText = outputArea.value
+    } else{
+        currentRawText = outputArea.value
+    }
 
-    // Указываем название файла
-    link.download = 'recognition.txt';
+    normText = currentNormText
+    rawText = currentRawText
 
-    // Отправляем файл клиенту
-    link.click();
-    URL.revokeObjectURL(link.href);
+    const formData = new FormData();
+    formData.append("id", id)
+    formData.append("type", 'audio')
+    formData.append('file_name', file_name)
+    formData.append('raw_text', currentRawText)
+    formData.append('norm_text', currentNormText)
+
+    try {
+    const resp = await fetch('/operation/saveOperation', {
+        method: 'POST',
+        body: formData,
+    })
+    console.log(resp)
+    } catch (error) {
+        console.error('Ошибка при выполнении запроса:', error);
+        alert('Ошибка при выполнении запроса:', error);
+        return
+    }
+
+    saveFileButton.innerText = "Сохранено"
+        setTimeout(() => {
+            saveFileButton.innerText = "Сохранить"
+        }, 1000)
+    
 })
 
 async function sendRequestURL() {
@@ -389,4 +425,25 @@ async function closePopup(popup) {
                 popups[i].classList.remove('slide-down'); // Добавляем анимацию спуска
             }
     }, { once: true });
+}
+
+async function getVersion(){
+    const formData = new FormData();
+    formData.append('id', id);
+    try {
+        const resp = await fetch('/operation/getVersion', {
+            method: 'POST',
+            body: formData,
+        })
+        const data = await resp.json();
+        if (data.error) {
+            console.log(data.error);
+            return 0
+        } else {
+            return data.version
+        }
+    } catch (err) {
+        console.log(err);
+        return 0
+    }
 }

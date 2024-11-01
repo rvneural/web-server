@@ -12,6 +12,8 @@ const saveFileButton = document.getElementById("saveFile") // Кнопка saveF
 
 var currentText = ""
 
+var version = 1
+
 var progress = false
 
 var id = ""
@@ -171,19 +173,40 @@ copyTextButton.addEventListener('click', async () => {
 
 // Обработчик кнопки "Сохранить текст в файл"
 saveFileButton.addEventListener('click', async () => {
-    // Создаем BLOB и убираем двойные переносы строк в тексте
-    const blob = new Blob([outputArea.value.trim().replaceAll('\n\n', '\n')], {type: 'text/plain'})
 
-    // Создаем документ и ссылку на скачиваение
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
+    var dbVersion = await getVersion()
+    console.log(dbVersion)
+    if (version === dbVersion){
+        version += 1
+    } else {
+        alert('База данных была обновлена. Перейдите на страницу https://neuron-nexus.ru/operarion/'+id + ", чтобы получить обновленный документ.")
+        return
+    }
 
-    // Указываем название файла
-    link.download = 'rewritedText.txt';
+    currentText = outputArea.value
+    const formData = new FormData();
+    formData.append("id", id)
+    formData.append("type", 'text')
+    formData.append('old_text', intupArea.value)
+    formData.append('new_text', outputArea.value)
+    formData.append('prompt', promtArea.value)
 
-    // Отправляем файл клиенту
-    link.click();
-    URL.revokeObjectURL(link.href);
+    try {
+        const resp = await fetch('/operation/saveOperation', {
+            method: 'POST',
+            body: formData,
+        })
+        console.log(resp)
+        } catch (error) {
+            console.error('Ошибка при выполнении запроса:', error);
+            alert('Ошибка при выполнении запроса:', error);
+            return
+        }
+    
+        saveFileButton.innerText = "Сохранено"
+        setTimeout(() => {
+            saveFileButton.innerText = "Сохранить"
+        }, 1000)
 })
 
 async function sendRequestURL() {
@@ -337,4 +360,25 @@ async function closePopup(popup) {
                 popups[i].classList.remove('slide-down'); // Добавляем анимацию спуска
             }
     }, { once: true });
+}
+
+async function getVersion(){
+    const formData = new FormData();
+    formData.append('id', id);
+    try {
+        const resp = await fetch('/operation/getVersion', {
+            method: 'POST',
+            body: formData,
+        })
+        const data = await resp.json();
+        if (data.error) {
+            console.log(data.error);
+            return 0
+        } else {
+            return data.version
+        }
+    } catch (err) {
+        console.log(err);
+        return 0
+    }
 }

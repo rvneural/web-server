@@ -97,7 +97,7 @@ func (n *TextProcessingHandler) HandleForm(c *gin.Context) {
 		resonse.OldText = text
 		resonse.NewText = err.Error()
 		go n.saveErrorToDB(id, err.Error(), prompt, text)
-		c.JSON(http.StatusNotAcceptable, resonse)
+		c.JSON(http.StatusBadGateway, resonse)
 		return
 	}
 	defer resp.Body.Close()

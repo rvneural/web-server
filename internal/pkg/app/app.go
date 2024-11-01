@@ -10,7 +10,6 @@ import (
 	upscalePage "WebServer/internal/server/handlers/pages/image-upscaler"
 	recognitionFromFilePage "WebServer/internal/server/handlers/pages/recognition-from-file"
 	textProcessingPage "WebServer/internal/server/handlers/pages/text-processing"
-	rewritePage "WebServer/internal/server/handlers/pages/text-rewriting"
 
 	audioFormHandler "WebServer/internal/server/handlers/forms/audio"
 	imageFormHandler "WebServer/internal/server/handlers/forms/img/generator"
@@ -33,6 +32,8 @@ import (
 	dbWorker "WebServer/internal/services/db"
 
 	adminOperationList "WebServer/internal/server/handlers/pages/admin/operations"
+
+	saveSystem "WebServer/internal/server/handlers/forms/saving"
 
 	"WebServer/internal/server/handlers/pages/stats"
 )
@@ -66,7 +67,6 @@ func (a *App) init() {
 
 	a.Endpoint.RegisterPageWithCache("/", recognitionFromFilePage.New())
 	a.Endpoint.RegisterPageWithCache("/image", imageGenerationPage.New())
-	a.Endpoint.RegisterPageWithCache("/rewrite", rewritePage.New())
 	a.Endpoint.RegisterPageWithCache("/text", textProcessingPage.New())
 	a.Endpoint.RegisterPageWithCache("/upscale", upscalePage.New())
 
@@ -80,7 +80,7 @@ func (a *App) init() {
 	a.Endpoint.RegisterAdminPageNoCahce("/operations", adminOperationList.New(dataBaseWorker))
 
 	a.Endpoint.RegisterResultNoCache("/get", newID.New(idgenerator.New(a.idMaxLen)))
-	a.Endpoint.RegisterResultWithCache("/:id", result.New(notFoundOperationPage.New(), progressOperationPage.New(), dataBaseWorker, a.logger))
+	a.Endpoint.RegisterResultNoCache("/:id", result.New(notFoundOperationPage.New(), progressOperationPage.New(), dataBaseWorker, a.logger))
 
 	a.Endpoint.RegisterForm("/recognize", audioFormHandler.New(dataBaseWorker, a.logger))
 	a.Endpoint.RegisterForm("/rewriteFromWeb", textFormHandler.New("{{ rewrite }}", dataBaseWorker, a.logger))
@@ -88,6 +88,9 @@ func (a *App) init() {
 	a.Endpoint.RegisterForm("/generateImage", imageFormHandler.New(dataBaseWorker, a.logger))
 	a.Endpoint.RegisterForm("/upscaleImage", imageUpscalerFormHandler.New(a.logger))
 	a.Endpoint.RegisterForm("/photopea", photopea.New(a.logger))
+
+	a.Endpoint.RegisterResultFormHandler("/saveOperation", saveSystem.New(dataBaseWorker, a.logger))
+	a.Endpoint.RegisterResultFormHandler("/getVersion", saveSystem.NewVersionSystem(dataBaseWorker, a.logger))
 
 	a.Endpoint.Register404Page(notFound.New())
 }

@@ -11,4 +11,5 @@ type DBResult struct {
 	OPERATION_TYPE string    `db:"type"`
 	CREATION_DATE  time.Time `db:"creation_date"`
 	FINISH_DATE    time.Time `db:"finish_date"`
+	VERSION        int64     `db:"version"`
 }

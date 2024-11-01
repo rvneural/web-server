@@ -50,6 +50,11 @@ to {
     grid-template-rows: 4fr 1fr;
 }
 
+.input-text-group p {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
 .input-text-area{
     display: grid;
     grid-template-rows: 2fr;

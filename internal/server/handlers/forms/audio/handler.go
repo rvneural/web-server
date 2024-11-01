@@ -87,12 +87,15 @@ func (n *RecognitionHandler) HandleForm(c *gin.Context) {
 
 	response := n.recognize(Request)
 
+	response.NormText = strings.TrimSpace(response.NormText)
+	response.RawText = strings.TrimSpace(response.RawText)
+
 	go func(id string, dbError error) {
 		if dbError == nil && len(id) != 0 {
 			dbResult := dbModel.DBResult{
-				RawText:  response.RawText,
-				NormText: response.NormText,
-				FileName: filename,
+				RawText:  strings.TrimSpace(response.RawText),
+				NormText: strings.TrimSpace(response.NormText),
+				FileName: strings.TrimSpace(filename),
 			}
 			byteData, err := json.Marshal(dbResult)
 			if err == nil {

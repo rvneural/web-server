@@ -54,7 +54,7 @@ func (w *Worker) RegisterOperation(uniqID string, operation_type string) error {
 	}
 	defer db.Close()
 
-	_, err = db.Exec("INSERT INTO "+w.table_name+" (operation_id, in_progress, type, creation_date, finish_date) VALUES ($1, $2, $3, $4, $5)", uniqID, true, operation_type, time.Now(), time.Now())
+	_, err = db.Exec("INSERT INTO "+w.table_name+" (operation_id, in_progress, type, creation_date, finish_date, version) VALUES ($1, $2, $3, $4, $5, $6)", uniqID, true, operation_type, time.Now(), time.Now(), 0)
 	if err != nil {
 		w.logger.Error("Insert operation to DataBase", "error", err)
 	}
@@ -75,7 +75,7 @@ func (w *Worker) SetResult(uniqID string, data []byte) error {
 	}
 	defer db.Close()
 
-	_, err = db.Exec("UPDATE "+w.table_name+" SET data = $1, in_progress = $2, finish_date = $3 WHERE operation_id = $4", data, false, time.Now(), uniqID)
+	_, err = db.Exec("UPDATE "+w.table_name+" SET data = $1, in_progress = $2, finish_date = $3, version = $4 WHERE operation_id = $5", data, false, time.Now(), 1, uniqID)
 	if err != nil {
 		w.logger.Error("Update operation to DataBase", "error", err)
 	}
@@ -157,4 +157,47 @@ func (w *Worker) GetOperation(uniqID string) (dbResult model.DBResult, err error
 		w.logger.Error("Get operation from DataBase", "error", err)
 	}
 	return dbResult, err
+}
+
+func (w *Worker) UpdateResult(uniqID string, data []byte) (err error) {
+
+	w.logger.Info("UpdateResult", "uniqID", uniqID, "data", string(data))
+	uniqID = strings.TrimSpace(uniqID)
+	if len(uniqID) == 0 || len(uniqID) > 35 {
+		return fmt.Errorf("uniqID is empty or too big")
+	}
+
+	db, err := w.connectToDB()
+	if err != nil {
+		w.logger.Error("Connection to DataBase", "error", err)
+		return err
+	}
+	defer db.Close()
+
+	_, err = db.Exec("UPDATE "+w.table_name+" SET data=$1, version=version+1 WHERE operation_id = $2", data, uniqID)
+	return err
+}
+
+func (w *Worker) GetVersion(uniqID string) (version int64, err error) {
+
+	type versionLabel struct {
+		Version int64 `db:"version"`
+	}
+
+	uniqID = strings.TrimSpace(uniqID)
+	if len(uniqID) == 0 || len(uniqID) > 35 {
+		return 0, fmt.Errorf("uniqID is empty or too big")
+	}
+
+	db, err := w.connectToDB()
+	if err != nil {
+		w.logger.Error("Connection to DataBase", "error", err)
+		return 0, err
+	}
+
+	var dbLabel = versionLabel{}
+
+	defer db.Close()
+	err = db.Get(&dbLabel, "SELECT version FROM "+w.table_name+" WHERE operation_id = $1 LIMIT 1", uniqID)
+	return dbLabel.Version, err
 }

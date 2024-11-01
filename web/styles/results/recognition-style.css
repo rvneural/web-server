@@ -4,7 +4,8 @@
     background-color: transparent;
     grid-template:
       "a a" 5%
-      "b c" auto;
+      "b c" auto
+      "d d" 7%;
     gap: 1%;
   }
 
@@ -65,4 +66,28 @@
     line-height: 1.5em;
     padding: 10px;
     box-sizing: border-box;
+  }
+
+  .button-save{
+    grid-area: d;
+    display: flex;
+    justify-content: center;
+    background: transparent;
+  }
+
+  .save-button{
+    flex: 1;
+    background-color: #707784;
+    border: none;
+    color:aliceblue;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 20px;
+  }
+
+  .save-button:hover{
+    cursor: pointer;
+    background-color: #494E56;
   }

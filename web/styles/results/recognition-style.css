@@ -70,6 +70,7 @@
 
   .button-save{
     grid-area: d;
+    max-height: 40px;
     display: flex;
     justify-content: center;
     background: transparent;
@@ -80,7 +81,6 @@
     background-color: #707784;
     border: none;
     color:aliceblue;
-    padding: 15px 32px;
     text-align: center;
     text-decoration: none;
     display: inline-block;

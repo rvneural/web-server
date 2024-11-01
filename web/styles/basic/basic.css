@@ -30,7 +30,7 @@
     grid-template: 
           "b b b" 8%
           "a c c" 85%
-          ". d d" auto;
+          ". d d" 6%;
     
     justify-content: center; /* Центрируем содержимое */
     padding: 0 20px; /* Устанавливаем одинаковые отступы слева и справа */
@@ -115,7 +115,7 @@
   
   .bottom-group button{
     width: 33.3333%;
-    min-height: 40px;
+    max-height: 40px;
     float: left;
   }
   

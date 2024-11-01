@@ -88,6 +88,9 @@ func (r *Result) GetPage(c *gin.Context) {
 			"filename":  result.FileName,
 			"raw_text":  strings.ReplaceAll(result.RawText, "&#34;", "\""),
 			"norm_text": strings.ReplaceAll(result.NormText, "&#34;", "\""),
+			"version":   res.VERSION,
+			"script":    "/web/scripts/results/recognition-result-script.js",
+			"id":        res.OPERATION_ID,
 		})
 		return
 	case "text":
@@ -108,6 +111,9 @@ func (r *Result) GetPage(c *gin.Context) {
 			"old_text": strings.ReplaceAll(result.OldText, "&#34;", "\""),
 			"new_text": strings.ReplaceAll(result.NewText, "&#34;", "\""),
 			"prompt":   strings.ReplaceAll(result.Prompt, "&#34;", "\""),
+			"version":  res.VERSION,
+			"script":   "/web/scripts/results/text-processing-result-script.js",
+			"id":       res.OPERATION_ID,
 		})
 		return
 	default:

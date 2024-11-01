@@ -1,5 +1,10 @@
 {{template "header.html" .}}
 <div class="work-group">
+    <script type="text/javascript">
+        var version = {{.version}};
+        var file_name = {{.filename}};
+        var id = {{.id}};
+    </script>
     <div class="filenameurl">
         {{if isValidURL .filename}}
         <p>Обработан файл по ссылке: <a href="{{.filename}}" target="_blank">{{.filename}}</a></p>
@@ -9,13 +14,13 @@
     </div>    
     <div class="input-text-group">
         <p>Нормализованный текст</p>
-        <textarea class="output-area" id="inputArea">{{.norm_text}}</textarea>
+        <textarea class="output-area" id="normArea">{{.norm_text}}</textarea>
     </div>
     <div class="output-text-group">
         <p >Сырой текст</p>
-        <textarea class="output-area" id="outputArea">{{.raw_text}}</textarea>
+        <textarea class="output-area" id="rawArea">{{.raw_text}}</textarea>
     </div>
 <div class="button-save">
-    <button class="save-button">Сохранить</button>
+    <button class="save-button" id="saveButton">Сохранить</button>
 </div>
 {{template "footer.html" .}}

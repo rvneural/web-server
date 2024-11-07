@@ -36,45 +36,16 @@ func New(dbWorker interfaces.DBWorker) *AdminOperationListStruct {
 
 func (a *AdminOperationListStruct) GetPage(c *gin.Context) {
 
-	if c.DefaultQuery("operation", "") != "" {
-		a.getSpecificOperation(c)
-	} else {
-		a.getListOfOperations(c)
-	}
+	a.getListOfOperations(c)
 
-}
-
-func (a *AdminOperationListStruct) getSpecificOperation(c *gin.Context) {
-	operationID := c.DefaultQuery("operation", "")
-	operations, err := a.dbWorker.GetAllOperations("", "", operationID)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error":       err.Error(),
-			"description": "Ошибка при чтении",
-		})
-		return
-	}
-	operation := operations[0]
-	c.JSON(http.StatusOK, OperationListElement{
-		ID:           operation.ID,
-		OPERATION_ID: operation.OPERATION_ID,
-		URI:          "/operation/" + operation.OPERATION_ID,
-		URL:          c.Request.URL.Scheme + "://" + c.Request.URL.Host + "/operation/" + operation.OPERATION_ID,
-		FINISHED:     !operation.IN_PROGRESS,
-		TYPE:         operation.OPERATION_TYPE,
-		CREATED_AT:   operation.CREATION_DATE.Format("02.01.2006 15:04:05"),
-		FINISH_DATE:  operation.FINISH_DATE.Format("02.01.2006 15:04:05"),
-		DURATION:     operation.FINISH_DATE.Sub(operation.CREATION_DATE).String(),
-		VERSION:      operation.VERSION,
-	})
-	return
 }
 
 func (a *AdminOperationListStruct) getListOfOperations(c *gin.Context) {
 	limit := c.DefaultQuery("limit", "0")
 	operation_type := c.DefaultQuery("type", "")
+	operation_id := c.DefaultQuery("operation", "")
 
-	operations, err := a.dbWorker.GetAllOperations(limit, operation_type, "")
+	operations, err := a.dbWorker.GetAllOperations(limit, operation_type, operation_id)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error":       err.Error(),

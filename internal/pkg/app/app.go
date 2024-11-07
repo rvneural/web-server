@@ -23,12 +23,9 @@ import (
 
 	newID "WebServer/internal/server/operations"
 
-	"WebServer/internal/services/idgenerator"
-
 	notFoundOperationPage "WebServer/internal/server/handlers/pages/results/notfound"
 	progressOperationPage "WebServer/internal/server/handlers/pages/results/progress"
 
-	dbConfig "WebServer/internal/config/db"
 	dbWorker "WebServer/internal/services/db"
 
 	adminOperationList "WebServer/internal/server/handlers/pages/admin/operations"
@@ -72,14 +69,11 @@ func (a *App) init() {
 
 	a.Endpoint.RegisterAdminPageNoCahce("/stats", stats.New())
 
-	dataBaseWorker := dbWorker.New(
-		dbConfig.HOST, dbConfig.PORT, dbConfig.LOGIN, dbConfig.PASSWORD, dbConfig.DB_NAME,
-		dbConfig.RESULT_TABLE_NAME, a.logger,
-	)
+	dataBaseWorker := dbWorker.New(a.logger)
 
 	a.Endpoint.RegisterAdminPageNoCahce("/operations", adminOperationList.New(dataBaseWorker))
 
-	a.Endpoint.RegisterResultNoCache("/get", newID.New(idgenerator.New(a.idMaxLen)))
+	a.Endpoint.RegisterResultNoCache("/get", newID.New(dataBaseWorker))
 	a.Endpoint.RegisterResultNoCache("/:id", result.New(notFoundOperationPage.New(), progressOperationPage.New(), dataBaseWorker, a.logger))
 
 	a.Endpoint.RegisterForm("/recognize", audioFormHandler.New(dataBaseWorker, a.logger))

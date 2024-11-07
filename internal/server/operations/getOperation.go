@@ -1,6 +1,7 @@
 package operations
 
 import (
+	"WebServer/internal/server/handlers/interfaces"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -11,17 +12,23 @@ type IDGeneratoer interface {
 }
 
 type Operation struct {
-	generator IDGeneratoer
+	dbWorker interfaces.DBWorker
 }
 
-func New(generator IDGeneratoer) *Operation {
+func New(dbWorker interfaces.DBWorker) *Operation {
 	return &Operation{
-		generator: generator,
+		dbWorker: dbWorker,
 	}
 }
 
 func (o *Operation) GetPage(c *gin.Context) {
-	id := o.generator.Generate()
+	id, err := o.dbWorker.GetOperationID()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
 
 	c.JSON(http.StatusOK, gin.H{
 		"id":  id,

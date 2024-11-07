@@ -3,7 +3,6 @@ package operations
 import (
 	"WebServer/internal/server/handlers/interfaces"
 	"net/http"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -47,7 +46,7 @@ func (a *AdminOperationListStruct) GetPage(c *gin.Context) {
 
 func (a *AdminOperationListStruct) getSpecificOperation(c *gin.Context) {
 	operationID := c.DefaultQuery("operation", "")
-	operation, err := a.dbWorker.GetOperation(operationID)
+	operations, err := a.dbWorker.GetAllOperations("", "", operationID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error":       err.Error(),
@@ -55,6 +54,7 @@ func (a *AdminOperationListStruct) getSpecificOperation(c *gin.Context) {
 		})
 		return
 	}
+	operation := operations[0]
 	c.JSON(http.StatusOK, OperationListElement{
 		ID:           operation.ID,
 		OPERATION_ID: operation.OPERATION_ID,
@@ -71,16 +71,10 @@ func (a *AdminOperationListStruct) getSpecificOperation(c *gin.Context) {
 }
 
 func (a *AdminOperationListStruct) getListOfOperations(c *gin.Context) {
-	var limit int
-	str_limit := c.DefaultQuery("limit", "0")
-	limit, err := strconv.Atoi(str_limit)
-	if err != nil {
-		limit = 0
-	}
-
+	limit := c.DefaultQuery("limit", "0")
 	operation_type := c.DefaultQuery("type", "")
 
-	operations, err := a.dbWorker.GetAllOperations(limit, operation_type)
+	operations, err := a.dbWorker.GetAllOperations(limit, operation_type, "")
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error":       err.Error(),

@@ -9,4 +9,6 @@ const (
 	DB_NAME = "rvneural"
 
 	RESULT_TABLE_NAME = "result"
+
+	URL = "http://127.0.0.1:7999"
 )

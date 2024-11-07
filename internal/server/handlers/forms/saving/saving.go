@@ -45,7 +45,7 @@ func (s *SavingSystem) HandleForm(c *gin.Context) {
 			s.logger.Error("Error while saving to db", "error", err)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal server error"})
 		}
-		err = s.dbWorker.UpdateResult(operation_id, byteResult)
+		err = s.dbWorker.SetResult(operation_id, byteResult)
 		if err != nil {
 			s.logger.Error("Error while saving to db", "error", err)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal server error"})
@@ -61,7 +61,7 @@ func (s *SavingSystem) HandleForm(c *gin.Context) {
 			s.logger.Error("Error while saving to db", "error", err)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal server error"})
 		}
-		err = s.dbWorker.UpdateResult(operation_id, byteResult)
+		err = s.dbWorker.SetResult(operation_id, byteResult)
 		if err != nil {
 			s.logger.Error("Error while saving to db", "error", err)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal server error"})

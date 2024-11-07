@@ -9,8 +9,6 @@ require (
 	github.com/gin-contrib/rollbar v1.0.1
 	github.com/gin-contrib/sessions v1.0.1
 	github.com/gin-gonic/gin v1.10.0
-	github.com/jmoiron/sqlx v1.4.0
-	github.com/lib/pq v1.10.9
 	github.com/neuron-nexus/go-image-upscaler v1.0.2
 	github.com/rollbar/rollbar-go v1.4.5
 	github.com/samber/slog-gin v1.13.6

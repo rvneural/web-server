@@ -7,8 +7,6 @@ import (
 	"net/http"
 
 	model "WebServer/internal/models/db/model"
-
-	_ "github.com/lib/pq"
 )
 
 type Worker struct {

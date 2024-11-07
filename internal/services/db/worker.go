@@ -3,6 +3,7 @@ package db
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"log/slog"
 	"net/http"
 
@@ -44,6 +45,9 @@ func (w *Worker) RegisterOperation(uniqID string, operation_type string) error {
 	}
 	defer response.Body.Close()
 
+	if response.StatusCode != 200 {
+		return fmt.Errorf("Error")
+	}
 	return nil
 }
 
@@ -54,6 +58,9 @@ func (w *Worker) SetResult(uniqID string, data []byte) error {
 		return err
 	}
 	defer response.Body.Close()
+	if response.StatusCode != 200 {
+		return fmt.Errorf("Error")
+	}
 	return nil
 }
 
@@ -86,11 +93,17 @@ func (w *Worker) GetAllOperations(limit string, operation_type string, operation
 		return dbResult, err
 	}
 	defer response.Body.Close()
+
 	type Response struct {
-		Data []model.DBResult `json:"operations"`
+		Data  []model.DBResult `json:"operations"`
+		Error string           `json:"error"`
 	}
+
 	var responseData Response
 	err = json.NewDecoder(response.Body).Decode(&responseData)
+	if err == nil && responseData.Error != "" {
+		err = fmt.Errorf(responseData.Error)
+	}
 	return responseData.Data, err
 }
 
@@ -102,17 +115,22 @@ func (w *Worker) GetOperationID() (id string, err error) {
 	}
 	defer response.Body.Close()
 	type Response struct {
-		ID string `json:"id"`
+		ID    string `json:"id"`
+		Error string `json:"error"`
 	}
 	var idR Response
 	err = json.NewDecoder(response.Body).Decode(&idR)
+	if err == nil && idR.Error != "" {
+		err = fmt.Errorf(idR.Error)
+	}
 	return idR.ID, err
 }
 
 func (w *Worker) GetVersion(uniqID string) (version int64, err error) {
 	uri := w.url + "operation/version/" + uniqID
 	type Response struct {
-		Version int64 `json:"version"`
+		Version int64  `json:"version"`
+		Error   string `json:"error"`
 	}
 	var versionR Response
 	response, err := http.Get(uri)
@@ -121,5 +139,8 @@ func (w *Worker) GetVersion(uniqID string) (version int64, err error) {
 	}
 	defer response.Body.Close()
 	err = json.NewDecoder(response.Body).Decode(&versionR)
+	if err == nil && versionR.Error != "" {
+		err = fmt.Errorf(versionR.Error)
+	}
 	return versionR.Version, err
 }

@@ -1,6 +1,8 @@
 package text2image_service
 
-const (
-	URL = "http://127.0.0.1:8083"
-	KEY = "KU2WTZBzFWn4Ko9lJ7TlpmUXwkHc8Y"
+import "os"
+
+var (
+	URL = os.Getenv("TEXT2IMAGE_URL")
+	KEY = os.Getenv("TEXT2IMAGE_KEY")
 )

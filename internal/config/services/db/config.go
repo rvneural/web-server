@@ -1,5 +1,7 @@
 package db
 
-const (
-	URL = "http://127.0.0.1:7999"
+import "os"
+
+var (
+	URL = os.Getenv("DB_URL")
 )

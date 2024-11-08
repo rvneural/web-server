@@ -8,6 +8,8 @@ import (
 	"net/http"
 
 	model "WebServer/internal/models/db/model"
+
+	config "WebServer/internal/config/services/db"
 )
 
 type Worker struct {
@@ -18,7 +20,7 @@ type Worker struct {
 func New(logger *slog.Logger) *Worker {
 	return &Worker{
 		logger: logger,
-		url:    "http://127.0.0.1:7999/",
+		url:    config.URL,
 	}
 }
 

@@ -68,8 +68,10 @@ func New() *App {
 	router.Use(gin.Recovery())
 
 	// Use session
-	cookieStore := cookie.NewStore([]byte(config.SESSION_SECRET))
-	router.Use(sessions.Sessions("neuron-nexus-session", cookieStore))
+	if config.SESSION_SECRET != "" {
+		cookieStore := cookie.NewStore([]byte(config.SESSION_SECRET))
+		router.Use(sessions.Sessions("neuron-nexus-session", cookieStore))
+	}
 
 	// Use GZIP compression
 	router.Use(gzip.Gzip(gzip.DefaultCompression))
@@ -95,9 +97,11 @@ func New() *App {
 	r := router.Group("/operation")
 
 	a := router.Group("/admin")
-	a.Use(gin.BasicAuth(gin.Accounts{
-		config.ADMIN_LOGIN: config.ADMIN_PASSWORD,
-	}))
+	if config.ADMIN_LOGIN != "" && config.ADMIN_PASSWORD != "" {
+		a.Use(gin.BasicAuth(gin.Accounts{
+			config.ADMIN_LOGIN: config.ADMIN_PASSWORD,
+		}))
+	}
 
 	router.StaticFS("/web/", http.Dir("../../web"))
 	router.LoadHTMLGlob("../../web/templates/*.html")

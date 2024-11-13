@@ -41,6 +41,10 @@ func (rp *TextProcessingPage) GetPage(c *gin.Context) {
 			Name:  "Заголовок",
 		},
 		{
+			Value: "correct",
+			Name:  "Исправление ошибок",
+		},
+		{
 			Value: "short",
 			Name:  "Сокращение",
 		},

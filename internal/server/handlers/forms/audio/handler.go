@@ -85,6 +85,8 @@ func (n *RecognitionHandler) HandleForm(c *gin.Context) {
 
 	Request.Dialog = (strings.ToLower(c.Request.FormValue("dialog")) == "true")
 
+	n.logger.Info("FILE DIALOG", "dialog", Request.Dialog, "form", c.Request.FormValue("dialog"))
+
 	response := n.recognize(Request)
 
 	response.NormText = strings.TrimSpace(response.NormText)

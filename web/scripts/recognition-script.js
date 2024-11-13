@@ -88,6 +88,8 @@ async function recognize(){
     
     formData.append('id', id);
     formData.append('language', language.value) // Язык
+    formData.append('dialog', dialogCheckBox.checked) // Диалог
+    console.log(formData)
 
     // Показываем окно о начале расшифровки
     //alert("Началась расшифровка файла. В зависимости от его размера, процесс может занять доительное время. В среднем 1 минута расшифровывается 10 секунд")

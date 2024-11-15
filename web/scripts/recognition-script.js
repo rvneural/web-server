@@ -15,6 +15,8 @@ const urlInput = document.getElementById('urlInput') // Поле ввода сс
 const language = document.getElementById("languageSelect") // Поле выбора языка
 const fileTypeSelect = document.getElementById("fileTypeSelect") // Поле выбора типа файла
 
+const whisper = document.getElementById("whisper") // Поле ввода whisper
+
 var id = ""
 var file_name = ""
 
@@ -86,6 +88,7 @@ async function recognize(){
         file_name = urlInput.value
     }
     
+    formData.append('whisper', whisper.checked);
     formData.append('id', id);
     formData.append('language', language.value) // Язык
     formData.append('dialog', dialogCheckBox.checked) // Диалог

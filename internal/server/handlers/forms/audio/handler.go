@@ -42,6 +42,11 @@ func (n *RecognitionHandler) handleFileRecognition(c *gin.Context) (models.Reque
 		return Request, err
 	}
 
+	if c.Request.FormValue("whisper") == "true" {
+		Request.Model = "whisper"
+	} else {
+		Request.Model = "yandex"
+	}
 	Request.File.Data = fileData
 	Request.Languages = []string{lang}
 	Request.File.Type = fileType

@@ -8,6 +8,7 @@ import (
 
 func (a *App) startRedirection() error {
 	a.logger.Info("Starting redirection server")
+	config := config.Init()
 	httpServer := &http.Server{
 		Addr: ":http",
 		Handler: http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

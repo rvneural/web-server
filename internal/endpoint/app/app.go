@@ -57,6 +57,7 @@ type FormHandler interface {
 }
 
 func New() *App {
+	config := config.Init()
 	gin.SetMode(gin.ReleaseMode)
 	router := gin.Default()
 
@@ -127,8 +128,10 @@ func (a *App) GetLogger() *slog.Logger {
 func (a *App) SetBasicAuth(login, password string) {
 	a.login = login
 	a.password = password
-
+	config := config.Init()
 	if a.login != "" && a.password != "" {
+		a.logger.Info("Admin", "login", config.ADMIN_LOGIN, "password", config.ADMIN_PASSWORD)
+		a.logger.Info("User", "login", login, "password", password)
 		a.logger.Info("Using authorization")
 		a.engine.Use(gin.BasicAuth(gin.Accounts{
 			config.ADMIN_LOGIN: config.ADMIN_PASSWORD,
@@ -178,6 +181,7 @@ func (a *App) RegisterAdminPageNoCahce(pattern string, handler PageHandler) {
 }
 
 func (a *App) StartLocal() {
+	config := config.Init()
 	a.logger.Info("Starting local server...")
 	httpServer := &http.Server{
 		Addr:    config.HTTP_PORT,
@@ -187,6 +191,7 @@ func (a *App) StartLocal() {
 }
 
 func (a *App) StartTLS() {
+	config := config.Init()
 	a.logger.Info("Starting TLS server...")
 
 	m := &autocert.Manager{

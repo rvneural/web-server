@@ -30,7 +30,6 @@ func (n *RecognitionHandler) recognize(request models.Request) models.Response {
 	}
 
 	httpRequest.Header.Set("Content-Type", "application/json")
-	httpRequest.Header.Set("Authorization", "Bearer "+config.KEY)
 
 	client := http.Client{}
 

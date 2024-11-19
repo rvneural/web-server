@@ -4,5 +4,4 @@ import "os"
 
 var (
 	URL = os.Getenv("TEXT2TEXT_URL")
-	KEY = os.Getenv("TEXT2TEXT_KEY")
 )

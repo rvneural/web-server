@@ -66,7 +66,6 @@ func (n *ImageGenerationHandler) HandleForm(c *gin.Context) {
 	}
 
 	httpRequest.Header.Set("Content-Type", "application/json")
-	httpRequest.Header.Set("Authorization", "Bearer "+config.KEY)
 
 	client := http.Client{}
 

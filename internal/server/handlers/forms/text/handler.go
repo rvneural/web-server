@@ -85,7 +85,6 @@ func (n *TextProcessingHandler) HandleForm(c *gin.Context) {
 		return
 	}
 
-	httpRequest.Header.Set("Authorization", "Bearer "+config.KEY)
 	httpRequest.Header.Set("Content-Type", "application/json")
 
 	client := http.Client{}

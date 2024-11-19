@@ -197,7 +197,7 @@ func (a *App) StartTLS() {
 	m := &autocert.Manager{
 		Cache:      autocert.DirCache("../../var/www/.cache"),
 		Prompt:     autocert.AcceptTOS,
-		HostPolicy: autocert.HostWhitelist(config.DOMAIN),
+		HostPolicy: autocert.HostWhitelist(config.DOMAIN, "www."+config.DOMAIN),
 	}
 	tlsServer := &http.Server{
 		Addr: config.HTTPS_PORT,

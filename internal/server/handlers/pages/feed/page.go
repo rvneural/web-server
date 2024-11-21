@@ -89,7 +89,7 @@ func (r *Page) GetPage(c *gin.Context) {
 			}
 		}(i, item, &news)
 	}
-
+	wg.Wait()
 	c.HTML(http.StatusOK, "feed.html", gin.H{
 		"title":  "Актуальные новости",
 		"style":  style,

@@ -1,8 +1,45 @@
 .work-group{
     display: grid;
-    row-gap: 0.5%;
+    gap: 0.5%;
+    grid-template-columns: 1fr 1fr;
     overflow-y: auto;
     overflow-x: hidden;
+    padding: 5px;
+    box-sizing:border-box;
+  }
+  
+  .work-group .news-element{
+    width: 100%;
+    height: auto;
+    padding: 5px;
+    box-sizing:border-box;
+    border: 1px solid black;
+    background-color: rgba(245, 245, 245, 0.629);
+
+    display: flex;
+    flex-direction: column; /* Устанавливаем вертикальное направление */
+    justify-content: space-between; /* Распределяем пространство между элементами */
   }
 
-  
+  .news-element *{
+    background: transparent;
+    text-align: left;
+  }
+
+  .news-element hr{
+    border: 0.5px solid rgb(63, 63, 63); /* Установите цвет и стиль границы */
+    width: 100%; /* Убедитесь, что ширина 100% */
+  }
+
+  .news-element .title{
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
+
+  .news-element .info{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0px;
+
+    margin-top: auto; /* Отодвигаем элемент info вниз */
+  }

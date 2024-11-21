@@ -99,7 +99,7 @@ func (r *Page) GetPage(c *gin.Context) {
 			}
 
 			if len(str_description) > max_description {
-				str_description = str_description[:max_description-3] + "..."
+				str_description = str_description[:max_description] + "..."
 			}
 			defer wg.Done()
 			(*news)[i] = News{

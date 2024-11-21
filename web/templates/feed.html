@@ -1,5 +1,15 @@
 {{template "header.html" .}}
 <div class="work-group">
-    
+{{range .news}}
+<div class="news-element">
+    <h3 class="title"><a href="{{.URL}}" target="_blank">{{.Title}}</a></h3>
+    <hr>
+    <p class="description">{{.Description}}</p>
+    <div class="info">
+        <p class="author">© <b>{{.Source}}</b></p>
+        <p class="date"><i>{{.Date}}</i></p>
+    </div>
+</div>
+{{end}}
 </div>
 {{template "footer.html" .}}

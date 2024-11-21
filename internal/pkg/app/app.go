@@ -32,6 +32,9 @@ import (
 
 	saveSystem "WebServer/internal/server/handlers/forms/saving"
 
+	newsPage "WebServer/internal/server/handlers/pages/feed"
+	rssFeed "WebServer/internal/server/handlers/pages/rss"
+
 	"WebServer/internal/server/handlers/pages/stats"
 )
 
@@ -66,6 +69,8 @@ func (a *App) init() {
 	a.Endpoint.RegisterPageWithCache("/image", imageGenerationPage.New())
 	a.Endpoint.RegisterPageWithCache("/text", textProcessingPage.New())
 	a.Endpoint.RegisterPageWithCache("/upscale", upscalePage.New())
+	a.Endpoint.RegisterPageNoCache("/news", newsPage.New(a.logger))
+	a.Endpoint.RegisterPageNoCache("/rss", rssFeed.New(a.logger))
 
 	a.Endpoint.RegisterAdminPageNoCahce("/stats", stats.New())
 

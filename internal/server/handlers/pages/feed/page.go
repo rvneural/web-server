@@ -16,6 +16,7 @@ type News struct {
 	Description string
 	URL         string
 	Date        string
+	Source      string
 }
 
 type Page struct {
@@ -79,6 +80,7 @@ func (r *Page) GetPage(c *gin.Context) {
 			Description: item.Description,
 			URL:         item.Link,
 			Date:        item.PubDate,
+			Source:      item.Source,
 		})
 	}
 

@@ -7,6 +7,7 @@ import (
 	"log/slog"
 	"net/http"
 	"os"
+	"sync"
 
 	"github.com/gin-gonic/gin"
 )
@@ -73,15 +74,20 @@ func (r *Page) GetPage(c *gin.Context) {
 		return
 	}
 
-	news := make([]News, 0, len(rss.Channel.Items))
-	for _, item := range rss.Channel.Items {
-		news = append(news, News{
-			Title:       item.Title,
-			Description: item.Description,
-			URL:         item.Link,
-			Date:        item.PubDate,
-			Source:      item.Source,
-		})
+	news := make([]News, len(rss.Channel.Items), len(rss.Channel.Items))
+	wg := sync.WaitGroup{}
+	for i, item := range rss.Channel.Items {
+		wg.Add(1)
+		go func(i int, item feed.Item, news *[]News) {
+			defer wg.Done()
+			(*news)[i] = News{
+				Title:       item.Title,
+				Description: item.Description,
+				URL:         item.Link,
+				Date:        item.PubDate,
+				Source:      item.Source,
+			}
+		}(i, item, &news)
 	}
 
 	c.HTML(http.StatusOK, "feed.html", gin.H{

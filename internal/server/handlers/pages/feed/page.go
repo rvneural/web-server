@@ -7,7 +7,9 @@ import (
 	"log/slog"
 	"net/http"
 	"os"
+	"strconv"
 	"sync"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -77,14 +79,34 @@ func (r *Page) GetPage(c *gin.Context) {
 	news := make([]News, len(rss.Channel.Items), len(rss.Channel.Items))
 	wg := sync.WaitGroup{}
 	for i, item := range rss.Channel.Items {
+
 		wg.Add(1)
 		go func(i int, item feed.Item, news *[]News) {
+			date, err := time.Parse(time.RFC1123Z, item.PubDate)
+			var str_date string
+			if err != nil {
+				str_date = item.PubDate
+			} else {
+				str_date = date.Format("02.01.2006 15:04")
+			}
+
+			str_description := item.Description
+
+			max_description_str := os.Getenv("MAX_DESC")
+			max_description, err := strconv.Atoi(max_description_str)
+			if err != nil {
+				max_description = 255
+			}
+
+			if len(str_description) > max_description {
+				str_description = str_description[:max_description-3] + "..."
+			}
 			defer wg.Done()
 			(*news)[i] = News{
 				Title:       item.Title,
-				Description: item.Description,
+				Description: str_description,
 				URL:         item.Link,
-				Date:        item.PubDate,
+				Date:        str_date,
 				Source:      item.Source,
 			}
 		}(i, item, &news)

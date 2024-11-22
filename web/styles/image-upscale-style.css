@@ -20,7 +20,10 @@
 
   .control-group{
     grid-area: control-group;
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 5px;
+    background: transparent;
   }
 
   .output-group{

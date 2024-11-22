@@ -71,7 +71,7 @@ func (i *ImageUpscaler) HandleForm(c *gin.Context) {
 		return
 	}
 
-	renderFile, err := os.Create("../../web/uploads/upscaled-" + strings.ReplaceAll(header.Filename, " ", "-") + ".jpg")
+	renderFile, err := os.Create("../../web/uploads/upscaled-" + strings.ReplaceAll(header.Filename, " ", "-") + ".png")
 	if err != nil {
 		i.logger.Error("Creating file", "error", err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -79,12 +79,12 @@ func (i *ImageUpscaler) HandleForm(c *gin.Context) {
 	}
 
 	upscaler.Upscale(3, 2)
-	upscaler.Render(imageupscaler.JPG, renderFile, nil)
+	upscaler.Render(imageupscaler.PNG, renderFile, nil)
 	file.Close()
-	resp := &Response{URL: "/web/uploads/upscaled-" + strings.ReplaceAll(header.Filename, " ", "-") + ".jpg"}
+	resp := &Response{URL: "/web/uploads/upscaled-" + strings.ReplaceAll(header.Filename, " ", "-") + ".png"}
 	c.JSON(http.StatusOK, resp)
 
-	go deleteImage("../../web/uploads/upscaled-"+strings.ReplaceAll(header.Filename, " ", "-")+".jpg", time.After(1*time.Hour))
+	go deleteImage("../../web/uploads/upscaled-"+strings.ReplaceAll(header.Filename, " ", "-")+".png", time.After(1*time.Hour))
 }
 
 func deleteImage(url string, delay <-chan time.Time) {

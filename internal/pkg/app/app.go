@@ -13,7 +13,10 @@ import (
 
 	audioFormHandler "WebServer/internal/server/handlers/forms/audio"
 	imageFormHandler "WebServer/internal/server/handlers/forms/img/generator"
+
+	bgRemover "WebServer/internal/server/handlers/forms/img/rembg"
 	imageUpscalerFormHandler "WebServer/internal/server/handlers/forms/img/upscale"
+
 	photopea "WebServer/internal/server/handlers/forms/photopea"
 	textFormHandler "WebServer/internal/server/handlers/forms/text"
 
@@ -68,7 +71,7 @@ func (a *App) init() {
 	a.Endpoint.RegisterPageWithCache("/", recognitionFromFilePage.New())
 	a.Endpoint.RegisterPageWithCache("/image", imageGenerationPage.New())
 	a.Endpoint.RegisterPageWithCache("/text", textProcessingPage.New())
-	a.Endpoint.RegisterPageWithCache("/upscale", upscalePage.New())
+	a.Endpoint.RegisterPageWithCache("/imgprocess", upscalePage.New())
 	a.Endpoint.RegisterPageNoCache("/news", newsPage.New(a.logger))
 	a.Endpoint.RegisterPageNoCache("/rss", rssFeed.New(a.logger))
 
@@ -86,6 +89,7 @@ func (a *App) init() {
 	a.Endpoint.RegisterForm("/processTextFromWeb", textFormHandler.New("", dataBaseWorker, a.logger))
 	a.Endpoint.RegisterForm("/generateImage", imageFormHandler.New(dataBaseWorker, a.logger))
 	a.Endpoint.RegisterForm("/upscaleImage", imageUpscalerFormHandler.New(a.logger))
+	a.Endpoint.RegisterForm("/removeBackground", bgRemover.New(a.logger))
 	a.Endpoint.RegisterForm("/photopea", photopea.New(a.logger))
 
 	a.Endpoint.RegisterResultFormHandler("/saveOperation", saveSystem.New(dataBaseWorker, a.logger))

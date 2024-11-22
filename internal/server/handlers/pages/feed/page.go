@@ -23,95 +23,107 @@ type News struct {
 }
 
 type Page struct {
-	logger  *slog.Logger
-	feedURL string
+	logger         *slog.Logger
+	feedURL        string
+	mu             sync.Mutex
+	LastNews       []News
+	MaxDescription int
 }
 
 func New(logger *slog.Logger) *Page {
 	RSSURL := os.Getenv("RSS_URL")
-	return &Page{
-		logger:  logger,
-		feedURL: RSSURL,
+
+	max_description_str := os.Getenv("MAX_DESC")
+	max_description, err := strconv.Atoi(max_description_str)
+	if err != nil {
+		max_description = 255
 	}
+
+	page := &Page{
+		logger:         logger,
+		feedURL:        RSSURL,
+		LastNews:       nil,
+		mu:             sync.Mutex{},
+		MaxDescription: max_description,
+	}
+
+	go func() {
+		for true {
+			page.UpdateNews()
+			time.Sleep(1 * time.Minute)
+		}
+	}()
+
+	return page
 }
 
-func (r *Page) GetPage(c *gin.Context) {
-
+func (p *Page) UpdateNews() error {
 	var rss feed.RSS
-
-	style := "/web/styles/feed-style.css"
-	script := "/web/scripts/feed-script.js"
-
-	response, err := http.Get(r.feedURL)
+	response, err := http.Get(p.feedURL)
 	if err != nil {
-		r.logger.Error("Error while sending request", "error", err)
-		c.HTML(http.StatusOK, "feed.html", gin.H{
-			"title":  "Актуальные новости (не удалось загрузить)",
-			"style":  style,
-			"script": script,
-		})
-		return
+		return err
 	}
 	defer response.Body.Close()
 
 	byteResponse, err := io.ReadAll(response.Body)
 	if err != nil {
-		r.logger.Error("Error while reading response", "error", err)
-		c.HTML(http.StatusOK, "feed.html", gin.H{
-			"title":  "Актуальные новости (не удалось загрузить)",
-			"style":  style,
-			"script": script,
-		})
-		return
+		return err
 	}
 
 	err = xml.Unmarshal(byteResponse, &rss)
 	if err != nil {
-		r.logger.Error("Error while unmarshalling response", "error", err)
-		c.HTML(http.StatusOK, "feed.html", gin.H{
-			"title": "Актуальные новости (не удалось загрузить)",
-			"style": style,
-			"scipr": script,
+		return err
+	}
+	var news []News
+
+	for _, item := range rss.Channel.Items {
+
+		if len(item.Description) > p.MaxDescription {
+			item.Description = item.Description[:p.MaxDescription] + "..."
+		}
+
+		date, err := time.Parse(time.RFC1123Z, item.PubDate)
+		if err == nil {
+			item.PubDate = date.Format("02.01.2006 15:04")
+		}
+
+		news = append(news, News{
+			Title:       item.Title,
+			Description: item.Description,
+			URL:         item.Link,
+			Date:        item.PubDate,
+			Source:      item.Source,
 		})
-		return
 	}
 
-	news := make([]News, len(rss.Channel.Items), len(rss.Channel.Items))
-	wg := sync.WaitGroup{}
-	for i, item := range rss.Channel.Items {
+	p.mu.Lock()
+	p.LastNews = news
+	p.mu.Unlock()
+	return nil
+}
 
-		wg.Add(1)
-		go func(i int, item feed.Item, news *[]News) {
-			date, err := time.Parse(time.RFC1123Z, item.PubDate)
-			var str_date string
-			if err != nil {
-				str_date = item.PubDate
-			} else {
-				str_date = date.Format("02.01.2006 15:04")
-			}
+func (r *Page) GetPage(c *gin.Context) {
 
-			str_description := item.Description
+	style := "/web/styles/feed-style.css"
+	script := "/web/scripts/feed-script.js"
 
-			max_description_str := os.Getenv("MAX_DESC")
-			max_description, err := strconv.Atoi(max_description_str)
-			if err != nil {
-				max_description = 255
-			}
-
-			if len(str_description) > max_description {
-				str_description = str_description[:max_description] + "..."
-			}
-			defer wg.Done()
-			(*news)[i] = News{
-				Title:       item.Title,
-				Description: str_description,
-				URL:         item.Link,
-				Date:        str_date,
-				Source:      item.Source,
-			}
-		}(i, item, &news)
+	if r.LastNews == nil {
+		err := r.UpdateNews()
+		if err != nil {
+			r.logger.Error("Error while reading response", "error", err)
+			c.HTML(http.StatusOK, "feed.html", gin.H{
+				"title":  "Актуальные новости (не удалось загрузить)",
+				"style":  style,
+				"script": script,
+			})
+			return
+		}
 	}
-	wg.Wait()
+
+	r.mu.Lock()
+	news := r.LastNews
+	r.mu.Unlock()
+
 	c.HTML(http.StatusOK, "feed.html", gin.H{
 		"title":  "Актуальные новости",
 		"style":  style,

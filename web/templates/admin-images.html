@@ -1,0 +1,15 @@
+{{template "header.html" .}}
+<div class="work-group">
+{{range .Images}}
+<div class="image-element">
+    <div class="el-data">
+        <img src="data:image/png;base64,{{.Data}}" class="image">
+    </div>
+    <div class="el-desc">
+        <a href="{{.URI}}" target="_blank" class="description"><p>{{.Prompt}}</p></a>
+        <p class="date">{{.Date}}</p>
+    </div>
+</div>
+{{end}}
+</div>
+{{template "footer.html" .}}

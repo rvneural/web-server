@@ -54,7 +54,6 @@ func (a *AdminOperationListStruct) getListOfOperations(c *gin.Context) {
 	}
 
 	JSONoperations := make([]OperationListElement, len(operations))
-
 	for id, operation := range operations {
 		JSONoperations[id] = OperationListElement{
 			ID:           operation.ID,
@@ -70,5 +69,5 @@ func (a *AdminOperationListStruct) getListOfOperations(c *gin.Context) {
 		}
 	}
 
-	c.JSON(http.StatusOK, JSONoperations)
+	c.JSON(http.StatusOK, gin.H{"operations": operations})
 }

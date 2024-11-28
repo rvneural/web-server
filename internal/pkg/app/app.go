@@ -31,14 +31,16 @@ import (
 
 	dbWorker "WebServer/internal/services/db"
 
+	imageOperationList "WebServer/internal/server/handlers/pages/admin/images"
 	adminOperationList "WebServer/internal/server/handlers/pages/admin/operations"
 
 	saveSystem "WebServer/internal/server/handlers/forms/saving"
 
 	newsPage "WebServer/internal/server/handlers/pages/feed"
+	mediaPage "WebServer/internal/server/handlers/pages/mediafeed"
 	rssFeed "WebServer/internal/server/handlers/pages/rss"
 
-	"WebServer/internal/server/handlers/pages/stats"
+	"WebServer/internal/server/handlers/pages/admin/stats"
 )
 
 type App struct {
@@ -73,6 +75,8 @@ func (a *App) init() {
 	a.Endpoint.RegisterPageWithCache("/text", textProcessingPage.New())
 	a.Endpoint.RegisterPageWithCache("/imgprocess", upscalePage.New())
 	a.Endpoint.RegisterPageNoCache("/news", newsPage.New(a.logger))
+	a.Endpoint.RegisterPageNoCache("/media", mediaPage.New(a.logger))
+
 	a.Endpoint.RegisterPageNoCache("/rss", rssFeed.New(a.logger))
 
 	a.Endpoint.RegisterAdminPageNoCahce("/stats", stats.New())
@@ -80,6 +84,7 @@ func (a *App) init() {
 	dataBaseWorker := dbWorker.New(a.logger)
 
 	a.Endpoint.RegisterAdminPageNoCahce("/operations", adminOperationList.New(dataBaseWorker))
+	a.Endpoint.RegisterAdminPageNoCahce("/images", imageOperationList.New(dataBaseWorker))
 
 	a.Endpoint.RegisterResultNoCache("/get", newID.New(dataBaseWorker))
 	a.Endpoint.RegisterResultNoCache("/:id", result.New(notFoundOperationPage.New(), progressOperationPage.New(), dataBaseWorker, a.logger))

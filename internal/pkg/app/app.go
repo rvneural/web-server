@@ -37,6 +37,7 @@ import (
 	imageOperationList "WebServer/internal/server/handlers/pages/admin/images"
 	adminOperationList "WebServer/internal/server/handlers/pages/admin/operations"
 	adminUserPage "WebServer/internal/server/handlers/pages/admin/user"
+	adminUsersPage "WebServer/internal/server/handlers/pages/admin/user/allusers"
 
 	saveSystem "WebServer/internal/server/handlers/forms/saving"
 
@@ -114,6 +115,7 @@ func (a *App) init() {
 	a.Endpoint.RegisterAdminPageNoCahce("/operations", adminOperationList.New(a.dataBaseWorker).GetPage)
 	a.Endpoint.RegisterAdminPageNoCahce("/images", imageOperationList.New(a.dataBaseWorker).GetPage)
 	a.Endpoint.RegisterAdminPageNoCahce("/user/:id", adminUserPage.New(a.dataBaseWorker, a.logger).GetPage)
+	a.Endpoint.RegisterAdminPageNoCahce("/users", adminUsersPage.New(a.dataBaseWorker).GetPage)
 
 	a.Endpoint.RegisterResultNoCache("/get", newID.New(a.dataBaseWorker).GetPage)
 	a.Endpoint.RegisterProtectedPage("/operation/:id", result.New(notFoundOperationPage.New(), progressOperationPage.New(), a.dataBaseWorker, a.logger).GetPage)

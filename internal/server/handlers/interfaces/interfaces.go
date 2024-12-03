@@ -20,6 +20,7 @@ type DBWorker interface {
 	CheckForLogin(email, hashPassword string) (status bool, user_id string)
 	GetUser(email string) (dbModel.DBUser, error)
 	GetUserByID(id int) (dbModel.DBUser, error)
+	GetAllUsers() ([]dbModel.DBUser, error)
 }
 
 type NoResultPage interface {

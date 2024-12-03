@@ -191,3 +191,20 @@ func (w *Worker) CheckForLogin(email, hashPassword string) (status bool, user_id
 	}
 	return response.Status, strconv.Itoa(response.UserID)
 }
+
+func (w *Worker) GetAllUsers() ([]model.DBUser, error) {
+	uri := w.url + "users/all"
+	resp, err := http.Get(uri)
+	if err != nil {
+		w.logger.Error("Error sendind request to DB Users:", "err", err)
+		return nil, err
+	}
+	var users []model.DBUser
+	byteBody, err := io.ReadAll(resp.Body)
+	err = json.Unmarshal(byteBody, &users)
+	if err != nil {
+		w.logger.Error("Error unmarshalling response from DB Users:", "err", err)
+		return nil, err
+	}
+	return users, nil
+}

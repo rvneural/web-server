@@ -1,0 +1,62 @@
+{{template "header.html" .}}
+<div class="work-group">
+    <div class="user-info">
+        <p>Имя: <b>{{.FirstName}}</b></p>
+        <p>Фамилия: <b>{{.LastName}}</b></p>
+        <p>ID: <b>{{.UserID}}</b></p>
+        <p>E-mail: <b>{{.Email}}</b></p>
+    </div>
+    <h3 class="group-header">Последние операции пользователя</h3>
+    <div class="operations">
+
+       <div class="list">
+        <h3 class="list-header">Генерация картинок</h3>
+         <div class="elements">
+            {{range .Images}}
+            <div class="element">
+                <div class="data">
+                <p><a href="/protected/operation/{{.ID}}" target="_blank">{{.Placeholder}}</a></p>
+                </div>
+                <div class="date">
+                <p>{{.Date}}</p>
+                </div>
+            </div>
+            {{end}}
+         </div>
+       </div>
+
+       <div class="list">
+        <h3 class="header">Обработка текста</h3>
+        <div class="elements">
+           {{range .Texts}}
+           <div class="element">
+            <div class="data">
+                <p><a href="/protected/operation/{{.ID}}" target="_blank">{{.Placeholder}}</a></p>
+                </div>
+                <div class="date">
+                <p>{{.Date}}</p>
+                </div>
+           </div>
+           {{end}}
+        </div>
+      </div>
+
+      <div class="list">
+        <h3 class="list-header">Расшифровка</h3>
+        <div class="elements">
+           {{range .Recognitions}}
+           <div class="element">
+            <div class="data">
+                <p><a href="/protected/operation/{{.ID}}" target="_blank">{{.Placeholder}}</a></p>
+                </div>
+                <div class="date">
+                <p>{{.Date}}</p>
+                </div>
+           </div>
+           {{end}}
+        </div>
+      </div>
+
+    </div>
+</div>
+{{template "footer.html" .}}

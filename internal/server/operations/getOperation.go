@@ -32,6 +32,6 @@ func (o *Operation) GetPage(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"id":  id,
-		"url": "/operation/" + id,
+		"url": "/protected/operation/" + id,
 	})
 }

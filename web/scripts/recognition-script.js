@@ -28,7 +28,6 @@ var currentRawText = "" // Глобальная переменная, храня
 
 var version = 1
 
-var progress = false
 
 fileTypeSelect.addEventListener('change', function() {
     if (fileTypeSelect.value == "file") {
@@ -39,12 +38,6 @@ fileTypeSelect.addEventListener('change', function() {
         urlInput.classList.remove('none-display')
     }
 })
-
-window.onbeforeunload = function() {
-    if (progress) {
-        return 'Расшифровка еще не закончена. Вы уверены, что хотите закрыть страницу?'
-    }
-}
 
 window.onload = function() {
     document.getElementById('filePage').style.backgroundColor = "#494E56"
@@ -66,7 +59,6 @@ async function recognize(){
 
     // Блокируем элементы управления
     lockElements()
-    progress = true
     await showPopupWithLink()
     
     // Включаем анимацию в поле вывода результата
@@ -122,7 +114,6 @@ async function recognize(){
 
     // Разблокирем элементы управления
     unlockElements()
-    progress = false
 
     // Сохраняем в глобальных переменных исходные результаты расшифровки
     normText = await data.normText
@@ -282,7 +273,7 @@ saveFileButton.addEventListener('click', async (event)=>{
 async function sendRequestURL() {
     try {
         // Отправляем GET-запрос на сервер
-        const resp = await fetch('operation/get', {
+        const resp = await fetch('/operation/get', {
             method: 'GET',
         });
 

@@ -8,6 +8,7 @@ import (
 	"io"
 	"log/slog"
 	"net/http"
+	"strconv"
 	"strings"
 
 	dbModel "WebServer/internal/models/db/results/image"
@@ -34,7 +35,17 @@ func (n *ImageGenerationHandler) HandleForm(c *gin.Context) {
 	id = strings.TrimSpace(id)
 	var dbError error
 	if len(id) != 0 {
-		dbError = n.dbWorker.RegisterOperation(id, "image")
+		var u_id int
+		user_id, err := c.Cookie("user_id")
+		if err != nil {
+			u_id = 0
+		} else {
+			u_id, err = strconv.Atoi(user_id)
+			if err != nil {
+				u_id = 0
+			}
+		}
+		dbError = n.dbWorker.RegisterOperation(id, "image", u_id)
 	}
 
 	prompt := c.Request.FormValue("prompt")

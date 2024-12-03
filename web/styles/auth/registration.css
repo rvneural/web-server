@@ -1,0 +1,117 @@
+body {
+    background: linear-gradient(170deg, rgba(49, 57, 73, 0.8) 20%, rgba(49, 57, 73, 0.5) 20%, rgba(49, 57, 73, 0.5) 35%, rgba(41, 48, 61, 0.6) 35%, rgba(41, 48, 61, 0.8) 45%, rgba(31, 36, 46, 0.5) 45%, rgba(31, 36, 46, 0.8) 75%, rgba(49, 57, 73, 0.5) 75%), linear-gradient(45deg, rgba(20, 24, 31, 0.8) 0%, rgba(41, 48, 61, 0.8) 50%, rgba(82, 95, 122, 0.8) 50%, rgba(133, 146, 173, 0.8) 100%) #313949;
+}
+
+.registration-group {
+    font-family: "PT Sans";
+    display: grid;
+    width: 300px;
+    margin: 100px auto;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.566);
+    border-radius: 5px;
+    border: 0px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+label.required::after {
+    content: " *"; /* Добавляет звездочку после текста */
+    color: red;    /* Устанавливает цвет звездочки в красный */
+}
+
+h2 {
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.rep-password-container {
+    position: relative;
+    display: flex;
+}
+
+.password-container {
+    position: relative;
+    display: flex;
+}
+
+.toggle-button:hover {
+    background: transparent; /* Убираем фоновый цвет при наведении */
+}
+
+.toggle-button {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 0; /* Убираем отступы */
+    width: 30px; /* Устанавливаем ширину кнопки */
+    height: 32px; /* Устанавливаем высоту кнопки */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: -40px; /* Сдвигаем кнопку влево, чтобы она находилась в пределах поля ввода */
+    border-radius: 0 4px 4px 0; /* Скругляем правые углы кнопки */
+}
+
+.toggle-button img {
+    width: 20px; /* Установите нужную ширину */
+    height: 20px; /* Установите нужную высоту */
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: #efe5e5;
+    border: none;
+    color: rgb(22, 22, 22);
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    border: 0px;
+}
+
+button:hover {
+    color:#ffffff;
+    background-color: rgb(22, 22, 22);
+}
+
+a {
+    text-decoration: none; /* Убираем стандартное подчеркивание */
+    position: relative; /* Устанавливаем позиционирование для псевдоэлемента */
+    margin-bottom: 10px;
+}
+
+a::after {
+    content: ''; /* Создаем пустой псевдоэлемент */
+    display: block; /* Делаем его блочным элементом */
+    height: 1px; /* Высота полоски */
+    background: rgb(63, 63, 63); /* Цвет полоски */
+    width: 0; /* Начальная ширина полоски */
+    transition: width 0.3s; /* Плавный переход ширины */
+    position: absolute; /* Абсолютное позиционирование */
+    left: 0; /* Позиция слева */
+    bottom: -5px; /* Расстояние от текста до полоски */
+}
+
+a:hover::after {
+    width: 60%; /* Ширина полоски при наведении */
+}

@@ -29,10 +29,12 @@ import (
 	notFoundOperationPage "WebServer/internal/server/handlers/pages/results/notfound"
 	progressOperationPage "WebServer/internal/server/handlers/pages/results/progress"
 
+	"WebServer/internal/services/auth"
 	dbWorker "WebServer/internal/services/db"
 
 	imageOperationList "WebServer/internal/server/handlers/pages/admin/images"
 	adminOperationList "WebServer/internal/server/handlers/pages/admin/operations"
+	adminUserPage "WebServer/internal/server/handlers/pages/admin/user"
 
 	saveSystem "WebServer/internal/server/handlers/forms/saving"
 
@@ -40,22 +42,36 @@ import (
 	mediaPage "WebServer/internal/server/handlers/pages/mediafeed"
 	rssFeed "WebServer/internal/server/handlers/pages/rss"
 
+	authPages "WebServer/internal/server/handlers/pages/auth"
+	authMaster "WebServer/internal/services/auth"
+
+	userPage "WebServer/internal/server/handlers/pages/user"
+
 	"WebServer/internal/server/handlers/pages/admin/stats"
 )
 
 type App struct {
-	Endpoint endpoint.App
-	login    string
-	password string
-	tlsMode  bool
-	idMaxLen int
-	logger   *slog.Logger
+	Endpoint       endpoint.App
+	login          string
+	password       string
+	tlsMode        bool
+	idMaxLen       int
+	logger         *slog.Logger
+	dataBaseWorker *dbWorker.Worker
+	auth           *auth.AuthentificationHandler
 }
 
 func New() *App {
+	logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
+	dataBaseWorker := dbWorker.New(logger)
+
+	auth := authMaster.New(dataBaseWorker)
 	return &App{
-		Endpoint: *endpoint.New(),
-		idMaxLen: 35,
+		Endpoint:       *endpoint.New(auth.AuthMiddleware("/login")),
+		idMaxLen:       35,
+		logger:         logger,
+		dataBaseWorker: dataBaseWorker,
+		auth:           auth,
 	}
 }
 
@@ -64,43 +80,53 @@ func (a *App) init() {
 	a.login = os.Getenv("LOGIN")
 	a.password = os.Getenv("PASSWORD")
 	a.tlsMode = os.Getenv("TLS_MODE") == "true"
-	a.logger = a.Endpoint.GetLogger()
 
 	if a.login != "" && a.password != "" {
 		a.Endpoint.SetBasicAuth(a.login, a.password)
 	}
 
-	a.Endpoint.RegisterPageWithCache("/", recognitionFromFilePage.New())
-	a.Endpoint.RegisterPageWithCache("/image", imageGenerationPage.New())
-	a.Endpoint.RegisterPageWithCache("/text", textProcessingPage.New())
-	a.Endpoint.RegisterPageWithCache("/imgprocess", upscalePage.New())
-	a.Endpoint.RegisterPageNoCache("/news", newsPage.New(a.logger))
-	a.Endpoint.RegisterPageNoCache("/media", mediaPage.New(a.logger))
+	// Основные страницы
+	a.Endpoint.RegisterProtectedPageWithCache("/recognition", recognitionFromFilePage.New().GetPage)
+	a.Endpoint.RegisterProtectedPageWithCache("/image", imageGenerationPage.New().GetPage)
+	a.Endpoint.RegisterProtectedPageWithCache("/text", textProcessingPage.New().GetPage)
+	a.Endpoint.RegisterProtectedPageWithCache("/imgprocess", upscalePage.New().GetPage)
+	a.Endpoint.RegisterProtectedPage("/", userPage.New(a.dataBaseWorker, a.logger).GetPage)
 
-	a.Endpoint.RegisterPageNoCache("/rss", rssFeed.New(a.logger))
+	a.Endpoint.RegisterProtectedPage("/news", newsPage.New(a.logger).GetPage)
+	a.Endpoint.RegisterProtectedPage("/media", mediaPage.New(a.logger).GetPage)
+	//----------------------------
 
-	a.Endpoint.RegisterAdminPageNoCahce("/stats", stats.New())
+	a.Endpoint.RegisterForm("/login", a.auth.HandleLogin)
+	a.Endpoint.RegisterForm("/register", a.auth.HandleRegistration)
 
-	dataBaseWorker := dbWorker.New(a.logger)
+	authPage := authPages.New()
+	a.Endpoint.RegisterPageWithCache("/login", authPage.GetLoginPage)
+	a.Endpoint.RegisterPageWithCache("/register", authPage.GetRegisterPage)
+	a.Endpoint.RegisterPageWithCache("/logout", authPage.GetLogoutPage)
 
-	a.Endpoint.RegisterAdminPageNoCahce("/operations", adminOperationList.New(dataBaseWorker))
-	a.Endpoint.RegisterAdminPageNoCahce("/images", imageOperationList.New(dataBaseWorker))
+	a.Endpoint.RegisterPageNoCache("/rss", rssFeed.New(a.logger).GetPage)
 
-	a.Endpoint.RegisterResultNoCache("/get", newID.New(dataBaseWorker))
-	a.Endpoint.RegisterResultNoCache("/:id", result.New(notFoundOperationPage.New(), progressOperationPage.New(), dataBaseWorker, a.logger))
+	a.Endpoint.RegisterAdminPageNoCahce("/stats", stats.New().GetPage)
 
-	a.Endpoint.RegisterForm("/recognize", audioFormHandler.New(dataBaseWorker, a.logger))
-	a.Endpoint.RegisterForm("/rewriteFromWeb", textFormHandler.New("{{ rewrite }}", dataBaseWorker, a.logger))
-	a.Endpoint.RegisterForm("/processTextFromWeb", textFormHandler.New("", dataBaseWorker, a.logger))
-	a.Endpoint.RegisterForm("/generateImage", imageFormHandler.New(dataBaseWorker, a.logger))
-	a.Endpoint.RegisterForm("/upscaleImage", imageUpscalerFormHandler.New(a.logger))
-	a.Endpoint.RegisterForm("/removeBackground", bgRemover.New(a.logger))
-	a.Endpoint.RegisterForm("/photopea", photopea.New(a.logger))
+	a.Endpoint.RegisterAdminPageNoCahce("/operations", adminOperationList.New(a.dataBaseWorker).GetPage)
+	a.Endpoint.RegisterAdminPageNoCahce("/images", imageOperationList.New(a.dataBaseWorker).GetPage)
+	a.Endpoint.RegisterAdminPageNoCahce("/user/:id", adminUserPage.New(a.dataBaseWorker, a.logger).GetPage)
 
-	a.Endpoint.RegisterResultFormHandler("/saveOperation", saveSystem.New(dataBaseWorker, a.logger))
-	a.Endpoint.RegisterResultFormHandler("/getVersion", saveSystem.NewVersionSystem(dataBaseWorker, a.logger))
+	a.Endpoint.RegisterResultNoCache("/get", newID.New(a.dataBaseWorker).GetPage)
+	a.Endpoint.RegisterProtectedPage("/operation/:id", result.New(notFoundOperationPage.New(), progressOperationPage.New(), a.dataBaseWorker, a.logger).GetPage)
 
-	a.Endpoint.Register404Page(notFound.New())
+	a.Endpoint.RegisterForm("/recognize", audioFormHandler.New(a.dataBaseWorker, a.logger).HandleForm)
+	a.Endpoint.RegisterForm("/rewriteFromWeb", textFormHandler.New("{{ rewrite }}", a.dataBaseWorker, a.logger).HandleForm)
+	a.Endpoint.RegisterForm("/processTextFromWeb", textFormHandler.New("", a.dataBaseWorker, a.logger).HandleForm)
+	a.Endpoint.RegisterForm("/generateImage", imageFormHandler.New(a.dataBaseWorker, a.logger).HandleForm)
+	a.Endpoint.RegisterForm("/upscaleImage", imageUpscalerFormHandler.New(a.logger).HandleForm)
+	a.Endpoint.RegisterForm("/removeBackground", bgRemover.New(a.logger).HandleForm)
+	a.Endpoint.RegisterForm("/photopea", photopea.New(a.logger).HandleForm)
+
+	a.Endpoint.RegisterResultFormHandler("/saveOperation", saveSystem.New(a.dataBaseWorker, a.logger).HandleForm)
+	a.Endpoint.RegisterResultFormHandler("/getVersion", saveSystem.NewVersionSystem(a.dataBaseWorker, a.logger).HandleForm)
+
+	a.Endpoint.Register404Page(notFound.New().GetPage)
 }
 
 func (a *App) Run() {

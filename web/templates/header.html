@@ -17,17 +17,21 @@
 <body>
   <div class="container">
     <div class="header-buttons">
-      <form action="/"><button class="header-button upper-bold" id="filePage">Расшифровка</button></form>
-      <form action="/image"><button class="header-button upper-bold" id="imagePage">Генерация изображения</button></form>
-      <form action="/imgprocess"><button class="header-button upper-bold" id="upscalePage">Обработка изображения</button></form>
-      <form action="/text"><button class="header-button upper-bold" id="textPage">Обработка текста</button></form>
-      <form action="/news"><button class="header-button upper-bold" id="newsPage">Актуальные новости</button></form>
-      <form action="/media"><button class="header-button upper-bold" id="mediaPage">Новости СМИ</button></form>
+      <form action="/protected/"><button class="header-button upper-bold" id="userPage">Мой профиль</button></form>
+      <br>
+      <form action="/protected/recognition"><button class="header-button upper-bold" id="filePage">Расшифровка</button></form>
+      <form action="/protected/image"><button class="header-button upper-bold" id="imagePage">Генерация изображения</button></form>
+      <form action="/protected/imgprocess"><button class="header-button upper-bold" id="upscalePage">Обработка изображения</button></form>
+      <form action="/protected/text"><button class="header-button upper-bold" id="textPage">Обработка текста</button></form>
+      <form action="/protected/news"><button class="header-button upper-bold" id="newsPage">Актуальные новости</button></form>
+      <form action="/protected/media"><button class="header-button upper-bold" id="mediaPage">Новости СМИ</button></form>
+      <br>
       <form action="/photopea" method="post" target="_blank"><button class="header-button upper-bold" id="textPage">↪ Онлайн Photoshop</button></form>
+      <form action="https://mail.realnoevremya.ru/" target="_blank"><button class="header-button upper-bold" id="textPage">↪ Корпоративная почта</button></form>
     </div>
     <div class="header-group">
       <img src="/web/static/img/logo.png" class="logo-image"/>
       <h1>Реальное время / {{.title}} </h1>
-      <p class="version-label" style="margin-left: 10px; color: rgb(62, 62, 62);">(v 3.3.2)</p>
+      <p class="version-label" style="margin-left: 10px; color: rgb(62, 62, 62);">(v 5.0.0)</p>
     </div>
 {{end}}

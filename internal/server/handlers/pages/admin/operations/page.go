@@ -3,6 +3,7 @@ package operations
 import (
 	"WebServer/internal/server/handlers/interfaces"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -18,6 +19,10 @@ type OperationListElement struct {
 	FINISH_DATE  string `json:"finish_date"`
 	DURATION     string `json:"duration"`
 	VERSION      int64  `json:"version"`
+	USER_ID      int    `json:"user_id"`
+	FIRST_NAME   string `json:"first_name"`
+	LAST_NAME    string `json:"last_name"`
+	EMAIL        string `json:"email"`
 }
 
 type AllOperations struct {
@@ -62,12 +67,16 @@ func (a *AdminOperationListStruct) getListOfOperations(c *gin.Context) {
 			URL:          "https://" + c.Request.Host + "/operation/" + operation.OPERATION_ID,
 			FINISHED:     !operation.IN_PROGRESS,
 			TYPE:         operation.OPERATION_TYPE,
-			CREATED_AT:   operation.CREATION_DATE.Format("02.01.2006 15:04:05"),
-			FINISH_DATE:  operation.FINISH_DATE.Format("02.01.2006 15:04:05"),
+			CREATED_AT:   operation.CREATION_DATE.Add(3 * time.Hour).Format("02.01.2006 15:04:05"),
+			FINISH_DATE:  operation.FINISH_DATE.Add(3 * time.Hour).Format("02.01.2006 15:04:05"),
 			DURATION:     operation.FINISH_DATE.Sub(operation.CREATION_DATE).String(),
 			VERSION:      operation.VERSION,
+			USER_ID:      operation.USER_ID,
+			FIRST_NAME:   operation.FIRST_NAME,
+			LAST_NAME:    operation.LAST_NAME,
+			EMAIL:        operation.EMAIL,
 		}
 	}
 
-	c.JSON(http.StatusOK, gin.H{"operations": operations})
+	c.JSON(http.StatusOK, gin.H{"operations": JSONoperations})
 }

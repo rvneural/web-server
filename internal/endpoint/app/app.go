@@ -37,12 +37,12 @@ import (
 )
 
 type App struct {
-	engine *gin.Engine
-	result *gin.RouterGroup
-	admin  *gin.RouterGroup
-	store  *persistence.InMemoryStore
-
-	logger *slog.Logger
+	engine    *gin.Engine
+	result    *gin.RouterGroup
+	admin     *gin.RouterGroup
+	protected *gin.RouterGroup
+	store     *persistence.InMemoryStore
+	logger    *slog.Logger
 
 	login    string
 	password string
@@ -56,7 +56,7 @@ type FormHandler interface {
 	HandleForm(c *gin.Context)
 }
 
-func New() *App {
+func New(protectedAuth gin.HandlerFunc) *App {
 	config := config.Init()
 	gin.SetMode(gin.ReleaseMode)
 	router := gin.Default()
@@ -103,6 +103,10 @@ func New() *App {
 			config.ADMIN_LOGIN: config.ADMIN_PASSWORD,
 		}))
 	}
+	a.Use(protectedAuth)
+
+	protected := router.Group("/protected")
+	protected.Use(protectedAuth)
 
 	router.StaticFS("/web/", http.Dir("../../web"))
 	router.LoadHTMLGlob("../../web/templates/*.html")
@@ -113,11 +117,12 @@ func New() *App {
 	router.Use(sloggin.New(logger))
 
 	return &App{
-		engine: router,
-		result: r,
-		admin:  a,
-		store:  store,
-		logger: logger,
+		engine:    router,
+		result:    r,
+		admin:     a,
+		store:     store,
+		protected: protected,
+		logger:    logger,
 	}
 }
 
@@ -140,44 +145,54 @@ func (a *App) SetBasicAuth(login, password string) {
 	}
 }
 
-func (a *App) Register404Page(handler PageHandler) {
+func (a *App) Register404Page(handler gin.HandlerFunc) {
 	a.logger.Info("Registering 404 handler")
-	a.engine.NoRoute(cache.CachePage(a.store, 5*time.Minute, handler.GetPage))
+	a.engine.NoRoute(cache.CachePage(a.store, 5*time.Minute, handler))
 }
 
-func (a *App) RegisterResultWithCache(pattern string, handler PageHandler) {
+func (a *App) RegisterResultWithCache(pattern string, handler gin.HandlerFunc) {
 	a.logger.Info("Registering result handler for", "pattern", pattern)
-	a.result.GET(pattern, cache.CachePage(a.store, 5*time.Minute, handler.GetPage))
+	a.result.GET(pattern, cache.CachePage(a.store, 5*time.Minute, handler))
 }
 
-func (a *App) RegisterResultNoCache(pattern string, handler PageHandler) {
+func (a *App) RegisterProtectedPage(pattern string, handler gin.HandlerFunc) {
+	a.logger.Info("Registering protected handler for", "pattern", pattern)
+	a.protected.GET(pattern, handler)
+}
+
+func (a *App) RegisterProtectedPageWithCache(pattern string, handler gin.HandlerFunc) {
+	a.logger.Info("Registering protected handler for", "pattern", pattern)
+	a.protected.GET(pattern, cache.CachePage(a.store, 5*time.Minute, handler))
+}
+
+func (a *App) RegisterResultNoCache(pattern string, handler gin.HandlerFunc) {
 	a.logger.Info("Registering result handler no cache for", "pattern", pattern)
-	a.result.GET(pattern, handler.GetPage)
+	a.result.GET(pattern, handler)
 }
 
-func (a *App) RegisterResultFormHandler(pattern string, handler FormHandler) {
+func (a *App) RegisterResultFormHandler(pattern string, handler gin.HandlerFunc) {
 	a.logger.Info("Registering result form handler for", "pattern", pattern)
-	a.result.POST(pattern, handler.HandleForm)
+	a.result.POST(pattern, handler)
 }
 
-func (a *App) RegisterPageWithCache(pattern string, handler PageHandler) {
+func (a *App) RegisterPageWithCache(pattern string, handler gin.HandlerFunc) {
 	a.logger.Info("Registering page handler with cache for", "pattern", pattern)
-	a.engine.GET(pattern, cache.CachePage(a.store, 5*time.Minute, handler.GetPage))
+	a.engine.GET(pattern, cache.CachePage(a.store, 5*time.Minute, handler))
 }
 
-func (a *App) RegisterPageNoCache(pattern string, handler PageHandler) {
+func (a *App) RegisterPageNoCache(pattern string, handler gin.HandlerFunc) {
 	a.logger.Info("Registering page handler no cache for", "pattern", pattern)
-	a.engine.GET(pattern, handler.GetPage)
+	a.engine.GET(pattern, handler)
 }
 
-func (a *App) RegisterForm(pattern string, handler FormHandler) {
+func (a *App) RegisterForm(pattern string, handler gin.HandlerFunc) {
 	a.logger.Info("Registering form handler for", "pattern", pattern)
-	a.engine.POST(pattern, handler.HandleForm)
+	a.engine.POST(pattern, handler)
 }
 
-func (a *App) RegisterAdminPageNoCahce(pattern string, handler PageHandler) {
+func (a *App) RegisterAdminPageNoCahce(pattern string, handler gin.HandlerFunc) {
 	a.logger.Info("Registering admin page handler no cache for", "pattern", pattern)
-	a.admin.GET(pattern, handler.GetPage)
+	a.admin.GET(pattern, handler)
 }
 
 func (a *App) StartLocal() {

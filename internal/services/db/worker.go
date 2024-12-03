@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log/slog"
 	"net/http"
+	"strconv"
 
 	model "WebServer/internal/models/db/model"
 
@@ -24,17 +25,19 @@ func New(logger *slog.Logger) *Worker {
 	}
 }
 
-func (w *Worker) RegisterOperation(uniqID string, operation_type string) error {
+func (w *Worker) RegisterOperation(uniqID string, operation_type string, user_id int) error {
 	uri := w.url
 
 	type Request struct {
-		ID   string `json:"id"`
-		Type string `json:"type"`
+		ID     string `json:"id"`
+		Type   string `json:"type"`
+		UserID int    `json:"user_id"`
 	}
 
 	var request Request
 	request.ID = uniqID
 	request.Type = operation_type
+	request.UserID = user_id
 
 	data, err := json.Marshal(request)
 	if err != nil {
@@ -101,6 +104,25 @@ func (w *Worker) GetAllOperations(limit string, operation_type string, operation
 		Error string           `json:"error"`
 	}
 
+	var responseData Response
+	err = json.NewDecoder(response.Body).Decode(&responseData)
+	if err == nil && responseData.Error != "" {
+		err = fmt.Errorf(responseData.Error)
+	}
+	return responseData.Data, err
+}
+
+func (w *Worker) GetUserOperations(user_id int, limit int, operation_type string) (dbResult []model.DBResult, err error) {
+	uri := w.url + "?userid=" + strconv.Itoa(user_id) + "&limit=" + strconv.Itoa(limit) + "&type=" + operation_type
+	response, err := http.Get(uri)
+	if err != nil {
+		return dbResult, err
+	}
+	defer response.Body.Close()
+	type Response struct {
+		Data  []model.DBResult `json:"operations"`
+		Error string           `json:"error"`
+	}
 	var responseData Response
 	err = json.NewDecoder(response.Body).Decode(&responseData)
 	if err == nil && responseData.Error != "" {

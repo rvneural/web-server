@@ -12,15 +12,7 @@ const seedValue = document.getElementById('seedValue')
 
 var id = ""
 
-var progress = false
-
 var images = new Map()
-
-window.onbeforeunload = function() {
-    if (progress) {
-        return "Выход из страницы приведёт к прерыванию работы генерации изображения. Вы уверены, что хотите выйти?"
-    }
-}
 
 window.onload = function() {
     document.getElementById('imagePage').style.backgroundColor = "#494E56"
@@ -45,8 +37,6 @@ generateImageButton.addEventListener('click', async() => {
         alert('Длина текста не может превышать 300 символов' + '\nТекущая длина текста: '+ inputArea.value.trim().length + ' символов')
         return
     }
-
-    progress = true
     prompt = inputArea.value.trim()
     seed = randomSeed.checked? 'random' : seedArea.value.trim().replaceAll('-', '').replaceAll('.', '').replaceAll(',', '')
     ratio = rationSelect.value.split('-')
@@ -78,7 +68,6 @@ generateImageButton.addEventListener('click', async() => {
         console.error('Error:', err)
         alert('Ошибка при обращении к серверу')
         unlockElements()
-        progress = false
         return
     }
 
@@ -87,7 +76,6 @@ generateImageButton.addEventListener('click', async() => {
     if ((data.error) && (data.error!== '')) {
         alert('Ошибка генерации изображения:'+ data.error + "\n\nДетали: " + data.details)
         unlockElements()
-        progress = false
         return
     }
 
@@ -103,7 +91,6 @@ generateImageButton.addEventListener('click', async() => {
     setImage(imagedata="data:image/jpeg;base64," + data.image.b64String, alt=imageName);
 
     seedValue.innerText = data.image.seed;
-    progress = false;
 })
 
 function setImage(imagedata, alt = 'neuron-nexus') {
@@ -157,7 +144,7 @@ randomSeed.addEventListener('change', (e) => {
 async function sendRequestURL() {
     try {
         // Отправляем GET-запрос на сервер
-        const resp = await fetch('operation/get', {
+        const resp = await fetch('/operation/get', {
             method: 'GET',
         });
 

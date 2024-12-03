@@ -14,15 +14,8 @@ var currentText = ""
 
 var version = 1
 
-var progress = false
-
 var id = ""
 
-window.onbeforeunload = function() {
-    if(progress){
-        return "Текст все еще обрабатывается. Вы уверены, что хотите закрыть страницу?"
-    }
-}
 
 window.onload = function() {
     document.getElementById('textPage').style.backgroundColor = "#494E56"
@@ -64,7 +57,6 @@ processButton.addEventListener('click', async () => {
 
   // Подготовка
   lockElements()
-  progress = true
   await showPopupWithLink()
 
   outputArea.value = 'Обрабатываем текст...'
@@ -80,7 +72,6 @@ processButton.addEventListener('click', async () => {
   outputArea.value = currentText
 
   unlockElements()
-  progress = false
 })
 
 // Функция переписывания текста
@@ -212,7 +203,7 @@ saveFileButton.addEventListener('click', async () => {
 async function sendRequestURL() {
     try {
         // Отправляем GET-запрос на сервер
-        const resp = await fetch('operation/get', {
+        const resp = await fetch('/operation/get', {
             method: 'GET',
         });
 

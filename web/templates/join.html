@@ -1,0 +1,27 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="web/styles/auth/registration.css">
+</head>
+
+<body>
+    <div class="registration-group">
+            <h2>АВТОРИЗАЦИЯ</h2>
+        <div class="form-group">
+            <label for="email">Электронная почта</label>
+            <input type="email" id="email" name="email" required>
+            <label for="password">Пароль</label>
+            <div class="password-container">
+                <input type="password" id="password" name="password" required>
+                <button type="button" id="togglePassword" class="toggle-button">
+                    <img src="web/static/img/auth/view.png" alt="Показать пароль" id="passwordIcon">
+                </button>
+            </div>
+        </div>
+    <a href="/register" id="linkText">Зарегистрироваться?</a>    
+    <button id="registerButton">Войти</button>
+    </div>
+    <script src="web/scripts/auth/reg-join.js"></script>
+    <script src="{{.script}}"></script>
+</body>
+</html>

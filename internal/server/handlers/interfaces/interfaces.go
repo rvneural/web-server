@@ -7,12 +7,19 @@ import (
 )
 
 type DBWorker interface {
-	RegisterOperation(uniqID string, operation_type string) error
+	RegisterOperation(uniqID string, operation_type string, user_id int) error
 	SetResult(uniqID string, data []byte) error
 	GetResult(uniqID string) (dbResult dbModel.DBResult, err error)
 	GetAllOperations(limit string, operation_type string, operation_id string) (dbOperations []dbModel.DBResult, err error)
 	GetOperationID() (id string, err error)
 	GetVersion(uniqID string) (version int64, err error)
+	GetUserOperations(user_id int, limit int, operation_type string) (dbResult []dbModel.DBResult, err error)
+
+	CheckForRegistered(email string) bool
+	Register(email, hashPassword, FirstName, LastName string) string
+	CheckForLogin(email, hashPassword string) (status bool, user_id string)
+	GetUser(email string) (dbModel.DBUser, error)
+	GetUserByID(id int) (dbModel.DBUser, error)
 }
 
 type NoResultPage interface {

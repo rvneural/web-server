@@ -9,10 +9,13 @@ import (
 )
 
 type Image struct {
-	URI    string
-	Prompt string
-	Data   string
-	Date   string
+	URI      string
+	Prompt   string
+	Data     string
+	Date     string
+	Name     string
+	LastName string
+	USER_ID  int
 }
 
 type AdminImages struct {
@@ -43,10 +46,13 @@ func (a *AdminImages) GetPage(c *gin.Context) {
 			continue
 		}
 		images = append(images, Image{
-			URI:    "/operation/" + operation.OPERATION_ID,
-			Prompt: img.Prompt,
-			Data:   img.B64string,
-			Date:   operation.CREATION_DATE.Format("02.01.2006"),
+			URI:      "/operation/" + operation.OPERATION_ID,
+			Prompt:   img.Prompt,
+			Data:     img.B64string,
+			Date:     operation.CREATION_DATE.Format("02.01.2006 15:04"),
+			Name:     operation.FIRST_NAME,
+			LastName: operation.LAST_NAME,
+			USER_ID:  operation.USER_ID,
 		})
 	}
 

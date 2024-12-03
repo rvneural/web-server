@@ -8,6 +8,7 @@ import (
 	"io"
 	"log/slog"
 	"net/http"
+	"strconv"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -64,13 +65,22 @@ func (n *RecognitionHandler) handleURLRecognition(c *gin.Context) models.Request
 }
 
 func (n *RecognitionHandler) HandleForm(c *gin.Context) {
-
 	id := c.Request.FormValue("id")
 	id = strings.TrimSpace(id)
 	filename := c.Request.FormValue("filename")
 	var dbError error
 	if len(id) != 0 {
-		dbError = n.dbWorker.RegisterOperation(id, "audio")
+		var u_id int
+		user_id, err := c.Cookie("user_id")
+		if err != nil {
+			u_id = 0
+		} else {
+			u_id, err = strconv.Atoi(user_id)
+			if err != nil {
+				u_id = 0
+			}
+		}
+		dbError = n.dbWorker.RegisterOperation(id, "audio", u_id)
 	}
 
 	var Request models.Request

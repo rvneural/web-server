@@ -92,7 +92,7 @@ func (p *Page) GetPage(c *gin.Context) {
 		for i, operation := range audio_operations {
 			Audios[i].ID = operation.OPERATION_ID
 			Audios[i].Placeholder = "Генерация аудио"
-			Audios[i].Date = operation.CREATION_DATE.Format("02.0101.2006 15:04:05")
+			Audios[i].Date = operation.CREATION_DATE.Format("02.01.2006 15:04:05")
 		}
 	}()
 	wg.Wait()

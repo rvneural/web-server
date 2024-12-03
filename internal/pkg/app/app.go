@@ -29,6 +29,8 @@ import (
 	notFoundOperationPage "WebServer/internal/server/handlers/pages/results/notfound"
 	progressOperationPage "WebServer/internal/server/handlers/pages/results/progress"
 
+	indexPage "WebServer/internal/server/handlers/pages/index"
+
 	"WebServer/internal/services/auth"
 	dbWorker "WebServer/internal/services/db"
 
@@ -100,6 +102,7 @@ func (a *App) init() {
 	a.Endpoint.RegisterForm("/register", a.auth.HandleRegistration)
 
 	authPage := authPages.New()
+	a.Endpoint.RegisterPageWithCache("/", indexPage.New().GetPage)
 	a.Endpoint.RegisterPageWithCache("/login", authPage.GetLoginPage)
 	a.Endpoint.RegisterPageWithCache("/register", authPage.GetRegisterPage)
 	a.Endpoint.RegisterPageWithCache("/logout", authPage.GetLogoutPage)

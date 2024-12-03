@@ -2,12 +2,16 @@ package user
 
 import (
 	"WebServer/internal/server/handlers/interfaces"
+	"encoding/json"
 	"log/slog"
 	"net/http"
 	"strconv"
 	"sync"
 
 	"github.com/gin-gonic/gin"
+
+	modelAudio "WebServer/internal/models/db/results/audio"
+	modelImage "WebServer/internal/models/db/results/image"
 )
 
 type Page struct {
@@ -74,8 +78,17 @@ func (p *Page) GetPage(c *gin.Context) {
 	go func() {
 		defer wg.Done()
 		for i, operation := range image_operations {
+			result := modelImage.DBResult{}
+			var placeholder string
+			err := json.Unmarshal(operation.DATA, &result)
+			if err != nil {
+				p.logger.Error("Unmarshalling image operation", "error", err)
+				placeholder = "Генерация изображения"
+			} else {
+				placeholder = result.Prompt
+			}
 			Images[i].ID = operation.OPERATION_ID
-			Images[i].Placeholder = "Генерация изображения"
+			Images[i].Placeholder = placeholder
 			Images[i].Date = operation.CREATION_DATE.Format("02.01.2006 15:04:05")
 		}
 	}()
@@ -83,15 +96,24 @@ func (p *Page) GetPage(c *gin.Context) {
 		defer wg.Done()
 		for i, operation := range text_operations {
 			Texts[i].ID = operation.OPERATION_ID
-			Texts[i].Placeholder = "Генерация текста"
+			Texts[i].Placeholder = "Обработка текста"
 			Texts[i].Date = operation.CREATION_DATE.Format("02.01.2006 15:04:05")
 		}
 	}()
 	go func() {
 		defer wg.Done()
 		for i, operation := range audio_operations {
+			result := modelAudio.DBResult{}
+			var placeholder string
+			err := json.Unmarshal(operation.DATA, &result)
+			if err != nil {
+				p.logger.Error("Unmarshalling image operation", "error", err)
+				placeholder = "Расшифровка фгвшщ"
+			} else {
+				placeholder = "Расшифровка: " + result.FileName
+			}
 			Audios[i].ID = operation.OPERATION_ID
-			Audios[i].Placeholder = "Генерация аудио"
+			Audios[i].Placeholder = placeholder
 			Audios[i].Date = operation.CREATION_DATE.Format("02.01.2006 15:04:05")
 		}
 	}()

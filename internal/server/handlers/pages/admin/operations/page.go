@@ -3,7 +3,6 @@ package operations
 import (
 	"WebServer/internal/server/handlers/interfaces"
 	"net/http"
-	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -67,8 +66,8 @@ func (a *AdminOperationListStruct) getListOfOperations(c *gin.Context) {
 			URL:          "https://" + c.Request.Host + "/operation/" + operation.OPERATION_ID,
 			FINISHED:     !operation.IN_PROGRESS,
 			TYPE:         operation.OPERATION_TYPE,
-			CREATED_AT:   operation.CREATION_DATE.Add(3 * time.Hour).Format("02.01.2006 15:04:05"),
-			FINISH_DATE:  operation.FINISH_DATE.Add(3 * time.Hour).Format("02.01.2006 15:04:05"),
+			CREATED_AT:   operation.CREATION_DATE.Format("02.01.2006 15:04:05"),
+			FINISH_DATE:  operation.FINISH_DATE.Format("02.01.2006 15:04:05"),
 			DURATION:     operation.FINISH_DATE.Sub(operation.CREATION_DATE).String(),
 			VERSION:      operation.VERSION,
 			USER_ID:      operation.USER_ID,

@@ -4,7 +4,7 @@
   
   @keyframes animate {
     50% {
-      color: white;
+      color: rgb(255, 255, 255);
     }
   }
 

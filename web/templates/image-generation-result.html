@@ -1,14 +1,14 @@
 {{template "header.html" .}}
-<div class="work-group">
-        <div class="input-group">
-            <div class="prompt-area">
+<div class="work-group nobg">
+        <div class="input-group clr">
+            <div class="prompt-area clr">
                 <textarea class="output-area" id="inputArea">{{.prompt}}</textarea>
             </div>
-            <div class="seed-area">
+            <div class="seed-area clr">
                 <p>SEED: {{.seed}}</p>
             </div>
         </div>
-        <div class="output-image-group">
+        <div class="output-image-group clr">
             <img src="data:image/jpeg;base64,{{.image}}">
             <a href="data:image/jpeg;base64,{{.image}}" download="{{.name}}">Скачать изображение</a>
         </div>

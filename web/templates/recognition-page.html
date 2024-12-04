@@ -1,7 +1,7 @@
 {{template "header.html" .}}
 <div class="work-group">
   <div class="popup-container" id="popupContainer"></div>
-    <div class="file-group">
+    <div class="file-group clr">
       <input type="file" class="input-field" name="filePath" id="fileInput" accept="audio/*,video/*, .flv, .mkv, .aac">
       <input type="url" class="input-field none-display" name="url" id="urlInput" placeholder="https://vk.com/video/@realnoevremya_official?z=video-85466065_456241777%2Fclub85466065">
       <select id="fileTypeSelect">
@@ -9,8 +9,8 @@
         <option value="url">URL</option>
       </select>
     </div>
-    <div class="language-group">
-      <p class="help-text">Выберите язык для расшифровки</p>
+    <div class="language-group clr">
+      <p class="help-text nobg">Выберите язык для расшифровки</p>
       <select class="select" id="languageSelect" name="language">
         {{ range .languages}}
             <option value="{{ .Code }}">{{ .Name }}</option>
@@ -18,25 +18,25 @@
       </select>
       <button class="button" id="recognizeButton">Расшифровать</button>
     </div>
-    <div class="normalize-group">
+    <div class="normalize-group clr">
       <input type="checkbox" name="whisper" class="checkbox" name="whisper" id="whisper" value="whisper">
-      <label for="whisper" style="margin-right: 100px;"><abbr title="Расшифровка через другую модель распознавания">Whisper</abbr></label>
+      <label class="nobg" for="whisper" style="margin-right: 100px;"><abbr title="Расшифровка через другую модель распознавания">Whisper</abbr></label>
       <input type="checkbox" name="dialog" class="checkbox" name="check" id="dialog" value="dialog">
-      <label for="dialog" style="margin-right: 30px;"><abbr title="Включить, если необходимо разделение голосов ДВУХ разных людей">Диалог</abbr></label>
+      <label class="nobg" for="dialog" style="margin-right: 30px;"><abbr title="Включить, если необходимо разделение голосов ДВУХ разных людей">Диалог</abbr></label>
       <input type="checkbox" name="normalize" class="checkbox" id="normResult" value="norm" checked disabled>
-      <label for="normResult"><abbr title="Нормализация — расстановка знаков препинания и абзацев">Нормализованный результат</abbr></label>
+      <label class="nobg" for="normResult"><abbr title="Нормализация — расстановка знаков препинания и абзацев">Нормализованный результат</abbr></label>
       <img src="https://imgs.search.brave.com/Lk7NL1lxotixVZUudspTuazVpE8zkumy6kH3VLbpll0/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5pc3RvY2twaG90/by5jb20vaWQvNTQw/NTY3MTkwL3J1LyVE/MCVCMiVEMCVCNSVE/MCVCQSVEMSU4MiVE/MCVCRSVEMSU4MCVE/MCVCRCVEMCVCMCVE/MSU4Ri8lRDAlQjcl/RDAlQkQlRDAlQjAl/RDElODclRDAlQkUl/RDAlQkEtJUQwJUI3/JUQwJUJEJUQwJUIw/JUQwJUJBLSVEMCVC/MiVEMCVCRSVEMCVC/RiVEMSU4MCVEMCVC/RSVEMSU4MSVEMCVC/MC0lRDAlQkElRDEl/ODMlRDAlQkIlRDEl/OEMlRDElODIlRDAl/QkUlRDAlQjIlRDAl/QjAlRDElOEYtJUQx/JTgxJUQwJUI1JUQx/JTgwJUQwJUI4JUQx/JThGLmpwZz9zPTYx/Mng2MTImdz0wJms9/MjAmYz1haTRtNVNZ/dUlkR3NxV2cxUE9o/aFU1ZTREc2M0Znd3/RGVBSkFjUFlrWXJJ/PQ" height="32"
           onclick="javascript:alert('Нормализация – это процесс расстановки знаков препинания и заглавных букв. ' + 
           'Здесь мы используем нейросеть, поэтому она может заменять окончания и даже целые слова, но с сохранением контекста');" 
           alt="Нормализация – это процесс расстановки знаков препинания и заглавных букв">
     </div>
-    <div class="output-group">
+    <div class="output-group clr">
       <textarea class="output-area" id="outputArea" placeholder="Здесь появится расшифровка вашего текста" readonly></textarea>
     </div>
     </div>
     <div class="bottom-group">
-      <button class="button b1" id="saveFile" disabled>Сохранить</button>
-      <button class="button b2" id="copyText" disabled>Скопировать</button>
-      <button class="button b3" id="resetButton" disabled>Восстановить</button>
+      <button class="button" id="saveFile" disabled>Сохранить</button>
+      <button class="button-copy" id="copyText" disabled>Скопировать</button>
+      <button class="button" id="resetButton" disabled>Восстановить</button>
     </div>
 {{template "footer.html" .}}

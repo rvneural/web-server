@@ -7,7 +7,6 @@
 
 .work-group textarea{
     text-align: left;
-    color: black;
     padding: 10px;
     font-size: 19px;
     box-sizing: border-box;
@@ -57,21 +56,20 @@
             grid-area: d;
             display: flex;
             justify-content: center;
-            background: transparent;
+            background-color: rgb(181, 181, 181);
+            margin-bottom: 7px;
           }
         
           .save-button{
             flex: 1;
             max-height: 40px;
-            background-color: #707784;
             border: none;
-            color:aliceblue;
             text-align: center;
-            text-decoration: none;
             display: inline-block;
+            background: transparent;
           }
         
           .save-button:hover{
-            cursor: pointer;
-            background-color: #494E56;
+            background-color: #5a5a5a;
+            color: white;
           }

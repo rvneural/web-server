@@ -1,3 +1,3 @@
 window.onload = function () {
-    document.getElementById('mediaPage').style.backgroundColor = "#494E56"
+    document.getElementById('mediaPage').classList.add('active-button');
 }

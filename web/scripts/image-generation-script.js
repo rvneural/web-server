@@ -15,7 +15,7 @@ var id = ""
 var images = new Map()
 
 window.onload = function() {
-    document.getElementById('imagePage').style.backgroundColor = "#494E56"
+    document.getElementById('imagePage').classList.add('active-button');
 }
 
 generateImageButton.addEventListener('click', async() => {

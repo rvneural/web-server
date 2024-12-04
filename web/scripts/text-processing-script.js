@@ -18,7 +18,7 @@ var id = ""
 
 
 window.onload = function() {
-    document.getElementById('textPage').style.backgroundColor = "#494E56"
+    document.getElementById('textPage').classList.add('active-button');
 }
 
 promtSelect.addEventListener('change', () => {

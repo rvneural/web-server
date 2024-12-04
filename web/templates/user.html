@@ -1,59 +1,65 @@
 {{template "header.html" .}}
 <div class="work-group">
-    <div class="user-info">
-        <p>Имя: <b>{{.FirstName}}</b></p>
-        <p>Фамилия: <b>{{.LastName}}</b></p>
-        <p>ID: <b>{{.UserID}}</b></p>
-        <p>E-mail: <b>{{.Email}}</b></p>
+    <div class="user-info clr">
+        <p class="nobg">Имя: <b class="nobg">{{.FirstName}}</b></p>
+        <p class="nobg">Фамилия: <b class="nobg">{{.LastName}}</b></p>
+        <p class="nobg">ID: <b class="nobg">{{.UserID}}</b></p>
+        <p class="nobg">E-mail: <b class="nobg">{{.Email}}</b></p>
     </div>
-    <form action="/logout" class="logoutForm"><button class="logoutBtn">Выйти</button></form>
-    <h3 class="group-header">Ваши последние операции</h3>
+    <form action="/logout" class="logoutForm nobg"><button class="logoutBtn button">Выйти</button></form>
+    <h3 class="group-header clr">Ваши последние операции</h3>
     <div class="operations">
 
        <div class="list">
-        <h3 class="list-header">Генерация картинок</h3>
+        <h3 class="list-header clr">Генерация картинок</h3>
          <div class="elements">
             {{range .Images}}
+            <a href="/protected/operation/{{.ID}}" class="nobg" target="_blank">
             <div class="element">
-                <div class="data">
-                <p><a href="/protected/operation/{{.ID}}" target="_blank">{{.Placeholder}}</a></p>
+                <div class="data nobg">
+                <p>{{.Placeholder}}</p>
                 </div>
-                <div class="date">
-                <p>{{.Date}}</p>
+                <div class="date nobg">
+                <p class="nobg">{{.Date}}</p>
                 </div>
             </div>
+        </a>
             {{end}}
          </div>
        </div>
 
        <div class="list">
-        <h3 class="header">Обработка текста</h3>
+        <h3 class="header clr">Обработка текста</h3>
         <div class="elements">
            {{range .Texts}}
+           <a href="/protected/operation/{{.ID}}" target="_blank">
            <div class="element">
             <div class="data">
-                <p><a href="/protected/operation/{{.ID}}" target="_blank">{{.Placeholder}}</a></p>
+                <p>{{.Placeholder}}</p>
                 </div>
                 <div class="date">
                 <p>{{.Date}}</p>
                 </div>
            </div>
+        </a>
            {{end}}
         </div>
       </div>
 
       <div class="list">
-        <h3 class="list-header">Расшифровка</h3>
+        <h3 class="list-header clr">Расшифровка</h3>
         <div class="elements">
            {{range .Recognitions}}
+           <a href="/protected/operation/{{.ID}}" target="_blank">
            <div class="element">
             <div class="data">
-                <p><a href="/protected/operation/{{.ID}}" target="_blank">{{.Placeholder}}</a></p>
+                <p>{{.Placeholder}}</p>
                 </div>
                 <div class="date">
                 <p>{{.Date}}</p>
                 </div>
            </div>
+        </a>
            {{end}}
         </div>
       </div>

@@ -41,8 +41,9 @@ to {
 .work-group{
   display: grid;
   grid-template-rows: 1fr 1fr 1fr 20fr;
-  background: transparent;
   row-gap: 0.5%;
+  padding: 5px;
+  box-sizing: border-box;
 }
 
 .file-group{
@@ -83,7 +84,6 @@ to {
   height: 100%;
   border-radius: 5px 0 0 5px;
   border: none;
-  background-color: rgba(255, 255, 255, 0.458);
 }
 
 .file-group input[type="file"]{
@@ -97,7 +97,6 @@ to {
 
 .file-group select{
   flex: 1;
-  background-color: #9f9f9f;
   max-width: 100px;
   height: 100%;
   border-radius: 0 5px 5px 0;
@@ -208,10 +207,10 @@ to {
   max-width: 100px; /* Максимальная ширина кнопок */
   height: 40px; /* Фиксированная высота */
   padding: 0px;     
-  border: none; 
+  border: none;        
+  cursor: pointer;
   background-color: #2b3845; 
-  color: white;           
-  cursor: pointer;        
+    color: white;       
   box-sizing: border-box; 
   transition: background-color 0.3s; 
   text-align: center; 
@@ -238,4 +237,8 @@ a {
 
 .popup.slide-down {
   animation: slideDOWN 0.5s backwards; /* Анимация опускания */
+}
+
+.help-text{
+  background: transparent;
 }

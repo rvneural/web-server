@@ -42,21 +42,18 @@ to {
     display: grid;
     grid-template-columns: 2fr 0.1fr 3fr;
     column-gap: 1%;
-    background: transparent;
   }
 
   .input-group{
     display: grid;
     grid-template-rows: 3fr 1fr;
-    row-gap: 0.5%;
-    background: transparent;
+    row-gap: 1%;
   }
 
   .output-image-group{
     display: grid;
     grid-template-rows: 4fr 0.1fr 0.1fr;
-    row-gap: 0.5%;
-    background: transparent;
+    row-gap: 1%;
   }
 
 
@@ -170,7 +167,7 @@ to {
 }
 
 .seed-text{
-    color: rgb(0, 255, 208)
+    color: rgb(27, 27, 27)
 }
 
 /********************************/
@@ -288,12 +285,6 @@ to {
   
   .popup button:focus {
     outline: none; 
-  }
-  
-  a {
-    font-size: 20px;
-    font-weight: bold;
-    background: transparent !important;
   }
   
   .popup.slide-up {

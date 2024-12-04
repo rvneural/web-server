@@ -1,11 +1,11 @@
 {{template "header.html" .}}
-<div class="work-group">
-    <div class="input-group">
+<div class="work-group nobg">
+    <div class="input-group clr">
         <div class="promt-area">
         <textarea class="input-area" id="inputArea" placeholder="Введите текст для генерации изображения"></textarea>
         </div>
-        <div class="settings-area">
-            <div class="ration-area">
+        <div class="settings-area clr">
+            <div class="ration-area clr">
                 <p>Укажите соотношение сторон: </p>
                 <select class="select" id="rationSelect" name="ration">
                     {{ range .rations }}
@@ -13,30 +13,30 @@
                     {{ end }}
                 </select>
             </div>
-            <div class="seed-area">
+            <div class="seed-area clr">
                 <p>Задайте seed (зерно) изображения:</p>
                 <input type="number" min="0" step="1" class="input-seed-area" id="seedArea" placeholder="123456" readonly></input>
             </div>
-            <div class="random-seed">
+            <div class="random-seed clr">
             <input type="checkbox" name="random-seed" class="checkbox" id="randomSeed" value="norm" checked>
             <label for="randomSeed"><abbr title="Seed (зерно изображения) — параметр, который отвечает за базовую генерацию изображения. Одинаковые запрос и seed ведут к генерации одного и того же изображения">Случайный seed</abbr></label>
             </div>
         </div>
     </div>
-    <div class="rewrite-button-group">
+    <div class="rewrite-button-group nobg">
         <div class="rewrite-buttons">
         <button class="button rewrite-button" id="generateImageButton">>>></button>
         <form action="https://yandex.cloud/ru/docs/foundation-models/prompts/yandexart/" target="_blank"><button class="help-button">?</button></form>
     </div>
     </div>
-    <div class="output-image-group">
-        <div class="output-image-class">
+    <div class="output-image-group clr">
+        <div class="output-image-class clr">
         <img class="output-image" id="outputImage" src="/web/static/img/templates/3-2.png" alt="Генерируемое изображение">
         </div>
-        <div class="download-link-class">
+        <div class="download-link-class clr">
             <a id="downloadLink" href="/web/static/img/templates/3-2.png" download="image.png">Скачать изображение</a>
         </div>
-        <div class="seed-class">
+        <div class="seed-class clr">
             <p>Seed (зерно):</p>
             <p class="seed-text upper-bold" id="seedValue"></p>
         </div>

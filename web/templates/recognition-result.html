@@ -5,21 +5,22 @@
         var file_name = {{.filename}};
         var id = {{.id}};
     </script>
-    <div class="filenameurl">
+    <div class="filenameurl clr">
         {{if isValidURL .filename}}
         <p>Обработан файл по ссылке: <a href="{{.filename}}" target="_blank">{{.filename}}</a></p>
     {{else}}
         <p>Обработан файл: "{{.filename}}"</p>
     {{end}}    
     </div>    
-    <div class="input-text-group">
-        <p>Нормализованный текст</p>
+    <div class="input-text-group clr">
+        <p class="clr">Нормализованный текст</p>
         <textarea class="output-area" id="normArea">{{.norm_text}}</textarea>
     </div>
-    <div class="output-text-group">
-        <p >Сырой текст</p>
+    <div class="output-text-group clr">
+        <p class="clr">Сырой текст</p>
         <textarea class="output-area" id="rawArea">{{.raw_text}}</textarea>
     </div>
+</div>
 <div class="button-save">
     <button class="save-button" id="saveButton">Сохранить</button>
 </div>

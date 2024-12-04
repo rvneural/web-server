@@ -40,7 +40,7 @@ fileTypeSelect.addEventListener('change', function() {
 })
 
 window.onload = function() {
-    document.getElementById('filePage').style.backgroundColor = "#494E56"
+    document.getElementById('filePage').classList.add('active-button');
 }
 
 // Функция расшифровки

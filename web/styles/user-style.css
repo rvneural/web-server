@@ -1,12 +1,6 @@
-.nobg{
-    background: transparent;
-}
 
 .operations{
     background: transparent;
-    padding-left: 5px;
-    padding-right: 5px;
-    box-sizing: border-box;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 1%;
@@ -15,6 +9,8 @@
 .operations .list{
     background: transparent;
     border: 1px solid black;
+    margin-left: 5px;
+    margin-right: 5px;
 }
 
 .operations .list h3{
@@ -30,19 +26,25 @@
     max-height: 57vh;
 }
 
+.operations .list .elements .element *{
+    background: transparent !important; 
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
 .operations .list .elements .element{
-    max-height: 60px;
+    max-height: 100px;
     margin-bottom: 3px;
     box-sizing: border-box;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    /*background: #f0f0f089;*/
 }
 
-.operations .list .elements .element *{
-    background: transparent;
-    margin-left: 5px;
-    margin-right: 5px;
+.element:hover{
+    color: white;
+    background: rgb(191, 45, 45);
 }
 
 .user-info{
@@ -81,24 +83,21 @@
 .logoutForm .logoutBtn{
     width: 200px;
     height: 30px;
-    background-color: #707784;
     border: none;
     color: white;
 }
 
-.logoutForm .logoutBtn:hover{
-    background-color: #494E56;
-}
 
 .data{
     width: 50%;
 }
 
-.data a{
-    color: black;
-}
-
 .data p{
     text-align: left;
-    text-wrap: pretty;
+    font-weight: bold;
+}
+
+.logoutForm {
+    background: transparent;
+    background-color: transparent;
 }

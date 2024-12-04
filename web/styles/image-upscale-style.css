@@ -15,7 +15,6 @@
     display: flex;
     margin-right: 30px;
     align-items: center;
-    background: transparent;
   }
 
   .control-group{
@@ -23,14 +22,12 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     column-gap: 5px;
-    background: transparent;
   }
 
   .output-group{
     grid-area: output-group;
     display: flex;
     margin-top: 10px;
-    background: rgba(255, 255, 255, 0.26);
     width: 100%;
   }
 
@@ -67,7 +64,6 @@
     width: auto;
     height: auto;
     margin: 10px;
-    box-shadow: 10px 5px 5px #fe72775b;
     border: 1px solid black;
     border-radius: 5px;
   }

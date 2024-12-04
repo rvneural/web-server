@@ -1,0 +1,141 @@
+
+body {
+    font-family: "PT Sans";
+    overflow: hidden;
+    font-size: 14px;
+    background-image: url("/web/static/fon.jpeg");
+    background-size: cover;
+}
+
+.container * {
+    border-radius: 5px; /* Скругляем углы на 5 пикселей */
+    text-align: center; /* Контент размещаем в центре по горизонтали */
+  }
+
+  .header-group, .work-group {
+    background: #bababaa9;	
+    backdrop-filter: blur(50px); 
+  }
+
+.work-group{
+    color: rgb(6, 6, 6);
+    backdrop-filter: blur(50px); 
+}
+
+  .header-group * {
+    background: transparent;
+  }
+
+.button, .header-button, .help-button{
+    /*background-color: #b84030;*/
+    background-color: rgba(181, 181, 181, 0.898);
+    backdrop-filter: blur(50px);    
+    border: none;
+    color: rgb(0, 0, 0);
+}
+
+.button-copy{
+    /*background-color: #b84030;*/
+    background-color: rgba(181, 181, 181, 0.898);
+    backdrop-filter: blur(50px);    
+    border: none;
+    color: rgb(0, 0, 0);
+    margin-left: 2px;
+    margin-right: 2px;
+}
+
+.button:hover, .header-button:hover, .help-button:hover{
+    background-color: #5a5a5a;
+    border: none;
+    cursor: pointer;
+    color: white;
+}
+
+.button-copy:hover{
+    background-color: #5a5a5a;
+    border: none;
+    cursor: pointer;
+    color: white;
+    margin-left: 2px;
+    margin-right: 2px;
+}
+
+button-copy:disabled,
+button-copy[disabled]{
+    background-color: rgba(105, 105, 105, 0.623);
+    backdrop-filter: blur(50px);    
+    cursor: not-allowed;
+    margin-left: 2px;
+    margin-right: 2px;
+}
+
+button-copy:disabled:hover,
+button-copy[disabled]:hover{
+    background-color:rgba(105, 105, 105, 0.623);
+    cursor: not-allowed;
+    color:black;
+}
+
+button:disabled,
+button[disabled]{
+    background-color: rgba(105, 105, 105, 0.623);
+    backdrop-filter: blur(50px);    
+    cursor: not-allowed;
+}
+
+button:disabled:hover,
+button[disabled]:hover{
+    background-color:rgba(105, 105, 105, 0.623);
+    cursor: not-allowed;
+    color:black;
+}
+
+textarea{
+    resize: none;
+}
+
+
+.header-button:hover{
+    cursor: pointer;
+}
+
+.upper-bold{
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+select, input[type="file"], input[type="checkbox"] {
+    cursor: pointer;
+}
+
+input[type="url"], input[type="text"], input[type="password"], input[type="number"], input[type="email"] {
+    cursor: text;
+}
+
+a, a:hover {
+    text-decoration: none;
+}
+
+p, a, h1, h2, h3, label, form, .nobg{
+    background: transparent;
+}
+
+a, a:hover{
+    color: black;
+    text-decoration: none;
+}
+
+.clr{
+    background: #f0f0f089;
+}
+
+.popup a{
+    color: blue;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.active-button{
+    background-color: #5a5a5a;
+    color: white;
+}

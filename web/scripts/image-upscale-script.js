@@ -14,7 +14,7 @@ window.onbeforeunload = function () {
 }
 
 window.onload = function () {
-    document.getElementById('upscalePage').style.backgroundColor = "#494E56"
+    document.getElementById('upscalePage').classList.add('active-button');
     upscaleButton.setAttribute("disabled", "")
     remBgButton.setAttribute("disabled", "")
 }

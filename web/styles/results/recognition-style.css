@@ -1,7 +1,6 @@
   
 .work-group{
     display: grid;
-    background-color: transparent;
     grid-template:
       "a a" 5%
       "b c" auto
@@ -70,23 +69,22 @@
 
   .button-save{
     grid-area: d;
-    max-height: 40px;
     display: flex;
     justify-content: center;
-    background: transparent;
+    background-color: rgb(181, 181, 181);
+    margin-bottom: 7px;
   }
 
   .save-button{
     flex: 1;
-    background-color: #707784;
+    max-height: 40px;
     border: none;
-    color:aliceblue;
     text-align: center;
-    text-decoration: none;
     display: inline-block;
+    background: transparent;
   }
 
   .save-button:hover{
-    cursor: pointer;
-    background-color: #494E56;
+    background-color: #5a5a5a;
+    color: white;
   }

@@ -33,6 +33,7 @@ func (p *Page) GetPage(c *gin.Context) {
 	if err != nil {
 		user_id = 0
 	}
+
 	p.logger.Info("Getting user", "user_id", user_id)
 	user, err := p.worker.GetUserByID(user_id)
 	if err != nil {
@@ -41,6 +42,33 @@ func (p *Page) GetPage(c *gin.Context) {
 		user.FIRSTNAME = "Неизвестный"
 		user.LASTNAME = "Пользователь"
 	}
+
+	// Проверка доступа
+	req_id, err := c.Cookie("user_id")
+	if err != nil || req_id == "" {
+		req_id = "-1"
+	}
+	var req_user_id = -1
+	if req_id != "-1" {
+		user_id, err = strconv.Atoi(req_id)
+		if err != nil {
+			req_user_id = -1
+		}
+	}
+	var req_user_status = -1
+	if user_id != -1 {
+		current_user, err := p.worker.GetUserByID(req_user_id)
+		if err != nil {
+			req_user_status = -1
+		} else {
+			req_user_status = current_user.USER_STATUS
+		}
+	}
+	if req_user_status != -1 && user.USER_STATUS > req_user_status {
+		c.AbortWithStatus(http.StatusForbidden)
+		return
+	}
+	//
 
 	limit_str := c.DefaultQuery("limit", "100")
 	limit, err := strconv.Atoi(limit_str)

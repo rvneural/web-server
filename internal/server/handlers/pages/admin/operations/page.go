@@ -2,9 +2,17 @@ package operations
 
 import (
 	"WebServer/internal/server/handlers/interfaces"
+	"encoding/json"
 	"net/http"
+	"os"
+	"strconv"
+	"strings"
 
 	"github.com/gin-gonic/gin"
+
+	modelAudio "WebServer/internal/models/db/results/audio"
+	modelImage "WebServer/internal/models/db/results/image"
+	modelText "WebServer/internal/models/db/results/text"
 )
 
 type OperationListElement struct {
@@ -22,6 +30,7 @@ type OperationListElement struct {
 	FIRST_NAME   string `json:"first_name"`
 	LAST_NAME    string `json:"last_name"`
 	EMAIL        string `json:"email"`
+	DATA         []byte `json:"-"`
 }
 
 type AllOperations struct {
@@ -45,7 +54,7 @@ func (a *AdminOperationListStruct) GetPage(c *gin.Context) {
 }
 
 func (a *AdminOperationListStruct) getListOfOperations(c *gin.Context) {
-	limit := c.DefaultQuery("limit", "0")
+	limit := c.DefaultQuery("limit", "100")
 	operation_type := c.DefaultQuery("type", "")
 	operation_id := c.DefaultQuery("operation", "")
 
@@ -62,8 +71,8 @@ func (a *AdminOperationListStruct) getListOfOperations(c *gin.Context) {
 		JSONoperations[id] = OperationListElement{
 			ID:           operation.ID,
 			OPERATION_ID: operation.OPERATION_ID,
-			URI:          "/operation/" + operation.OPERATION_ID,
-			URL:          "https://" + c.Request.Host + "/operation/" + operation.OPERATION_ID,
+			URI:          "/protected/operation/" + operation.OPERATION_ID,
+			URL:          "https://" + c.Request.Host + "/protected/operation/" + operation.OPERATION_ID,
 			FINISHED:     !operation.IN_PROGRESS,
 			TYPE:         operation.OPERATION_TYPE,
 			CREATED_AT:   operation.CREATION_DATE.Format("02.01.2006 15:04:05"),
@@ -74,8 +83,88 @@ func (a *AdminOperationListStruct) getListOfOperations(c *gin.Context) {
 			FIRST_NAME:   operation.FIRST_NAME,
 			LAST_NAME:    operation.LAST_NAME,
 			EMAIL:        operation.EMAIL,
+			DATA:         operation.DATA,
 		}
 	}
 
-	c.JSON(http.StatusOK, gin.H{"operations": JSONoperations})
+	if strings.Contains(c.GetHeader("Accept"), "text/html") {
+
+		str_max_desc := os.Getenv("MAX_DESC")
+		max_desc, err := strconv.Atoi(str_max_desc)
+		if err != nil {
+			max_desc = 500
+		}
+
+		type Operation struct {
+			URI         string
+			Type        string
+			ID          int64
+			TITLE       string
+			DESCRIPTION string
+			AUTHOR      string
+			DATE        string
+			IMAGE       string
+		}
+
+		operations := make([]Operation, 0, len(JSONoperations))
+		for _, operation := range JSONoperations {
+			var q_operation Operation
+			q_operation.URI = operation.URI
+			q_operation.Type = operation.TYPE
+			q_operation.ID = operation.ID
+			q_operation.AUTHOR = operation.FIRST_NAME + " " + operation.LAST_NAME
+			q_operation.DATE = operation.CREATED_AT
+
+			switch operation.TYPE {
+			case "text":
+				data := modelText.DBResult{}
+				err := json.Unmarshal(operation.DATA, &data)
+				if err != nil {
+					q_operation.TITLE = "Ошибка при декодировании"
+					q_operation.DESCRIPTION = err.Error()
+				} else {
+					q_operation.TITLE = data.Prompt
+					q_operation.DESCRIPTION = data.OldText
+					if len(q_operation.DESCRIPTION) > max_desc {
+						q_operation.DESCRIPTION = q_operation.DESCRIPTION[:max_desc]
+					}
+				}
+			case "image":
+				data := modelImage.DBResult{}
+				err := json.Unmarshal(operation.DATA, &data)
+				if err != nil {
+					q_operation.TITLE = "Ошибка при декодировании"
+					q_operation.DESCRIPTION = err.Error()
+				} else {
+					q_operation.IMAGE = data.B64string
+					q_operation.TITLE = data.Prompt
+					q_operation.DESCRIPTION = ""
+				}
+			case "audio":
+				data := modelAudio.DBResult{}
+				err := json.Unmarshal(operation.DATA, &data)
+				if err != nil {
+					q_operation.TITLE = "Ошибка при декодировании"
+					q_operation.DESCRIPTION = err.Error()
+				} else {
+					q_operation.TITLE = "Расшифровано: " + data.FileName
+					q_operation.DESCRIPTION = data.NormText
+					if len(q_operation.DESCRIPTION) > max_desc {
+						q_operation.DESCRIPTION = q_operation.DESCRIPTION[:max_desc]
+					}
+				}
+			}
+
+			operations = append(operations, q_operation)
+		}
+
+		c.HTML(http.StatusOK, "admin-operations.html",
+			gin.H{
+				"style":      "/web/styles/admin-operations.css",
+				"title":      "Операции пользователей",
+				"Operations": operations,
+			})
+	} else {
+		c.JSON(http.StatusOK, gin.H{"operations": JSONoperations})
+	}
 }

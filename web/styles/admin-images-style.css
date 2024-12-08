@@ -2,7 +2,6 @@
     display: flex;
     flex-direction: column;
     gap: 0.5%;
-    /*grid-template-columns: repeat(1, 1fr);*/
     overflow-y: auto;
     overflow-x: hidden;
     padding: 5px;

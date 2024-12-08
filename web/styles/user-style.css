@@ -23,7 +23,7 @@
     overflow-y: auto;
     overflow-x: hidden;;
     display: list-item;
-    max-height: 57vh;
+    height: 57vh;
 }
 
 .operations .list .elements .element *{
@@ -33,7 +33,7 @@
 }
 
 .operations .list .elements .element{
-    max-height: 100px;
+    max-height: 200px;
     margin-bottom: 3px;
     box-sizing: border-box;
     display: flex;

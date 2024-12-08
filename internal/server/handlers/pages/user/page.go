@@ -27,18 +27,6 @@ func New(worker interfaces.DBWorker, logger *slog.Logger) *Page {
 }
 
 func (p *Page) GetPage(c *gin.Context) {
-	email, err := c.Cookie("user_email")
-	if err != nil {
-		c.Redirect(http.StatusPermanentRedirect, "/login")
-		return
-	}
-	user, err := p.worker.GetUser(email)
-	if err != nil {
-		p.logger.Error("Getting user", "error", err)
-		user.EMAIL = "неизвестно"
-		user.FIRSTNAME = "Неизвестный"
-		user.LASTNAME = "Пользователь"
-	}
 	str_id, err := c.Cookie("user_id")
 	if err != nil {
 		c.Redirect(http.StatusPermanentRedirect, "/login")
@@ -48,6 +36,13 @@ func (p *Page) GetPage(c *gin.Context) {
 	if err != nil {
 		c.Redirect(http.StatusPermanentRedirect, "/login")
 		return
+	}
+	user, err := p.worker.GetUserByID(user_id)
+	if err != nil {
+		p.logger.Error("Getting user", "error", err)
+		user.EMAIL = "неизвестно"
+		user.FIRSTNAME = "Неизвестный"
+		user.LASTNAME = "Пользователь"
 	}
 	p.logger.Info("New request to user page")
 	image_operations, err := p.worker.GetUserOperations(user_id, 100, "image")

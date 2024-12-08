@@ -7,7 +7,6 @@ import (
 	"strconv"
 	"strings"
 
-	dbModel "WebServer/internal/models/db/results/text"
 	"WebServer/internal/server/handlers/interfaces"
 
 	"bytes"
@@ -36,19 +35,15 @@ func (n *TextProcessingHandler) HandleForm(c *gin.Context) {
 
 	id := c.Request.FormValue("id")
 	id = strings.TrimSpace(id)
-	var dbError error
-	if len(id) != 0 {
-		var u_id int
-		user_id, err := c.Cookie("user_id")
+	str_id, err := c.Cookie("user_id")
+	var user_id int
+	if err != nil {
+		user_id = 0
+	} else {
+		user_id, err = strconv.Atoi(str_id)
 		if err != nil {
-			u_id = 0
-		} else {
-			u_id, err = strconv.Atoi(user_id)
-			if err != nil {
-				u_id = 0
-			}
+			user_id = 0
 		}
-		dbError = n.dbWorker.RegisterOperation(id, "text", u_id)
 	}
 
 	// Получаем текст и промт
@@ -66,6 +61,8 @@ func (n *TextProcessingHandler) HandleForm(c *gin.Context) {
 	request.Model = "pro"
 	request.Text = text
 	request.Prompt = prompt
+	request.OperationId = id
+	request.UserID = user_id
 
 	if prompt == "{{ rewrite }}" {
 		request.Temperature = "0.3"
@@ -79,7 +76,6 @@ func (n *TextProcessingHandler) HandleForm(c *gin.Context) {
 
 		resonse.OldText = text
 		resonse.NewText = err.Error()
-		go n.saveErrorToDB(id, err.Error(), prompt, text)
 		c.JSON(http.StatusBadRequest, resonse)
 		return
 	}
@@ -91,7 +87,6 @@ func (n *TextProcessingHandler) HandleForm(c *gin.Context) {
 		n.logger.Error("Creating request", "error", err)
 		resonse.OldText = text
 		resonse.NewText = err.Error()
-		go n.saveErrorToDB(id, err.Error(), prompt, text)
 		c.JSON(http.StatusBadRequest, resonse)
 		return
 	}
@@ -106,7 +101,6 @@ func (n *TextProcessingHandler) HandleForm(c *gin.Context) {
 		n.logger.Error("Sending request", "error", err)
 		resonse.OldText = text
 		resonse.NewText = err.Error()
-		go n.saveErrorToDB(id, err.Error(), prompt, text)
 		c.JSON(http.StatusBadGateway, resonse)
 		return
 	}
@@ -119,7 +113,6 @@ func (n *TextProcessingHandler) HandleForm(c *gin.Context) {
 		n.logger.Error("Reading response", "error", err)
 		resonse.OldText = text
 		resonse.NewText = err.Error()
-		go n.saveErrorToDB(id, err.Error(), prompt, text)
 		c.JSON(http.StatusInternalServerError, resonse)
 		return
 	}
@@ -131,40 +124,10 @@ func (n *TextProcessingHandler) HandleForm(c *gin.Context) {
 		n.logger.Error("Unmarshalling response", "error", err)
 		resonse.OldText = text
 		resonse.NewText = err.Error()
-		go n.saveErrorToDB(id, err.Error(), prompt, text)
 		c.JSON(http.StatusInternalServerError, resonse)
 		return
 	}
 
-	go func(id string, dbError error) {
-		if dbError == nil && len(id) != 0 {
-			ddbResult := dbModel.DBResult{
-				OldText: model.OldText,
-				NewText: model.NewText,
-				Prompt:  prompt,
-			}
-			byteDbResult, err := json.Marshal(ddbResult)
-			if err == nil {
-				n.dbWorker.SetResult(id, byteDbResult)
-			}
-		}
-	}(id, dbError)
-
 	// Отправляем ответ в виде JSON клиенту
 	c.JSON(http.StatusOK, model)
-}
-
-func (n *TextProcessingHandler) saveErrorToDB(id string, errorMsg string, prompt string, oldText string) {
-	if len(id) == 0 {
-		return
-	}
-	dbResult := dbModel.DBResult{
-		OldText: oldText,
-		NewText: errorMsg,
-		Prompt:  prompt,
-	}
-	byteDbResult, err := json.Marshal(dbResult)
-	if err == nil {
-		n.dbWorker.SetResult(id, byteDbResult)
-	}
 }

@@ -2,9 +2,7 @@ package audio
 
 import (
 	models "WebServer/internal/models/audio"
-	dbModel "WebServer/internal/models/db/results/audio"
 	"WebServer/internal/server/handlers/interfaces"
-	"encoding/json"
 	"io"
 	"log/slog"
 	"net/http"
@@ -68,23 +66,18 @@ func (n *RecognitionHandler) HandleForm(c *gin.Context) {
 	id := c.Request.FormValue("id")
 	id = strings.TrimSpace(id)
 	filename := c.Request.FormValue("filename")
-	var dbError error
-	if len(id) != 0 {
-		var u_id int
-		user_id, err := c.Cookie("user_id")
+	str_id, err := c.Cookie("user_id")
+	var user_id int
+	if err != nil {
+		user_id = 0
+	} else {
+		user_id, err = strconv.Atoi(str_id)
 		if err != nil {
-			u_id = 0
-		} else {
-			u_id, err = strconv.Atoi(user_id)
-			if err != nil {
-				u_id = 0
-			}
+			user_id = 0
 		}
-		dbError = n.dbWorker.RegisterOperation(id, "audio", u_id)
 	}
 
 	var Request models.Request
-	var err error = nil
 	url := c.Request.FormValue("url")
 	if url != "" {
 		Request = n.handleURLRecognition(c)
@@ -92,13 +85,15 @@ func (n *RecognitionHandler) HandleForm(c *gin.Context) {
 		Request, err = n.handleFileRecognition(c)
 		if err != nil {
 			go n.logger.Error("Error sending recognition response", "error", err)
-			go n.saveErrorToDB(id, err.Error())
 			c.JSON(http.StatusBadRequest, gin.H{"error": err})
 			return
 		}
 	}
 
 	Request.Dialog = (strings.ToLower(c.Request.FormValue("dialog")) == "true")
+	Request.OperationId = id
+	Request.File.Name = filename
+	Request.UserID = user_id
 
 	n.logger.Info("FILE DIALOG", "dialog", Request.Dialog, "form", c.Request.FormValue("dialog"))
 
@@ -106,20 +101,6 @@ func (n *RecognitionHandler) HandleForm(c *gin.Context) {
 
 	response.NormText = strings.TrimSpace(response.NormText)
 	response.RawText = strings.TrimSpace(response.RawText)
-
-	go func(id string, dbError error) {
-		if dbError == nil && len(id) != 0 {
-			dbResult := dbModel.DBResult{
-				RawText:  strings.TrimSpace(response.RawText),
-				NormText: strings.TrimSpace(response.NormText),
-				FileName: strings.TrimSpace(filename),
-			}
-			byteData, err := json.Marshal(dbResult)
-			if err == nil {
-				n.dbWorker.SetResult(id, byteData)
-			}
-		}
-	}(id, dbError)
 
 	// Отправляем запрос на распознавание текста
 	c.JSON(http.StatusOK, response)

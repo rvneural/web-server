@@ -56,7 +56,7 @@ type FormHandler interface {
 	HandleForm(c *gin.Context)
 }
 
-func New(protectedAuth gin.HandlerFunc) *App {
+func New(protectedAuth gin.HandlerFunc, adminProtectedAuth gin.HandlerFunc) *App {
 	config := config.Init()
 	gin.SetMode(gin.ReleaseMode)
 	router := gin.Default()
@@ -98,15 +98,14 @@ func New(protectedAuth gin.HandlerFunc) *App {
 	r := router.Group("/operation")
 
 	a := router.Group("/admin")
-	if config.ADMIN_LOGIN != "" && config.ADMIN_PASSWORD != "" {
-		a.Use(gin.BasicAuth(gin.Accounts{
-			config.ADMIN_LOGIN: config.ADMIN_PASSWORD,
-		}))
+	if adminProtectedAuth != nil {
+		a.Use(adminProtectedAuth)
 	}
-	a.Use(protectedAuth)
 
 	protected := router.Group("/protected")
-	protected.Use(protectedAuth)
+	if protectedAuth != nil {
+		protected.Use(protectedAuth)
+	}
 
 	router.StaticFS("/web/", http.Dir("../../web"))
 	router.LoadHTMLGlob("../../web/templates/*.html")

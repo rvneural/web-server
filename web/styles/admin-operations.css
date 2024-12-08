@@ -1,0 +1,138 @@
+.work-group {
+    overflow: auto;
+    overflow-x: hidden;
+    padding: 5px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.work-group .operation{
+    width: 100%;
+    padding: 5px;
+    box-sizing: border-box;
+    max-height: 500px;
+}
+
+
+/*Основное расположение элементов*/
+
+.work-group .text,
+.work-group .audio {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Две колонки одинаковой ширины */
+    grid-template-rows: auto auto auto; /* Три строки */
+    gap: 5px; /* Отступ между элементами */
+}
+
+.work-group .text .mark,
+.work-group .audio .mark {
+    grid-column: 1; /* Первая колонка */
+    grid-row: 1; /* Первая строка */
+    justify-self: start;
+    align-self: center;
+}
+
+.work-group .text .title,
+.work-group .audio .title {
+    grid-column: 1; /* Вторая колонка */
+    grid-row: 1; /* Первая строка */
+    margin-left: 80px;
+}
+
+.work-group .text .title p,
+.work-group .audio .title p{
+    text-align: left;
+}
+
+.work-group .text .description,
+.work-group .audio .description {
+    grid-column: 1 / 3; /* Обе колонки */
+    grid-row: 2; /* Вторая строка */
+}
+
+.work-group .text .description p,
+.work-group .audio .description p{
+    text-align: left;
+}
+
+.work-group .text .date,
+.work-group .audio .date {
+    grid-column: 1 / 3; /* Обе колонки */
+    grid-row: 3; /* Третья строка */
+}
+
+.text .date, .audio .date{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.work-group .image .mark{
+    background: red;
+    color: white;
+    padding: 5px;
+    border-radius: 50%;
+}
+
+.work-group .text .mark{
+    background: blue;
+    color: white;
+    padding: 5px;
+    border-radius: 50%;
+}
+
+
+.work-group .audio .mark{
+    background: green;
+    color: white;
+    padding: 5px;
+    border-radius: 50%;
+}
+
+.work-group .image{
+    display: flex;
+    flex-direction: row;
+}
+
+.work-group .image .img img{
+    max-height: 150px;
+    margin-right: 10px;
+    width: auto;
+}
+
+.work-group .image .img{
+    display: block;
+}
+
+.work-group .image .info{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.work-group .image .info .up{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.work-group .image .info .down .date{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.operation:hover{
+    color: white;
+    background: rgb(191, 45, 45);
+}
+
+.mark{
+    margin-right: 20px;
+    width: 60px;
+}

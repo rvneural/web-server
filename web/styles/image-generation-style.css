@@ -54,6 +54,8 @@ to {
     display: grid;
     grid-template-rows: 4fr 0.1fr 0.1fr;
     row-gap: 1%;
+    padding: 5px;
+    box-sizing: border-box;
   }
 
 
@@ -69,6 +71,9 @@ to {
     display: grid;
     row-gap: 2%;
     grid-template-rows: 0.1fr 1fr 0.4fr;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-bottom: 5px;
 }
 
 /********************************/

@@ -11,48 +11,9 @@ import (
 	model "WebServer/internal/models/db/model"
 )
 
-func (w *Worker) GetUser(email string) (model.DBUser, error) {
-	uri := w.url + "users/email/"
-	type Request struct {
-		Email string `json:"email"`
-	}
-	req := Request{
-		Email: email,
-	}
-	body, err := json.Marshal(req)
-	if err != nil {
-		w.logger.Error("Error marshalling request to DB Users:", "err", err)
-		return model.DBUser{}, err
-	}
-	resp, err := http.Post(uri, "application/json", bytes.NewBuffer(body))
-	if err != nil {
-		w.logger.Error("Error sendind request to DB Users:", "err", err)
-		return model.DBUser{}, err
-	}
-	var user model.DBUser
-	byteBody, err := io.ReadAll(resp.Body)
-	err = json.Unmarshal(byteBody, &user)
-	if err != nil {
-		w.logger.Error("Error unmarshalling response from DB Users:", "err", err)
-		return model.DBUser{}, err
-	}
-	return user, nil
-}
-
 func (w *Worker) GetUserByID(id int) (model.DBUser, error) {
-	uri := w.url + "users/id/"
-	type Request struct {
-		ID int `json:"id"`
-	}
-	req := Request{
-		ID: id,
-	}
-	body, err := json.Marshal(req)
-	if err != nil {
-		w.logger.Error("Error marshalling request to DB Users:", "err", err)
-		return model.DBUser{}, err
-	}
-	resp, err := http.Post(uri, "application/json", bytes.NewBuffer(body))
+	uri := w.url + "users/id/" + strconv.Itoa(id)
+	resp, err := http.Get(uri)
 	if err != nil {
 		w.logger.Error("Error sendind request to DB Users:", "err", err)
 		return model.DBUser{}, err

@@ -70,7 +70,7 @@ func New() *App {
 
 	auth := authMaster.New(dataBaseWorker)
 	return &App{
-		Endpoint:       *endpoint.New(auth.AuthMiddleware("/login")),
+		Endpoint:       *endpoint.New(auth.AuthMiddleware("/login", 0, dataBaseWorker), auth.AuthMiddleware("/login", 1, dataBaseWorker)),
 		idMaxLen:       35,
 		logger:         logger,
 		dataBaseWorker: dataBaseWorker,

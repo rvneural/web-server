@@ -1,0 +1,65 @@
+{{template "header.html" .}}
+<div class="work-group">
+    {{range .Operations}}
+    <a href="{{.URI}}" target="_blank">
+        {{if eq .Type "text"}}
+        <div class="operation text clr">
+            <div class="mark">
+                {{.Type}}
+            </div>
+            <div class="title">
+                <p>{{.ID}}: {{.TITLE}}</p>
+            </div>
+            <div class="description">
+                <p>{{.DESCRIPTION}}</p>
+            </div>
+            <div class="date">
+                <p>{{.AUTHOR}}</p>
+                <p>{{.DATE}}</p>
+            </div>
+        </div>
+        {{end}}
+        {{if eq .Type "audio"}}
+            <div class="operation audio clr">
+            <div class="mark">
+                {{.Type}}
+            </div>
+            <div class="title">
+                <p>{{.ID}}: {{.TITLE}}</p>
+            </div>
+            <div class="description">
+                <p>{{.DESCRIPTION}}</p>
+            </div>
+            <div class="date">
+                <p>{{.AUTHOR}}</p>
+                <p>{{.DATE}}</p>
+            </div>
+        </div>
+        {{end}}
+        {{if eq .Type "image"}}
+        <div class="operation image clr">
+            <div class="img">
+                <img src="data:image/png;base64,{{.IMAGE}}" class="image">
+            </div>
+            <div class="info">
+                <div class="up">
+                    <div class="mark">
+                        {{.Type}}
+                    </div>
+                    <div class="title">
+                        <p>{{.ID}}: {{.TITLE}}</p>
+                    </div>
+                </div>
+                <div class="down">
+                    <div class="date">
+                        <p>{{.AUTHOR}}</p>
+                        <p>{{.DATE}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{end}}
+    </a>
+    {{end}}
+</div>
+{{template "footer.html" .}}

@@ -4,11 +4,13 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 
 	authModels "WebServer/internal/models/user/model"
+	"WebServer/internal/server/handlers/interfaces"
 )
 
 type RegisterWorker interface {
@@ -107,7 +109,7 @@ func (a *AuthentificationHandler) HandleLogin(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "Successfully logged in"})
 }
 
-func (a *AuthentificationHandler) AuthMiddleware(authPath string) gin.HandlerFunc {
+func (a *AuthentificationHandler) AuthMiddleware(authPath string, minimal_level int, db_worker interfaces.DBWorker) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		tokenString, err := c.Cookie("NeuronNexusAuth")
 		if err != nil || tokenString == "" {
@@ -148,6 +150,25 @@ func (a *AuthentificationHandler) AuthMiddleware(authPath string) gin.HandlerFun
 			return
 		}
 
-		c.Next()
+		if minimal_level > 0 {
+			int_id, err := strconv.Atoi(id)
+			if err != nil {
+				c.AbortWithStatus(http.StatusForbidden)
+				return
+			}
+			user, err := db_worker.GetUserByID(int_id)
+			if err != nil {
+				c.AbortWithStatus(http.StatusForbidden)
+				return
+			}
+			if user.USER_STATUS < minimal_level {
+				c.AbortWithStatus(http.StatusForbidden)
+				return
+			} else {
+				c.Next()
+			}
+		} else {
+			c.Next()
+		}
 	}
 }

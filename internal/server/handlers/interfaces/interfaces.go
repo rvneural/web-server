@@ -18,7 +18,7 @@ type DBWorker interface {
 	CheckForRegistered(email string) bool
 	Register(email, hashPassword, FirstName, LastName string) string
 	CheckForLogin(email, hashPassword string) (status bool, user_id string)
-	GetUser(email string) (dbModel.DBUser, error)
+
 	GetUserByID(id int) (dbModel.DBUser, error)
 	GetAllUsers() ([]dbModel.DBUser, error)
 }

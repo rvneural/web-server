@@ -11,7 +11,6 @@ import (
 	"strconv"
 	"strings"
 
-	dbModel "WebServer/internal/models/db/results/image"
 	"WebServer/internal/server/handlers/interfaces"
 
 	"github.com/gin-gonic/gin"
@@ -33,19 +32,15 @@ func (n *ImageGenerationHandler) HandleForm(c *gin.Context) {
 
 	id := c.Request.FormValue("id")
 	id = strings.TrimSpace(id)
-	var dbError error
-	if len(id) != 0 {
-		var u_id int
-		user_id, err := c.Cookie("user_id")
+	str_id, err := c.Cookie("user_id")
+	var user_id int
+	if err != nil {
+		user_id = 0
+	} else {
+		user_id, err = strconv.Atoi(str_id)
 		if err != nil {
-			u_id = 0
-		} else {
-			u_id, err = strconv.Atoi(user_id)
-			if err != nil {
-				u_id = 0
-			}
+			user_id = 0
 		}
-		dbError = n.dbWorker.RegisterOperation(id, "image", u_id)
 	}
 
 	prompt := c.Request.FormValue("prompt")
@@ -58,12 +53,13 @@ func (n *ImageGenerationHandler) HandleForm(c *gin.Context) {
 	request.Seed = seed
 	request.WidthRatio = widthRatio
 	request.HeightRatio = heightRatio
+	request.UserID = user_id
+	request.OperationId = id
 
 	byteRequets, err := json.Marshal(request)
 
 	if err != nil {
 		n.logger.Error("Marshalling request", "error", err)
-		go n.saveErrorToDB(id, err.Error())
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -71,7 +67,6 @@ func (n *ImageGenerationHandler) HandleForm(c *gin.Context) {
 	httpRequest, err := http.NewRequest("POST", config.URL, bytes.NewBuffer(byteRequets))
 	if err != nil {
 		n.logger.Error("Creating request", "error", err)
-		go n.saveErrorToDB(id, err.Error())
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -84,7 +79,6 @@ func (n *ImageGenerationHandler) HandleForm(c *gin.Context) {
 
 	if err != nil {
 		n.logger.Error("Sending request", "error", err)
-		go n.saveErrorToDB(id, err.Error())
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -95,7 +89,6 @@ func (n *ImageGenerationHandler) HandleForm(c *gin.Context) {
 
 	if err != nil {
 		n.logger.Error("Reading response", "error", err)
-		go n.saveErrorToDB(id, err.Error())
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -105,40 +98,8 @@ func (n *ImageGenerationHandler) HandleForm(c *gin.Context) {
 
 	if err != nil {
 		n.logger.Error("Unmarshalling response", "error", err)
-		go n.saveErrorToDB(id, err.Error())
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
-	go func(id string, dbError error) {
-		if dbError == nil && len(id) != 0 {
-			dbResult := dbModel.DBResult{
-				Prompt:    prompt,
-				Seed:      model.Image.Seed,
-				B64string: model.Image.B64String,
-				Name:      strings.ReplaceAll(strings.TrimSpace(prompt), " ", "-") + ".jpg",
-			}
-			dbByteRes, err := json.Marshal(dbResult)
-			if err == nil {
-				n.dbWorker.SetResult(id, dbByteRes)
-			}
-		}
-	}(id, dbError)
-
 	c.JSON(http.StatusOK, model)
-}
-
-func (n *ImageGenerationHandler) saveErrorToDB(id string, dbError string) {
-	if len(id) == 0 {
-		return
-	}
-	dbResult := dbModel.DBResult{
-		Prompt:    dbError,
-		Seed:      "",
-		B64string: "",
-	}
-	dbByteRes, err := json.Marshal(dbResult)
-	if err == nil {
-		n.dbWorker.SetResult(id, dbByteRes)
-	}
 }

@@ -1,0 +1,75 @@
+  
+.work-group{
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 0.5%;
+}
+
+.work-group textarea{
+    text-align: left;
+    padding: 10px;
+    font-size: 19px;
+    box-sizing: border-box;
+}
+
+    .work-group div{
+        background: transparent;
+    }
+
+    .input-group{
+        display: grid;
+        background: transparent;
+        grid-template-rows: 5fr 1fr;
+        gap: 0.5%;
+    }
+
+        .old-text-area{
+            width: 100%;
+            display: flex;
+        }
+
+            .old-text-area *{
+                flex: 1;
+                margin: 5px 0 0 5px;
+            }
+
+        .prompt-area{
+            width: 100%;
+            display: flex;
+        }
+            .prompt-area * {
+                flex: 1;
+                margin: 0 0 5px 5px;
+            }
+
+    .output-group{
+        display: flex;
+        width: 100%;
+    }
+
+        .output-group *{
+            flex: 1;
+            margin: 5px 5px 5px 0;
+        }
+
+        .button-save{
+            grid-area: d;
+            display: flex;
+            justify-content: center;
+            background-color: rgb(181, 181, 181);
+            margin-bottom: 7px;
+          }
+        
+          .save-button{
+            flex: 1;
+            max-height: 40px;
+            border: none;
+            text-align: center;
+            display: inline-block;
+            background: transparent;
+          }
+        
+          .save-button:hover{
+            background-color: #5a5a5a;
+            color: white;
+          }

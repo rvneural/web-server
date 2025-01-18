@@ -1,8 +1,10 @@
 {{template "header.html" .}}
 <div class="work-group">
     <div class="popup-container" id="popupContainer"></div>
-    <div class="input-text-group clr">
+    <div class="input-text-group nobg">
+        <div class="input-text-area-2 clr">
         <textarea class="output-area" id="inputArea" placeholder="Введите сюда текст"></textarea>
+        </div>
         <div class="input-text-area">
             <div class="area clr">
             <textarea class="output-area" id="promtArea" placeholder="Введите сюда задачу для нейросети: ЧТО НУЖНО СДЕЛАТЬ С ЭТИМ ТЕКСТОМ"></textarea>
@@ -29,7 +31,7 @@
 </div>
 <div class="bottom-group">
     <button class="button" id="saveFile" disabled>Сохранить</button>
-    <button class="button-copy" id="copyText" disabled>Скопировать</button>
+    <button class="button" id="copyText" disabled>Скопировать</button>
     <button class="button" id="resetButton" disabled>Восстановить</button>
 </div>
 {{template "footer.html" .}}

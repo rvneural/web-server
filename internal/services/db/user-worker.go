@@ -160,12 +160,15 @@ func (w *Worker) GetAllUsers() ([]model.DBUser, error) {
 		w.logger.Error("Error sendind request to DB Users:", "err", err)
 		return nil, err
 	}
-	var users []model.DBUser
+	type all_users struct {
+		Users []model.DBUser `json:"users"`
+	}
+	var users all_users
 	byteBody, err := io.ReadAll(resp.Body)
 	err = json.Unmarshal(byteBody, &users)
 	if err != nil {
 		w.logger.Error("Error unmarshalling response from DB Users:", "err", err)
 		return nil, err
 	}
-	return users, nil
+	return users.Users, nil
 }

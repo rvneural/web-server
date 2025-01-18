@@ -1,0 +1,90 @@
+  
+.work-group{
+    display: grid;
+    grid-template:
+      "a a" 5%
+      "b c" auto
+      "d d" 7%;
+    gap: 1%;
+  }
+
+  .filenameurl{
+    grid-area: a;
+    display: flex;
+    align-items: center;
+  }
+
+  .filenameurl a{
+    background: none;
+    color: rgb(0, 255, 208);
+  }
+
+  .filenameurl p{
+    flex: 1;
+    font-size: 20px;
+    text-align: center;
+  }
+  
+  .input-text-group{
+    grid-template-rows: 0.5fr 12fr;
+    display: grid;
+    grid-area: b;
+  }
+  
+  .output-text-group{
+    grid-template-rows: 0.5fr 12fr;
+    display: grid;
+    grid-area: c;
+  }
+  
+  .input-text-group p{
+    text-align: left;
+    font-size: 20px;
+    margin: 10px 0 10px 5px;
+  }
+
+  .output-text-group p{
+    text-align: left;
+    font-size: 20px;
+    margin: 10px 0 10px 5px;
+  }
+
+  .input-text-group textarea{
+    font-size: 20px;
+    margin: 0.5%;
+    text-align: left;
+    line-height: 1.5em;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+  
+  .output-text-group textarea{
+    font-size: 20px;
+    margin: 0.5%;
+    text-align: left;
+    line-height: 1.5em;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+
+  .button-save{
+    grid-area: d;
+    display: flex;
+    justify-content: center;
+    background-color: rgb(181, 181, 181);
+    margin-bottom: 7px;
+  }
+
+  .save-button{
+    flex: 1;
+    max-height: 40px;
+    border: none;
+    text-align: center;
+    display: inline-block;
+    background: transparent;
+  }
+
+  .save-button:hover{
+    background-color: #5a5a5a;
+    color: white;
+  }

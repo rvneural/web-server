@@ -88,11 +88,26 @@ to {
 
 .file-group input[type="file"]{
   text-align: left;
+  cursor: pointer;
 }
 
 .file-group input[type="url"]{
   text-align: left;
   max-height: 32px;
+}
+
+input[type=file]::file-selector-button {
+  margin-right: 20px;
+  border: none;
+  height: 100%;
+  width: 140px;
+  cursor: pointer;
+  background: #e2e2e3;
+  color: #456FAC;
+}
+
+input[type=file]::file-selector-button:hover {
+  background: #e3e5e8;
 }
 
 .file-group select{
@@ -115,6 +130,7 @@ to {
 .language-group select{
   height: 90%;
   margin-right: 5px;
+  border: 1px solid #e3e5e8;
 }
 
 .normalize-group img{

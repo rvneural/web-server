@@ -64,16 +64,15 @@ to {
 .promt-area{
     display: flex;
     height: 100%;
+    padding: 3px;
+    box-sizing: border-box;
 }
 
 .settings-area{
     background: transparent;
     display: grid;
-    row-gap: 2%;
+    row-gap: 5%;
     grid-template-rows: 0.1fr 1fr 0.4fr;
-    margin-left: 5px;
-    margin-right: 5px;
-    margin-bottom: 5px;
 }
 
 /********************************/
@@ -90,7 +89,7 @@ to {
 
 .ration-area select{
         background: hwb(0 100% 0% / 0.276) url('https://img.icons8.com/ios-filled/15/down--v1.png') no-repeat right 10px center;
-        border: 1px solid #ffffff;
+        border: 1px solid #edeef0;
         padding: 5px 30px 5px 10px; /* Резервируем место под стрелку */
         border-radius: 6px;
         font-size: 0.9rem;
@@ -126,7 +125,7 @@ to {
     color: #212529;
     /*background-color: #fff;*/
     background-clip: padding-box;
-    border: 1px solid #ffffff;
+    border: 1px solid #edeef0;
     border-radius: 0.25rem;
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
@@ -145,7 +144,7 @@ to {
     margin: 5px;
     width: 100%;
     padding: 10px;
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 .output-image-class{

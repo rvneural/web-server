@@ -1,5 +1,5 @@
 body {
-    background: linear-gradient(170deg, rgba(49, 57, 73, 0.8) 20%, rgba(49, 57, 73, 0.5) 20%, rgba(49, 57, 73, 0.5) 35%, rgba(41, 48, 61, 0.6) 35%, rgba(41, 48, 61, 0.8) 45%, rgba(31, 36, 46, 0.5) 45%, rgba(31, 36, 46, 0.8) 75%, rgba(49, 57, 73, 0.5) 75%), linear-gradient(45deg, rgba(20, 24, 31, 0.8) 0%, rgba(41, 48, 61, 0.8) 50%, rgba(82, 95, 122, 0.8) 50%, rgba(133, 146, 173, 0.8) 100%) #313949;
+    background: #edeef0
 }
 
 .registration-group {
@@ -80,9 +80,8 @@ input[type="password"] {
 button {
     width: 100%;
     padding: 10px;
-    background-color: #efe5e5;
+    background-color: #e2e2e3;
     border: none;
-    color: rgb(22, 22, 22);
     font-size: 16px;
     cursor: pointer;
     border-radius: 5px;
@@ -90,14 +89,14 @@ button {
 }
 
 button:hover {
-    color:#ffffff;
-    background-color: rgb(22, 22, 22);
+    background-color: #e3e5e8;
 }
 
 a {
     text-decoration: none; /* Убираем стандартное подчеркивание */
     position: relative; /* Устанавливаем позиционирование для псевдоэлемента */
     margin-bottom: 10px;
+    color: black;
 }
 
 a::after {
@@ -113,5 +112,5 @@ a::after {
 }
 
 a:hover::after {
-    width: 60%; /* Ширина полоски при наведении */
+    width: 50%; /* Ширина полоски при наведении */
 }

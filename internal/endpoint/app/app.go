@@ -211,7 +211,8 @@ func (a *App) StartTLS() {
 	m := &autocert.Manager{
 		Cache:      autocert.DirCache("../../var/www/.cache"),
 		Prompt:     autocert.AcceptTOS,
-		HostPolicy: autocert.HostWhitelist(config.DOMAIN, "www."+config.DOMAIN),
+		HostPolicy: autocert.HostWhitelist(config.DOMAIN, "www."+config.DOMAIN, "doc."+config.DOMAIN, "docs."+config.DOMAIN),
+		Email:      "info@realnoevremya.ru",
 	}
 	tlsServer := &http.Server{
 		Addr: config.HTTPS_PORT,
@@ -228,4 +229,8 @@ func (a *App) StartTLS() {
 		}
 	}()
 	log.Fatal(tlsServer.ListenAndServeTLS("", ""))
+}
+
+func (a *App) GetEngine() *gin.Engine {
+	return a.engine
 }

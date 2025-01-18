@@ -14,10 +14,6 @@ var id = ""
 
 var images = new Map()
 
-window.onload = function() {
-    document.getElementById('imagePage').classList.add('active-button');
-}
-
 generateImageButton.addEventListener('click', async() => {
     if (inputArea.value.trim() === ''){
         alert('Введите текст для генерации изображения')

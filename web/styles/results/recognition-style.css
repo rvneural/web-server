@@ -2,14 +2,13 @@
 .work-group{
     display: grid;
     grid-template:
-      "a a" 5%
-      "b c" auto
-      "d d" 7%;
+      "k k" 5%
+      "l f" auto;
     gap: 1%;
   }
 
   .filenameurl{
-    grid-area: a;
+    grid-area: k;
     display: flex;
     align-items: center;
   }
@@ -28,13 +27,13 @@
   .input-text-group{
     grid-template-rows: 0.5fr 12fr;
     display: grid;
-    grid-area: b;
+    grid-area: l;
   }
   
   .output-text-group{
     grid-template-rows: 0.5fr 12fr;
     display: grid;
-    grid-area: c;
+    grid-area: f;
   }
   
   .input-text-group p{
@@ -75,16 +74,6 @@
     margin-bottom: 7px;
   }
 
-  .save-button{
-    flex: 1;
-    max-height: 40px;
-    border: none;
-    text-align: center;
-    display: inline-block;
-    background: transparent;
-  }
-
-  .save-button:hover{
-    background-color: #5a5a5a;
-    color: white;
+  .button{
+    width: 100%;
   }

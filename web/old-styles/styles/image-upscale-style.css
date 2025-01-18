@@ -1,0 +1,75 @@
+
+
+  .work-group {
+    display: grid;
+    padding: 10px;
+    box-sizing: border-box;
+    grid-template: 
+        "input-group control-group" 4%
+        "output-group output-group";
+    row-gap: 0.3%;
+  }
+
+  .input-group{
+    grid-area: input-group;
+    display: flex;
+    margin-right: 30px;
+    align-items: center;
+  }
+
+  .control-group{
+    grid-area: control-group;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 5px;
+  }
+
+  .output-group{
+    grid-area: output-group;
+    display: flex;
+    margin-top: 10px;
+    width: 100%;
+  }
+
+  .output-group img{
+    border-radius: 0;
+  }
+
+  /*-------*/
+
+  .control-group .button {
+    width: 100%;
+    height: 100%;
+  }
+
+  .input-group .input-field{
+    align-self: center;
+    border-radius: 5px;
+    height: 30px;
+    width: 100%;
+  }
+
+  .output-group{
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    font-size: 20px;
+    font-weight: bold;
+  }
+
+  .output-group img{
+    display: block;
+    max-width: 90%;
+    max-height: 70vh;
+    width: auto;
+    height: auto;
+    margin: 10px;
+    border: 1px solid black;
+    border-radius: 5px;
+  }
+
+  a {
+    background-color: transparent !important; /* Убираем фон */ 
+    margin: 0 0 10px 0;
+}
+  

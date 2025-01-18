@@ -14,7 +14,6 @@ window.onbeforeunload = function () {
 }
 
 window.onload = function () {
-    document.getElementById('upscalePage').classList.add('active-button');
     upscaleButton.setAttribute("disabled", "")
     remBgButton.setAttribute("disabled", "")
 }

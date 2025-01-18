@@ -37,13 +37,11 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     fill: black;
 }
 
 .square:hover {
-    background-color: #880b0b;
-    color:rgb(255, 255, 255);
+    background-color: #e3e5e8;
 }
 
 .square-img {
@@ -51,10 +49,6 @@
     margin-left: 10px;
     margin-right: 10px;
     background: transparent;
-}
-
-.square:hover .svg-icon {
-    filter: invert(100%); /* Примените фильтры для изменения цвета SVG */
 }
 
 .square-img img{

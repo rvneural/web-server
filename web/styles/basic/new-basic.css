@@ -1,48 +1,26 @@
 html, body {
+    width: 100%;
     height: 100%;
     margin: 0;
+    display: flex; /* Используем flexbox */
+    justify-content: center; /* Центрируем по горизонтали */
   }
 
   /* Добавляем оформление элементам grid-контейнера: */
-
- /* Добавляем оформление grid-контейнеру:*/
-  .container {
-    display: flex; /* Используем flexbox */
-    justify-content: center; /* Центрируем по горизонтали */
-    width: 94vw; /* Ширина 94% от ширины окна */
-    height: 99vh; /* Высота 99% от высоты окна */
-    margin: 10px auto 0; /* Авто-отступы для центрирования */
-    border-radius: 3px; /* Скругляем углы */
-    box-sizing: border-box; /* Учитываем отступы и границы в ширине и высоте */
-  }
   
    /*Параметры grid-контейнера */
   .container {
+    height: 99vh;
+    gap: 1%;
     display: grid;
-    column-gap: 0.5%;
-    row-gap: 0.5%;
-    
     grid-template: 
-          "b b b" 8%
-          "a c c" 85%
-          ". d d" 6%;
-    
-    justify-content: center; /* Центрируем содержимое */
-    padding: 0 20px; /* Устанавливаем одинаковые отступы слева и справа */
-    max-width: 1200px; /* Устанавливаем максимальную ширину контейнера */
-    width: 100%; /* Ширина 100% от родительского элемента */
-    height: 99vh; /* Высота 99% от высоты окна */
-    margin: 10px auto 0; /* Авто-отступы для центрирования */
-    border-radius: 3px; /* Скругляем углы */
-    box-sizing: border-box; /* Учитываем отступы и границы в ширине и высоте */
-    
+          "b b b b b b b" 6%
+          ". . a c c . ." 87%
+          ". . . d d . ." 6%;
   }
 
 .header-buttons{
   grid-area: a;
-  width: 16vw;
-  min-width: 150px;
-  max-width: 230px;
 }
 
 .header-group{
@@ -56,6 +34,7 @@ html, body {
 
 .bottom-group{
   grid-area: d;
+  width: 80vw;
 }
   
   /*Параметры конйтейнеров внутри grid-блока*/
@@ -75,11 +54,9 @@ html, body {
   .bottom-group{
     justify-content: center;
     display: flex;
+    gap: 5px;
     background: transparent;
-  }
-  
-  
-  
+  }  
   
   /*Отдельные элементы в блоках*/
   
@@ -89,7 +66,6 @@ html, body {
     width: 100%;
     min-height: 33px;
     max-height: 33px;
-    border-radius: 5px;
     margin-bottom: 3px;
     background: transparent;
   }
@@ -108,19 +84,6 @@ html, body {
     width: 33.3333%;
     max-height: 40px;
     float: left;
-  }
-  
-  /*Нижние кнопки слева направо*/
-  .b1{
-    border-radius: 5px 0px 0px 5px;
-  }
-  
-  .b2{
-    border-radius: 0px;
-  }
-  
-  .b3{
-    border-radius: 0px 5px 5px 0px;
   }
 
   .checkbox{

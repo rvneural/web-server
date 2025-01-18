@@ -1,0 +1,43 @@
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.mainbox {
+    background: transparent;
+  }
+  
+  .mainbox p.second {
+      text-align: center;
+      font-size: 2rem;
+      background-color: transparent;
+    }
+
+    .mainbox p.special {
+        text-align: center;
+        font-size: 4rem;
+        background-color: transparent;
+        font-weight: 700;
+      }
+
+    .name-type{
+        margin-top: 5%;
+        background: transparent;
+    }
+
+    .loading {
+        width: 20%;
+        height: auto;
+        background: transparent;
+        background-color: transparent;
+        animation: rotate 10s linear infinite;
+        fill: white;
+    }
+
+    .repeat-url{
+        background: transparent;
+    }

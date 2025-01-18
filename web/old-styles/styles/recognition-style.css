@@ -1,0 +1,244 @@
+@keyframes slideIn {
+  from {
+      transform: translateY(100%); /* Начальная позиция - ниже */
+      opacity: 0; /* Начальная непрозрачность */
+  }
+  to {
+      transform: translateY(0); /* Конечная позиция - на месте */
+      opacity: 1; /* Конечная непрозрачность */
+  }
+}
+
+@keyframes slideOut {
+  from {
+      transform: translateY(0); /* Начальная позиция - ниже */
+      opacity: 1; /* Начальная непрозрачность */
+  }
+  to {
+      transform: translateY(100%); /* Конечная позиция - на месте */
+      opacity: 0; /* Конечная непрозрачность */
+  }
+}
+
+@keyframes slideDOWN {
+  from {
+      transform: translateY(-100%); /* Начальная позиция - ниже */
+  }
+  to {
+      transform: translateY(0); /* Конечная позиция - на месте */
+  }
+}
+
+@keyframes slideUP {
+  from {
+    transform: translateY(0); /* Начальная позиция - ниже */
+}
+to {
+    transform: translateY(-100%); /* Конечная позиция - на месте */
+}
+}
+
+.work-group{
+  display: grid;
+  grid-template-rows: 1fr 1fr 1fr 20fr;
+  row-gap: 0.5%;
+  padding: 5px;
+  box-sizing: border-box;
+}
+
+.file-group{
+  display: flex;
+  justify-items: end;
+  align-items: center;
+}
+
+.url-group{
+  display: flex;
+  justify-content: start;
+}
+
+.language-group{
+  max-height: 36px;
+  justify-items: end;
+  align-items: center;
+  display: flex;
+}
+
+.normalize-group{
+  align-items: center;
+  justify-content: end;
+  display: flex;
+}
+
+.output-group{
+  align-items: center; /*Выравнивание по вертикали*/
+  justify-content: center;  /*Выравнивание по вертикали*/
+  display: flex;
+}
+
+/*Отдельные элементы в блоках*/
+
+.file-group input{
+  flex: 1;
+  background: transparent;
+  height: 100%;
+  border-radius: 5px 0 0 5px;
+  border: none;
+}
+
+.file-group input[type="file"]{
+  text-align: left;
+}
+
+.file-group input[type="url"]{
+  text-align: left;
+  max-height: 32px;
+}
+
+.file-group select{
+  flex: 1;
+  max-width: 100px;
+  height: 100%;
+  border-radius: 0 5px 5px 0;
+  border: none;
+}
+
+.language-group *{
+  flex: 1;
+}
+
+.language-group button{
+  height: 90%;
+  margin-right: 2px;
+}
+
+.language-group select{
+  height: 90%;
+  margin-right: 5px;
+}
+
+.normalize-group img{
+  max-height: 50%;
+  margin-right: 1%;
+  cursor: help;
+}
+
+.normalize-group label{
+  margin-right: 5px;
+}
+
+.output-group textarea{
+  text-align: left;
+  line-height: 1.5em;
+  flex: 1;
+  font-size: 20px;
+  height: 95%;
+  margin-left: 1%;
+  margin-right: 1%;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.none-display{
+  display: none;
+}
+
+.popup-container {
+  display: flex; /* Изменяем на flex для размещения попапов */
+  position: fixed;
+  bottom: -100px; /* Изначально скрываем за экраном */
+  right: 20px; /* Расположение от правого края */
+  width: 300px;
+  background: none;
+  padding: 30px;
+  color: white;
+  transition: bottom 0.5s ease; /* Плавный переход при активации */
+  flex-direction: column;
+  gap: 5px;
+  align-items: flex-end;
+  z-index: 0; /* Убедимся, что контейнер поверх других элементов */
+}
+
+.popup-active {
+  flex: 0;
+  bottom: 5px; /* Позиция при активации */
+  padding: 0px;
+}
+
+.popup {
+  background-color: #485867b6;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  color: white;
+  width: 100%; /* Занимаем всю ширину контейнера */
+  display: flex;
+  margin-bottom: 0px; /* Отступ между попапами */
+  flex-direction: column; /* Располагаем элементы вертикально */
+  align-items: center; /* Центрируем содержимое по горизонтали */
+}
+
+.popup.slide-in {
+  animation: slideIn 0.5s forwards; /* Анимация появления */
+}
+
+.popup.slide-out {
+  animation: slideOut 0.5s forwards; /* Анимация исчезновения */
+}
+
+.popup p {
+  margin: 0 0 10px;
+}
+
+.button-container {
+  background: none;
+  display: flex; /* Используем flexbox для размещения кнопок в строку */
+  justify-content: space-between; /* Распределяем кнопки по горизонтали */
+  width: 70%; /* Занимаем всю ширину родительского элемента */
+  margin-top: 10px; /* Отступ сверху для разделения от текста */
+  gap: 0;
+}
+
+.button-container button {
+  margin: 0; /* Убираем отступы между кнопками */
+}
+
+.popup button {
+  flex: 1; /* Кнопки займут равное пространство */
+  max-width: 100px; /* Максимальная ширина кнопок */
+  height: 40px; /* Фиксированная высота */
+  padding: 0px;     
+  border: none;        
+  cursor: pointer;
+  background-color: #2b3845; 
+    color: white;       
+  box-sizing: border-box; 
+  transition: background-color 0.3s; 
+  text-align: center; 
+  margin: 0;
+}
+
+.popup button:hover {
+  background-color: #9f9f9f; 
+}
+
+.popup button:focus {
+  outline: none; 
+}
+
+a {
+  font-size: 20px;
+  font-weight: bold;
+  background: transparent !important;
+}
+
+.popup.slide-up {
+  animation: slideUP 0.5s forwards; /* Анимация поднятия */
+}
+
+.popup.slide-down {
+  animation: slideDOWN 0.5s backwards; /* Анимация опускания */
+}
+
+.help-text{
+  background: transparent;
+}

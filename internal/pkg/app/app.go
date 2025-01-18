@@ -45,6 +45,8 @@ import (
 	mediaPage "WebServer/internal/server/handlers/pages/mediafeed"
 	rssFeed "WebServer/internal/server/handlers/pages/rss"
 
+	fips "WebServer/internal/server/handlers/pages/fips"
+
 	authPages "WebServer/internal/server/handlers/pages/auth"
 	authMaster "WebServer/internal/services/auth"
 
@@ -89,33 +91,35 @@ func (a *App) init() {
 	}
 
 	// Основные страницы
-	a.Endpoint.RegisterProtectedPageWithCache("/recognition", recognitionFromFilePage.New().GetPage)
-	a.Endpoint.RegisterProtectedPageWithCache("/image", imageGenerationPage.New().GetPage)
-	a.Endpoint.RegisterProtectedPageWithCache("/text", textProcessingPage.New().GetPage)
-	a.Endpoint.RegisterProtectedPageWithCache("/imgprocess", upscalePage.New().GetPage)
+	a.Endpoint.RegisterProtectedPage("/recognition", recognitionFromFilePage.New().GetPage)
+	a.Endpoint.RegisterProtectedPage("/image", imageGenerationPage.New().GetPage)
+	a.Endpoint.RegisterProtectedPage("/text", textProcessingPage.New().GetPage)
+	a.Endpoint.RegisterProtectedPage("/imgprocess", upscalePage.New().GetPage)
 	a.Endpoint.RegisterProtectedPage("/", userPage.New(a.dataBaseWorker, a.logger).GetPage)
 
 	a.Endpoint.RegisterProtectedPage("/news", newsPage.New(a.logger).GetPage)
 	a.Endpoint.RegisterProtectedPage("/media", mediaPage.New(a.logger).GetPage)
+	a.Endpoint.RegisterProtectedPage("/fips", fips.New().GetPage)
 	//----------------------------
 
 	a.Endpoint.RegisterForm("/login", a.auth.HandleLogin)
 	a.Endpoint.RegisterForm("/register", a.auth.HandleRegistration)
 
 	authPage := authPages.New()
-	a.Endpoint.RegisterPageWithCache("/", indexPage.New().GetPage)
-	a.Endpoint.RegisterPageWithCache("/login", authPage.GetLoginPage)
-	a.Endpoint.RegisterPageWithCache("/register", authPage.GetRegisterPage)
-	a.Endpoint.RegisterPageWithCache("/logout", authPage.GetLogoutPage)
+	a.Endpoint.RegisterPageNoCache("/", indexPage.New().GetPage)
+	a.Endpoint.RegisterPageNoCache("/login", authPage.GetLoginPage)
+	a.Endpoint.RegisterPageNoCache("/register", authPage.GetRegisterPage)
+	a.Endpoint.RegisterPageNoCache("/logout", authPage.GetLogoutPage)
 
-	a.Endpoint.RegisterPageNoCache("/rss", rssFeed.New(a.logger).GetPage)
+	a.Endpoint.RegisterPageNoCache("/rss", rssFeed.New(a.logger, "RSS_URL").GetPage)
+	a.Endpoint.RegisterPageNoCache("/media", rssFeed.New(a.logger, "MEDIA_RSS_URL").GetPage)
 
 	a.Endpoint.RegisterAdminPageNoCahce("/stats", stats.New().GetPage)
 
 	a.Endpoint.RegisterAdminPageNoCahce("/operations", adminOperationList.New(a.dataBaseWorker).GetPage)
 	a.Endpoint.RegisterAdminPageNoCahce("/images", imageOperationList.New(a.dataBaseWorker).GetPage)
-	a.Endpoint.RegisterAdminPageNoCahce("/user/:id", adminUserPage.New(a.dataBaseWorker, a.logger).GetPage)
-	a.Endpoint.RegisterAdminPageNoCahce("/users", adminUsersPage.New(a.dataBaseWorker).GetPage)
+	a.Endpoint.RegisterAdminPageNoCahce("/users/", adminUsersPage.New(a.dataBaseWorker).GetPage)
+	a.Endpoint.RegisterAdminPageNoCahce("/users/:id", adminUserPage.New(a.dataBaseWorker, a.logger).GetPage)
 
 	a.Endpoint.RegisterResultNoCache("/get", newID.New(a.dataBaseWorker).GetPage)
 	a.Endpoint.RegisterProtectedPage("/operation/:id", result.New(notFoundOperationPage.New(), progressOperationPage.New(), a.dataBaseWorker, a.logger).GetPage)

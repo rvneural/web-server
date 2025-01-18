@@ -17,10 +17,6 @@ var version = 1
 var id = ""
 
 
-window.onload = function() {
-    document.getElementById('textPage').classList.add('active-button');
-}
-
 promtSelect.addEventListener('change', () => {
     console.log(promtSelect.value)
     if (promtSelect.value !== '0') {

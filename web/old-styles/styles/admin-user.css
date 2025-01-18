@@ -1,0 +1,92 @@
+.nobg{
+    background: transparent;
+}
+
+.operations{
+    background: transparent;
+    padding-left: 5px;
+    padding-right: 5px;
+    box-sizing: border-box;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1%;
+}
+
+.operations .list{
+    background: transparent;
+    border: 1px solid black;
+}
+
+.operations .list h3{
+    margin-top: 0;
+    margin-bottom: 5px;
+}
+
+.operations .list .elements{
+    background: transparent;
+    overflow-y: auto;
+    overflow-x: hidden;;
+    display: list-item;
+    height: 62vh;
+}
+
+.operations .list .elements .element{
+    max-height: 200px;
+    margin-bottom: 3px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.operations .list .elements .element *{
+    background: transparent;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.user-info{
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: 5px;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.user-info b{
+    background: transparent;
+}
+
+.user-info p{
+    margin: 1px;
+    text-align: left;
+}
+
+.group-header{
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+
+.data{
+    width: 50%;
+}
+
+.elements a{
+    color: black;
+}
+
+.elements a:hover{
+    text-decoration: none;
+}
+
+.element:hover{
+    background: rgb(191, 45, 45);
+    color: white;
+}
+
+.data p{
+    text-align: left;
+    font-weight: bold;
+}

@@ -23,8 +23,8 @@ type Page struct {
 	feedURL string
 }
 
-func New(logger *slog.Logger) *Page {
-	RSSURL := os.Getenv("RSS_URL")
+func New(logger *slog.Logger, env_name string) *Page {
+	RSSURL := os.Getenv(env_name)
 	return &Page{
 		logger:  logger,
 		feedURL: RSSURL,

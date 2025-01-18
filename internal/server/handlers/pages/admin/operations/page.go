@@ -136,7 +136,7 @@ func (a *AdminOperationListStruct) getListOfOperations(c *gin.Context) {
 			q_operation.URI = operation.URI
 			q_operation.Type = operation.TYPE
 			q_operation.ID = operation.ID
-			q_operation.AUTHOR = operation.FIRST_NAME + " " + operation.LAST_NAME
+			q_operation.AUTHOR = operation.FIRST_NAME + " " + operation.LAST_NAME + " (" + strconv.Itoa(operation.USER_ID) + ")"
 			q_operation.DATE = operation.CREATED_AT
 
 			switch operation.TYPE {

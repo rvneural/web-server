@@ -1,0 +1,83 @@
+.work-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+    justify-content: space-between;
+}
+.description {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 20px; /* отступ между текстом и квадратами */
+    font-size: 15px;
+}
+
+.description h2{
+    background: transparent;
+}
+
+.grid {
+    display: grid;
+    background: transparent;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    height: 100%;
+   
+}
+
+.grid a{
+    background: transparent;
+}
+
+.square {
+    border-radius: 5px;
+    height: 100%; /* высота квадрата занимает всю высоту родителя */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    fill: black;
+}
+
+.square:hover {
+    background-color: #880b0b;
+    color:rgb(255, 255, 255);
+}
+
+.square-img {
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+    background: transparent;
+}
+
+.square:hover .svg-icon {
+    filter: invert(100%); /* Примените фильтры для изменения цвета SVG */
+}
+
+.square-img img{
+    width: 100%;
+    max-width: 100px;
+    height: auto;
+    background: transparent;
+}
+
+.square-text {
+    background: transparent;
+    margin-right: 30px;
+    margin-left: 30px;
+}
+
+.square-text h2{
+    background: transparent;
+}
+
+.work-group a{
+    color: black;
+}
+
+.work-group a:hover{
+    text-decoration: none;
+}

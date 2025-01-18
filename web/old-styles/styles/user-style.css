@@ -1,0 +1,103 @@
+
+.operations{
+    background: transparent;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1%;
+}
+
+.operations .list{
+    background: transparent;
+    border: 1px solid black;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.operations .list h3{
+    margin-top: 0;
+    margin-bottom: 5px;
+}
+
+.operations .list .elements{
+    background: transparent;
+    overflow-y: auto;
+    overflow-x: hidden;;
+    display: list-item;
+    height: 57vh;
+}
+
+.operations .list .elements .element *{
+    background: transparent !important; 
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.operations .list .elements .element{
+    max-height: 200px;
+    margin-bottom: 3px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    /*background: #f0f0f089;*/
+}
+
+.element:hover{
+    color: white;
+    background: rgb(191, 45, 45);
+}
+
+.user-info{
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: 5px;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.user-info b{
+    background: transparent;
+}
+
+.user-info p{
+    margin: 1px;
+    text-align: left;
+}
+
+.group-header{
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+
+.logoutForm{
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: 5px;
+    align-items: start;
+    padding: 5px;
+    box-sizing: border-box;
+}
+
+.logoutForm .logoutBtn{
+    width: 200px;
+    height: 30px;
+    border: none;
+    color: white;
+}
+
+
+.data{
+    width: 50%;
+}
+
+.data p{
+    text-align: left;
+    font-weight: bold;
+}
+
+.logoutForm {
+    background: transparent;
+    background-color: transparent;
+}

@@ -39,9 +39,6 @@ fileTypeSelect.addEventListener('change', function() {
     }
 })
 
-window.onload = function() {
-    document.getElementById('filePage').classList.add('active-button');
-}
 
 // Функция расшифровки
 async function recognize(){

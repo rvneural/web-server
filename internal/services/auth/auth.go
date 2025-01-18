@@ -4,7 +4,9 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"slices"
 	"strconv"
+	"strings"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
@@ -111,6 +113,13 @@ func (a *AuthentificationHandler) HandleLogin(c *gin.Context) {
 
 func (a *AuthentificationHandler) AuthMiddleware(authPath string, minimal_level int, db_worker interfaces.DBWorker) gin.HandlerFunc {
 	return func(c *gin.Context) {
+
+		if a.isBot(c) {
+			log.Println("Request from bot:", c.Request.UserAgent())
+			c.Next()
+			return
+		}
+
 		tokenString, err := c.Cookie("NeuronNexusAuth")
 		if err != nil || tokenString == "" {
 			log.Println("No token found")
@@ -171,4 +180,10 @@ func (a *AuthentificationHandler) AuthMiddleware(authPath string, minimal_level 
 			c.Next()
 		}
 	}
+}
+
+func (a *AuthentificationHandler) isBot(c *gin.Context) bool {
+	userAgent := strings.ToLower(c.Request.UserAgent())
+	bots := []string{"googlebot", "yandexBot", "bingbot", "applebot", "msnbot", "facebot", "duckduckbot", "baiduspider", "swiftbot", "twitterbot", "rogerbot", "linkedinbot", "embedly", "quora link preview", "showyoubot", "outbrain", "pinterest/0.1", "slackbot", "vkshare"}
+	return slices.Contains(bots, userAgent)
 }

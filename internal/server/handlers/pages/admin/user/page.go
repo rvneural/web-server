@@ -50,13 +50,13 @@ func (p *Page) GetPage(c *gin.Context) {
 	}
 	var req_user_id = -1
 	if req_id != "-1" {
-		user_id, err = strconv.Atoi(req_id)
+		req_user_id, err = strconv.Atoi(req_id)
 		if err != nil {
 			req_user_id = -1
 		}
 	}
 	var req_user_status = -1
-	if user_id != -1 {
+	if req_user_id != -1 {
 		current_user, err := p.worker.GetUserByID(req_user_id)
 		if err != nil {
 			req_user_status = -1

@@ -3,92 +3,51 @@ body {
     font-family: "PT Sans";
     overflow: hidden;
     font-size: 14px;
-    /*background-image: url("/web/static/fon.jpeg");
-    background-size: cover;*/
-    background: linear-gradient(170deg, rgba(49, 57, 73, 0.8) 20%, rgba(49, 57, 73, 0.5) 20%, rgba(49, 57, 73, 0.5) 35%, rgba(41, 48, 61, 0.6) 35%, rgba(41, 48, 61, 0.8) 45%, rgba(31, 36, 46, 0.5) 45%, rgba(31, 36, 46, 0.8) 75%, rgba(49, 57, 73, 0.5) 75%), linear-gradient(45deg, rgba(20, 24, 31, 0.8) 0%, rgba(41, 48, 61, 0.8) 50%, rgba(82, 95, 122, 0.8) 50%, rgba(133, 146, 173, 0.8) 100%) #313949;
+    background: #edeef0;
 }
 
 .container * {
-    border-radius: 5px; /* Скругляем углы на 5 пикселей */
+    color: black;
+    border-radius: 5px;
     text-align: center; /* Контент размещаем в центре по горизонтали */
   }
 
-  .header-group, .work-group {
-    background: #bababaa9;	
-    backdrop-filter: blur(50px); 
+  .header-group{
+    background: #fff;
+    width: 100%;
+    border-radius: 0;
   }
-
-.work-group{
-    color: rgb(6, 6, 6);
-    backdrop-filter: blur(50px); 
-}
 
   .header-group * {
     background: transparent;
   }
 
-.button, .header-button, .help-button{
-    /*background-color: #b84030;*/
-    background-color: rgba(181, 181, 181, 0.898);
-    backdrop-filter: blur(50px);    
+.button, .header-button, .help-button{ 
     border: none;
-    color: rgb(0, 0, 0);
+    color: #000;
 }
 
-.button-copy{
-    /*background-color: #b84030;*/
-    background-color: rgba(181, 181, 181, 0.898);
-    backdrop-filter: blur(50px);    
-    border: none;
-    color: rgb(0, 0, 0);
-    margin-left: 2px;
-    margin-right: 2px;
+.button, .help-button{
+    background: #e2e2e3;
+    color: #456FAC;
+    font-weight: bold;
+}
+
+.header-button{
+    text-align: left;
 }
 
 .button:hover, .header-button:hover, .help-button:hover{
-    background-color: #5a5a5a;
-    border: none;
     cursor: pointer;
-    color: white;
-}
-
-.button-copy:hover{
-    background-color: #5a5a5a;
-    border: none;
-    cursor: pointer;
-    color: white;
-    margin-left: 2px;
-    margin-right: 2px;
-}
-
-button-copy:disabled,
-button-copy[disabled]{
-    background-color: rgba(105, 105, 105, 0.623);
-    backdrop-filter: blur(50px);    
-    cursor: not-allowed;
-    margin-left: 2px;
-    margin-right: 2px;
-}
-
-button-copy:disabled:hover,
-button-copy[disabled]:hover{
-    background-color:rgba(105, 105, 105, 0.623);
-    cursor: not-allowed;
-    color:black;
+    background: #e3e5e8;
 }
 
 button:disabled,
-button[disabled]{
-    background-color: rgba(105, 105, 105, 0.623);
-    backdrop-filter: blur(50px);    
-    cursor: not-allowed;
-}
-
+button[disabled],
 button:disabled:hover,
 button[disabled]:hover{
-    background-color:rgba(105, 105, 105, 0.623);
+    background-color: #e2e2e3; 
     cursor: not-allowed;
-    color:black;
 }
 
 textarea{
@@ -98,6 +57,14 @@ textarea{
 
 .header-button:hover{
     cursor: pointer;
+}
+
+.upper{
+    text-transform: uppercase;
+}
+
+.bold {
+    font-weight: bold;
 }
 
 .upper-bold{
@@ -122,12 +89,12 @@ p, a, h1, h2, h3, label, form, .nobg{
 }
 
 a, a:hover{
-    color: black;
     text-decoration: none;
 }
 
 .clr{
-    background: #f0f0f089;
+    color: #000;
+    background: #fff;
 }
 
 .popup a{
@@ -137,6 +104,6 @@ a, a:hover{
 }
 
 .active-button{
-    background-color: #5a5a5a;
-    color: white;
+    background-color: #e3e5e8;
+    color: black;
 }

@@ -1,0 +1,13 @@
+.loader {
+    animation: animate 6s ease infinite;
+  }
+  
+  @keyframes animate {
+    50% {
+      color: rgb(255, 255, 255);
+    }
+  }
+
+  .need-enter{
+    outline: solid 3px red;   
+  }

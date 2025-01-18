@@ -1,10 +1,10 @@
 {{template "header.html" .}}
 <div class="work-group nobg">
-    <div class="input-group clr">
-        <div class="promt-area">
+    <div class="input-group nobg">
+        <div class="promt-area clr">
         <textarea class="input-area" id="inputArea" placeholder="Введите текст для генерации изображения"></textarea>
         </div>
-        <div class="settings-area clr">
+        <div class="settings-area nobg">
             <div class="ration-area clr">
                 <p>Укажите соотношение сторон: </p>
                 <select class="select" id="rationSelect" name="ration">
@@ -29,7 +29,7 @@
         <form action="https://yandex.cloud/ru/docs/foundation-models/prompts/yandexart/" target="_blank"><button class="help-button">?</button></form>
     </div>
     </div>
-    <div class="output-image-group clr">
+    <div class="output-image-group nobg">
         <div class="output-image-class clr">
         <img class="output-image" id="outputImage" src="/web/static/img/templates/3-2.png" alt="Генерируемое изображение">
         </div>

@@ -1,0 +1,23 @@
+{{template "header.html" .}}
+<div class="work-group nobg">
+<div class="search clr">
+    <input type="text" id="search-input" class="search-input" placeholder="Татарстан, Казань, Москва">
+    <button id="search-button" class="button search-button">Найти</button>
+</div>
+<div class="out nobg">
+{{range .Fips}}
+<a href="{{.URI}}" target="_blank" class="description">
+<div class="image-element">
+    <div class="el-data">
+        <img src="{{.IMAGE_URL}}" class="image">
+    </div>
+        <div class="el-desc">
+            <p>({{.REGISTRATION_NUMBER}}) {{.AUTHOR}}</p>
+            <p class="date">{{.MAIL}} — {{.DATE}}</p>
+        </div>
+</div>
+</a>
+{{end}}
+</div>
+</div>
+{{template "footer.html" .}}

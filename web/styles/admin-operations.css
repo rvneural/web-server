@@ -128,8 +128,7 @@
 }
 
 .operation:hover{
-    color: white;
-    background: rgb(191, 45, 45);
+    background: #e3e5e8;
 }
 
 .mark{

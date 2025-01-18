@@ -4,6 +4,7 @@ import (
 	modelImage "WebServer/internal/models/db/results/image"
 	"WebServer/internal/server/handlers/interfaces"
 	"encoding/json"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -34,8 +35,32 @@ func (a *AdminImages) GetPage(c *gin.Context) {
 		return
 	}
 
+	id, err := c.Cookie("user_id")
+	if err != nil || id == "" {
+		id = "-1"
+	}
+	var user_id = -1
+	if id != "-1" {
+		user_id, err = strconv.Atoi(id)
+		if err != nil {
+			user_id = -1
+		}
+	}
+	var user_status = -1
+	if user_id != -1 {
+		current_user, err := a.dbWorker.GetUserByID(user_id)
+		if err != nil {
+			user_status = -1
+		} else {
+			user_status = current_user.USER_STATUS
+		}
+	}
+
 	images := make([]Image, 0, len(operations))
 	for _, operation := range operations {
+		if user_status != -1 && operation.USER_STATUS > user_status {
+			continue
+		}
 		img := modelImage.DBResult{}
 		err = json.Unmarshal(operation.DATA, &img)
 		if err != nil {

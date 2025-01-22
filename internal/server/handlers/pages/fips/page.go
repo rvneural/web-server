@@ -46,11 +46,33 @@ func (a *FipsPage) GetPage(c *gin.Context) {
 		search = "?search=" + search
 	}
 
-	response, err := http.Get(a.url + search)
+	from := c.DefaultQuery("from", "")
+	if from != "" {
+		if search != "" {
+			from = "&from=" + from
+		} else {
+			from = "?from=" + from
+		}
+	}
+
+	to := c.DefaultQuery("to", "")
+	if to != "" {
+		if from != "" || search != "" {
+			to = "&to=" + to
+		} else {
+			to = "?to=" + to
+		}
+	}
+
+	response, err := http.Get(a.url + search + from + to)
 
 	if err != nil {
-		c.HTML(500, "404.html", gin.H{
-			"error": err,
+		style := "/web/styles/fips-style.css"
+		script := "/web/scripts/fips-script.js"
+		c.HTML(200, "fips.html", gin.H{
+			"title":  "Регистрация товарных знаков",
+			"style":  style,
+			"script": script,
 		})
 		return
 	}
@@ -58,8 +80,12 @@ func (a *FipsPage) GetPage(c *gin.Context) {
 
 	data, err := io.ReadAll(response.Body)
 	if err != nil {
-		c.HTML(500, "404.html", gin.H{
-			"error": err,
+		style := "/web/styles/fips-style.css"
+		script := "/web/scripts/fips-script.js"
+		c.HTML(200, "fips.html", gin.H{
+			"title":  "Регистрация товарных знаков",
+			"style":  style,
+			"script": script,
 		})
 		return
 	}
@@ -67,8 +93,12 @@ func (a *FipsPage) GetPage(c *gin.Context) {
 	var fips FIPS
 	err = json.Unmarshal(data, &fips)
 	if err != nil {
-		c.HTML(500, "404.html", gin.H{
-			"error": err,
+		style := "/web/styles/fips-style.css"
+		script := "/web/scripts/fips-script.js"
+		c.HTML(200, "fips.html", gin.H{
+			"title":  "Регистрация товарных знаков",
+			"style":  style,
+			"script": script,
 		})
 		return
 	}

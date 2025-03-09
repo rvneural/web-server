@@ -31,7 +31,7 @@
     width: 100%;
   }
 
-  .output-group img{
+  .output-group img:not(.logo-image){
     border-radius: 0;
   }
 
@@ -57,7 +57,7 @@
     font-weight: bold;
   }
 
-  .output-group img{
+  .output-group img:not(.logo-image){
     display: block;
     max-width: 90%;
     max-height: 70vh;

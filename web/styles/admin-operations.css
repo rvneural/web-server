@@ -96,7 +96,7 @@
     flex-direction: row;
 }
 
-.work-group .image .img img{
+.work-group .image .img img:not(.logo-image){
     max-height: 150px;
     margin-right: 10px;
     width: auto;

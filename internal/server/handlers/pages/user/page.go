@@ -10,6 +10,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
+	"WebServer/internal/models/db/model"
 	modelAudio "WebServer/internal/models/db/results/audio"
 	modelImage "WebServer/internal/models/db/results/image"
 )
@@ -28,14 +29,16 @@ func New(worker interfaces.DBWorker, logger *slog.Logger) *Page {
 
 func (p *Page) GetPage(c *gin.Context) {
 	str_id, err := c.Cookie("user_id")
+	var user_id int
 	if err != nil {
-		c.Redirect(http.StatusPermanentRedirect, "/login")
-		return
-	}
-	user_id, err := strconv.Atoi(str_id)
-	if err != nil {
-		c.Redirect(http.StatusPermanentRedirect, "/login")
-		return
+		p.logger.Error("Getting user id", "error", err)
+		user_id = 0
+	} else {
+		user_id, err = strconv.Atoi(str_id)
+		if err != nil {
+			p.logger.Error("Converting user id", "error", err)
+			user_id = 0
+		}
 	}
 	user, err := p.worker.GetUserByID(user_id)
 	if err != nil {
@@ -45,18 +48,38 @@ func (p *Page) GetPage(c *gin.Context) {
 		user.LASTNAME = "Пользователь"
 	}
 	p.logger.Info("New request to user page")
-	image_operations, err := p.worker.GetUserOperations(user_id, 100, "image")
-	if err != nil {
-		p.logger.Error("Getting images operations", "error", err)
-	}
-	text_operations, err := p.worker.GetUserOperations(user_id, 100, "text")
-	if err != nil {
-		p.logger.Error("Getting text operations", "error", err)
-	}
-	audio_operations, err := p.worker.GetUserOperations(user_id, 100, "audio")
-	if err != nil {
-		p.logger.Error("Getting audio operations", "error", err)
-	}
+	var image_operations []model.DBResult
+	var text_operations []model.DBResult
+	var audio_operations []model.DBResult
+
+	wgGet := sync.WaitGroup{}
+	wgGet.Add(3)
+
+	go func() {
+		defer wgGet.Done()
+		image_operations, err = p.worker.GetUserOperations(user_id, 20, "image")
+		if err != nil {
+			p.logger.Error("Getting images operations", "error", err)
+		}
+	}()
+
+	go func() {
+		defer wgGet.Done()
+		text_operations, err = p.worker.GetUserOperations(user_id, 20, "text")
+		if err != nil {
+			p.logger.Error("Getting text operations", "error", err)
+		}
+	}()
+
+	go func() {
+		defer wgGet.Done()
+		audio_operations, err = p.worker.GetUserOperations(user_id, 20, "audio")
+		if err != nil {
+			p.logger.Error("Getting audio operations", "error", err)
+		}
+	}()
+
+	wgGet.Wait()
 
 	type Operation struct {
 		ID          string

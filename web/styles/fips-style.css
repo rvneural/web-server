@@ -44,7 +44,7 @@
     align-content: center;
   }
 
-  .el-data img {
+  .el-data img:not(.logo-image) {
     max-height: 110px;
     max-width: 300px;
   }

@@ -3,9 +3,9 @@ package app
 import (
 	"log/slog"
 
-	sloggin "github.com/samber/slog-gin"
-
 	"os"
+
+	sloggin "github.com/samber/slog-gin"
 
 	"crypto/tls"
 	"log"
@@ -81,7 +81,7 @@ func New(protectedAuth gin.HandlerFunc, adminProtectedAuth gin.HandlerFunc) *App
 	router.Use(stats.RequestStats())
 
 	// Create cache
-	store := persistence.NewInMemoryStore(time.Hour)
+	store := persistence.NewInMemoryStore(1 * time.Hour)
 
 	// Add URL validation function
 	router.SetFuncMap(template.FuncMap{
@@ -108,6 +108,7 @@ func New(protectedAuth gin.HandlerFunc, adminProtectedAuth gin.HandlerFunc) *App
 	}
 
 	router.StaticFS("/web/", http.Dir("../../web"))
+	router.StaticFile("/robots.txt", "../../web/static/robots.txt")
 	router.LoadHTMLGlob("../../web/templates/*.html")
 
 	logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
@@ -159,9 +160,9 @@ func (a *App) RegisterProtectedPage(pattern string, handler gin.HandlerFunc) {
 	a.protected.GET(pattern, handler)
 }
 
-func (a *App) RegisterProtectedPageWithCache(pattern string, handler gin.HandlerFunc) {
+func (a *App) RegisterProtectedPageWithCache(pattern string, handler gin.HandlerFunc, t time.Duration) {
 	a.logger.Info("Registering protected handler for", "pattern", pattern)
-	a.protected.GET(pattern, cache.CachePage(a.store, 5*time.Minute, handler))
+	a.protected.GET(pattern, cache.CachePage(a.store, t, handler))
 }
 
 func (a *App) RegisterResultNoCache(pattern string, handler gin.HandlerFunc) {

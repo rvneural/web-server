@@ -60,7 +60,7 @@ html, body {
   
   /*Отдельные элементы в блоках*/
   
-  .header-buttons *{
+  .header-buttons a, .header-buttons button{
     font-size: 12px;
     height: 100%;
     width: 100%;
@@ -68,6 +68,12 @@ html, body {
     max-height: 33px;
     margin-bottom: 3px;
     background: transparent;
+  }
+
+  .header-buttons hr{
+	  height: 0;
+    width: 100%;
+	  border-top: 1px solid #333;
   }
 
   .header-group img{

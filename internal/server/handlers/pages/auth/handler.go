@@ -34,13 +34,12 @@ func (a *AuthPageHandler) CheckForLogin(c *gin.Context) bool {
 	return true
 }
 
-func (a *AuthPageHandler) SetCookie(c *gin.Context, ss string) {
-	c.SetCookie("NeuronNexusAuth", ss, 3600*24*30, "/", "", false, true)
-}
-
 func (a *AuthPageHandler) GetRegisterPage(c *gin.Context) {
 	if a.CheckForLogin(c) {
-		c.Redirect(http.StatusPermanentRedirect, "/protected/")
+		c.Header("Cache-Control", "no-cache, no-store, must-revalidate")
+		c.Header("Pragma", "no-cache")
+		c.Header("Expires", "0")
+		c.Redirect(http.StatusFound, "/")
 		return
 	}
 	script := "/web/scripts/auth/register.js"
@@ -52,7 +51,10 @@ func (a *AuthPageHandler) GetRegisterPage(c *gin.Context) {
 
 func (a *AuthPageHandler) GetLoginPage(c *gin.Context) {
 	if a.CheckForLogin(c) {
-		c.Redirect(http.StatusPermanentRedirect, "/protected/")
+		c.Header("Cache-Control", "no-cache, no-store, must-revalidate")
+		c.Header("Pragma", "no-cache")
+		c.Header("Expires", "0")
+		c.Redirect(http.StatusFound, "/")
 		return
 	}
 	script := "/web/scripts/auth/login.js"
@@ -65,6 +67,8 @@ func (a *AuthPageHandler) GetLoginPage(c *gin.Context) {
 func (a *AuthPageHandler) GetLogoutPage(c *gin.Context) {
 	c.SetCookie("NeuronNexusAuth", "", -1, "/", "", false, true)
 	c.SetCookie("user_id", "", -1, "/", "", false, true)
-	c.SetCookie("user_email", "", -1, "/", "", false, true)
-	c.Redirect(http.StatusPermanentRedirect, "/")
+	c.Header("Cache-Control", "no-cache, no-store, must-revalidate")
+	c.Header("Pragma", "no-cache")
+	c.Header("Expires", "0")
+	c.Redirect(http.StatusOK, "/")
 }

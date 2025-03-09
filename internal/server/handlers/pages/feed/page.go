@@ -28,10 +28,10 @@ type Page struct {
 	mu             sync.Mutex
 	LastNews       []News
 	MaxDescription int
+	title          string
 }
 
-func New(logger *slog.Logger) *Page {
-	RSSURL := os.Getenv("RSS_URL")
+func New(logger *slog.Logger, rss_url string, title string) *Page {
 
 	max_description_str := os.Getenv("MAX_DESC")
 	max_description, err := strconv.Atoi(max_description_str)
@@ -41,10 +41,11 @@ func New(logger *slog.Logger) *Page {
 
 	page := &Page{
 		logger:         logger,
-		feedURL:        RSSURL,
+		feedURL:        rss_url,
 		LastNews:       nil,
 		mu:             sync.Mutex{},
 		MaxDescription: max_description,
+		title:          title,
 	}
 
 	go func() {
@@ -112,7 +113,7 @@ func (r *Page) GetPage(c *gin.Context) {
 		if err != nil {
 			r.logger.Error("Error while reading response", "error", err)
 			c.HTML(http.StatusOK, "feed.html", gin.H{
-				"title":  "Актуальные новости (не удалось загрузить)",
+				"title":  r.title + " (не удалось загрузить)",
 				"style":  style,
 				"script": script,
 			})
@@ -125,7 +126,7 @@ func (r *Page) GetPage(c *gin.Context) {
 	r.mu.Unlock()
 
 	c.HTML(http.StatusOK, "feed.html", gin.H{
-		"title":  "Актуальные новости",
+		"title":  r.title,
 		"style":  style,
 		"script": script,
 		"news":   news,

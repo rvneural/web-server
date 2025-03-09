@@ -1,70 +1,94 @@
 const input = document.getElementById("search-input")
+
 const button = document.getElementById("search-button")
+
 const from = document.getElementById("search-input-start")
 const to = document.getElementById("search-input-end")
+const outDiv = document.getElementById("fips-res")
 
-window.addEventListener("load", () => {
-    var idx = window.location.href.indexOf('?') + 1
-    if(idx === 0){
+const newUrl = "/fips"
+
+const limit = 15
+var offset = 0
+var searchLine = ""
+var fromLine = ""
+var toLine = ""
+
+async function updateOut(){
+    let data = new FormData()
+    data.append("limit", limit)
+    data.append("offset", offset)
+    if(searchLine.length > 0) data.append("search", searchLine)
+    if(fromLine.length > 0) data.append("from", fromLine)
+    if(toLine.length) data.append("to", toLine)
+
+    response = await fetch(newUrl, {
+        method: "POST",
+        body: data
+    })
+
+    if(!response.ok){
+        alert("Не получилось загрузить данные")
+        return
+    }
+    const json = await response.json()
+
+    if((json["fips"] === null) || (json["fips"].length === 0)){
         return
     }
 
-    var hashes = decodeURI(window.location.href).slice(idx).split('&');
-    for(var i = 0; i < hashes.length; i++){
-        var hash = hashes[i].split('=')
-        if(hash[0] === "search"){
-            console.log(hash[1])
-            input.value = hash[1].split(",").join(", ")
-        }
-        if(hash[0] === "from"){
-            from.value = hash[1].split(".").reverse().join("-")
-        }
-        if(hash[0] === "to"){
-            to.value = hash[1].split(".").reverse().join("-")
-        }
+    for (var line of json["fips"]){
+        outDiv.innerHTML += `<a href="${line["url"]}" target="_blank" class="description">
+        <div class="image-element">
+            <div class="el-data">
+                <img src="${line["image_url"]}" class="image">
+            </div>
+            <div class="el-desc">
+                <p>(${line["registration_number"]}) ${line["author"]}</p>
+                <p class="date">${line["mail"]} — ${line["registration_date"]}</p>
+            </div>
+        </div>
+        </a>`
+    }
+}
+
+window.onload = async function(){
+    await updateOut()
+}
+
+outDiv.addEventListener("scroll", async function(){
+    if(outDiv.scrollTop + outDiv.clientHeight >= outDiv.scrollHeight - 1){
+        offset += limit
+        await updateOut()
     }
 })
 
-button.addEventListener("click", () => {
-    var search = "?search="
-    var search_value = input.value
-    if (search_value.length === 0){
-        search = ""
+button.addEventListener("click", async function(){
+    searchLine = ""
+    fromLine = ""
+    toLine = ""
+    outDiv.innerHTML = ""
+    offset = 0
+
+    if (input.value.length === 0){
+                search = ""
     } else {
+        let search_value = input.value
         search_value = search_value.trim()
         search_value = search_value.toLowerCase()
         search_value = search_value.replace(/\s+/g, " ")
         search_value = search_value.replaceAll(", ", ",")
         search_value = search_value.replaceAll(" ", ",")
-        search += search_value
+        searchLine += search_value
+    }
+        
+    if(from.value.length !== 0){
+        fromLine = from.value.split("-").reverse().join(".")
     }
 
-    var from_date = "&from="
-    if(search.length === 0){
-        from_date = "?from="
-    }
-    var from_value = from.value
-
-    if(from_value.length === 0){
-        from_date = ""
-    } else {
-        var result_date = from_value.split("-").reverse().join(".")
-        from_date += result_date
+    if(to.value.length !== 0){
+        toLine = to.value.split("-").reverse().join(".")
     }
 
-
-     var to_date = "&to="
-     if((from_date.length === 0) && (search.length === 0)){
-        to_date = "?to="
-    }
-     var to_value = to.value
-
-    if(to_value.length === 0){
-        to_date = ""
-    } else {
-        var result_date = to_value.split("-").reverse().join(".")
-        to_date += result_date
-    }
-
-    window.location.href = "/protected/fips" + search + from_date + to_date
+    await updateOut()
 })

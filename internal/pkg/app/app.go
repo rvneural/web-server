@@ -3,6 +3,7 @@ package app
 import (
 	"log/slog"
 	"os"
+	"time"
 
 	endpoint "WebServer/internal/endpoint/app"
 
@@ -19,6 +20,7 @@ import (
 
 	photopea "WebServer/internal/server/handlers/forms/photopea"
 	textFormHandler "WebServer/internal/server/handlers/forms/text"
+	ttsHandler "WebServer/internal/server/handlers/forms/tts"
 
 	result "WebServer/internal/server/handlers/pages/results"
 
@@ -42,7 +44,6 @@ import (
 	saveSystem "WebServer/internal/server/handlers/forms/saving"
 
 	newsPage "WebServer/internal/server/handlers/pages/feed"
-	mediaPage "WebServer/internal/server/handlers/pages/mediafeed"
 	rssFeed "WebServer/internal/server/handlers/pages/rss"
 
 	fips "WebServer/internal/server/handlers/pages/fips"
@@ -53,6 +54,12 @@ import (
 	userPage "WebServer/internal/server/handlers/pages/user"
 
 	"WebServer/internal/server/handlers/pages/admin/stats"
+
+	pricePage "WebServer/internal/server/handlers/pages/price"
+	ttsPage "WebServer/internal/server/handlers/pages/text2speech"
+
+	agregatorAPI "WebServer/internal/server/handlers/forms/agregator"
+	agregatorPage "WebServer/internal/server/handlers/pages/agregator"
 )
 
 type App struct {
@@ -89,6 +96,7 @@ func (a *App) init() {
 	if a.login != "" && a.password != "" {
 		a.Endpoint.SetBasicAuth(a.login, a.password)
 	}
+	agregatorApi := agregatorAPI.New(a.logger)
 
 	// Основные страницы
 	a.Endpoint.RegisterProtectedPage("/recognition", recognitionFromFilePage.New().GetPage)
@@ -96,10 +104,20 @@ func (a *App) init() {
 	a.Endpoint.RegisterProtectedPage("/text", textProcessingPage.New().GetPage)
 	a.Endpoint.RegisterProtectedPage("/imgprocess", upscalePage.New().GetPage)
 	a.Endpoint.RegisterProtectedPage("/", userPage.New(a.dataBaseWorker, a.logger).GetPage)
+	a.Endpoint.RegisterProtectedPage("/tts", ttsPage.New().GetPage)
 
-	a.Endpoint.RegisterProtectedPage("/news", newsPage.New(a.logger).GetPage)
-	a.Endpoint.RegisterProtectedPage("/media", mediaPage.New(a.logger).GetPage)
-	a.Endpoint.RegisterProtectedPage("/fips", fips.New().GetPage)
+	agPage := agregatorPage.New(agregatorApi)
+	a.Endpoint.RegisterPageNoCache("/news", agPage.GetPage)
+	a.Endpoint.RegisterPageNoCache("/news/:id", agPage.GetPageWithID)
+	a.Endpoint.RegisterProtectedPage("/news", newsPage.New(a.logger, os.Getenv("RSS_URL"), "Ведомства Татарстана").GetPage)
+	a.Endpoint.RegisterProtectedPage("/media", newsPage.New(a.logger, os.Getenv("MEDIA_RSS_URL"), "Новости СМИ").GetPage)
+	a.Endpoint.RegisterProtectedPage("/rfpravo", newsPage.New(a.logger, os.Getenv("RF_PRAVO_URL"), "Официальное опубликование РФ").GetPage)
+	a.Endpoint.RegisterProtectedPage("/rfnews", newsPage.New(a.logger, os.Getenv("RF_NEWS_URL"), "Федеральные ведомства").GetPage)
+	a.Endpoint.RegisterProtectedPage("/cbrnews", newsPage.New(a.logger, os.Getenv("CBR_URL"), "Банк России").GetPage)
+	fp := fips.New(a.logger)
+	a.Endpoint.RegisterProtectedPageWithCache("/fips", fp.GetPage, 1*time.Hour)
+	a.Endpoint.RegisterProtectedPageWithCache("/price", pricePage.New(a.logger).GetPage, 1*time.Hour)
+	a.Endpoint.RegisterForm("/fips", fp.GetList)
 	//----------------------------
 
 	a.Endpoint.RegisterForm("/login", a.auth.HandleLogin)
@@ -112,6 +130,9 @@ func (a *App) init() {
 	a.Endpoint.RegisterPageNoCache("/logout", authPage.GetLogoutPage)
 
 	a.Endpoint.RegisterPageNoCache("/rss", rssFeed.New(a.logger, "RSS_URL").GetPage)
+	a.Endpoint.RegisterPageNoCache("/rfpravo", rssFeed.New(a.logger, "RF_PRAVO_URL").GetPage)
+	a.Endpoint.RegisterPageNoCache("/rfnews", rssFeed.New(a.logger, "RF_NEWS_URL").GetPage)
+	a.Endpoint.RegisterPageNoCache("/cbrnews", rssFeed.New(a.logger, "CBR_URL").GetPage)
 	a.Endpoint.RegisterPageNoCache("/media", rssFeed.New(a.logger, "MEDIA_RSS_URL").GetPage)
 
 	a.Endpoint.RegisterAdminPageNoCahce("/stats", stats.New().GetPage)
@@ -131,6 +152,10 @@ func (a *App) init() {
 	a.Endpoint.RegisterForm("/upscaleImage", imageUpscalerFormHandler.New(a.logger).HandleForm)
 	a.Endpoint.RegisterForm("/removeBackground", bgRemover.New(a.logger).HandleForm)
 	a.Endpoint.RegisterForm("/photopea", photopea.New(a.logger).HandleForm)
+	a.Endpoint.RegisterForm("/tts", ttsHandler.New().Handler)
+
+	a.Endpoint.RegisterPageNoCache("/agregator/get", agregatorApi.GetNewsList)
+	a.Endpoint.RegisterPageNoCache("/agregator/get/:id", agregatorApi.GetNews)
 
 	a.Endpoint.RegisterResultFormHandler("/saveOperation", saveSystem.New(a.dataBaseWorker, a.logger).HandleForm)
 	a.Endpoint.RegisterResultFormHandler("/getVersion", saveSystem.NewVersionSystem(a.dataBaseWorker, a.logger).HandleForm)

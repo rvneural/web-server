@@ -51,7 +51,7 @@
     background: transparent;
 }
 
-.square-img img{
+.square-img img:not(.logo-image){
     width: 100%;
     max-width: 100px;
     height: auto;

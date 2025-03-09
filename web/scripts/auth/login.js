@@ -26,7 +26,7 @@ btn.addEventListener("click", async () => {
 
     const data = await response.json()
     if (data.message === "Successfully logged in") {
-        window.location.href = "/protected/"
+        window.location.href = data.uri
     } else {
         alert(data.error)
     }

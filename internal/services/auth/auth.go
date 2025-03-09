@@ -32,6 +32,7 @@ func New(worker RegisterWorker) *AuthentificationHandler {
 }
 
 func (a *AuthentificationHandler) HandleRegistration(c *gin.Context) {
+	c.Header("Cache-Control", "no-cache")
 	model := authModels.RegistrationInput{}
 
 	err := c.Bind(&model)
@@ -107,23 +108,36 @@ func (a *AuthentificationHandler) HandleLogin(c *gin.Context) {
 	log.Println("Setting token for user_id:", id)
 	c.SetCookie("NeuronNexusAuth", ss, 3600*24*30, "/", "", false, true)
 	c.SetCookie("user_id", id, 3600*24*30, "/", "", false, true)
-	c.SetCookie("user_email", model.Email, 3600*24*30, "/", "", false, true)
-	c.JSON(http.StatusOK, gin.H{"message": "Successfully logged in"})
+	path, err := c.Cookie("ControlPath")
+	if err != nil {
+		path = "/"
+	} else {
+		path = strings.TrimPrefix(path, "https://neuron-nexus.ru")
+	}
+	c.JSON(http.StatusOK, gin.H{"message": "Successfully logged in", "uri": path})
+}
+
+func (a *AuthentificationHandler) redirect(c *gin.Context, authPath string) {
+	c.Header("Cache-Control", "no-cache, no-store, must-revalidate")
+	c.Header("Pragma", "no-cache")
+	c.Header("Expires", "0")
+	c.Header("referer", c.Request.RequestURI)
+	c.Redirect(http.StatusFound, authPath)
 }
 
 func (a *AuthentificationHandler) AuthMiddleware(authPath string, minimal_level int, db_worker interfaces.DBWorker) gin.HandlerFunc {
 	return func(c *gin.Context) {
-
 		if a.isBot(c) {
 			log.Println("Request from bot:", c.Request.UserAgent())
 			c.Next()
 			return
 		}
 
+		c.SetCookie("ControlPath", c.FullPath(), 300, "/", "", false, true)
 		tokenString, err := c.Cookie("NeuronNexusAuth")
 		if err != nil || tokenString == "" {
 			log.Println("No token found")
-			c.Redirect(http.StatusPermanentRedirect, authPath)
+			a.redirect(c, authPath)
 			return
 		}
 
@@ -133,32 +147,26 @@ func (a *AuthentificationHandler) AuthMiddleware(authPath string, minimal_level 
 
 		if err != nil || !token.Valid {
 			log.Println("Invalid token")
-			c.Redirect(http.StatusPermanentRedirect, authPath)
+			a.redirect(c, authPath)
 			return
 		}
 
 		clms, ok := token.Claims.(jwt.MapClaims)
 		if !ok {
-			c.Redirect(http.StatusPermanentRedirect, authPath)
+			a.redirect(c, authPath)
 			return
 		}
 
-		id, err := c.Cookie("user_id")
-		if err != nil || id == "" {
-			c.Redirect(http.StatusPermanentRedirect, authPath)
+		id := clms["user_id"].(string)
+		email := clms["user_email"].(string)
+
+		if id == "" || email == "" {
+			a.redirect(c, authPath)
 			return
 		}
 
-		email, err := c.Cookie("user_email")
-		if err != nil || email == "" {
-			c.Redirect(http.StatusPermanentRedirect, authPath)
-			return
-		}
-		if email != clms["user_email"].(string) || id != clms["user_id"].(string) {
-			c.Redirect(http.StatusPermanentRedirect, authPath)
-			return
-		}
-
+		c.SetCookie("NeuronNexusAuth", tokenString, 3600*24*30, "/", "", false, true)
+		c.SetCookie("user_id", id, 3600*24*30, "/", "", false, true)
 		if minimal_level > 0 {
 			int_id, err := strconv.Atoi(id)
 			if err != nil {

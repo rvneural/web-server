@@ -1,0 +1,99 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
+        <meta http-equiv="content-type" content="text/html; charset=utf8" />
+        <title>Расшифровка аудио | Генерация текста | Создание изображений | ИИ | Нейросеть</title>
+        <link rel="icon" href="/web/static/img/favicon.ico" type="image/x-icon">
+        <link rel="stylesheet" href= "/web/styles/text2speech/style.css">
+        <meta name="description" content="Здесь можно генерировать тексты и изображения, расшифровывать аудио и видео">
+        <meta name="keywords" content="ИИ, Нейросети, Расшифровка аудио, Расшифровка видео, Генерация картинок, Новости, Удалить фон с картинки">
+      </head>
+    <body>
+        <div class="elements">
+            <div class="element-group">
+                <h3 title="Всплывающая подсказка" class="noselect">Паузы</h3>
+                <div class="element" onclick="add('<[tiny]>')">
+                    <button class="element-button"><span><[tiny]></span></button>
+                    <p class="noselect">Короткая пауза</p>
+                </div>
+                <div class="element" onclick="add('<[small]>')">
+                    <button class="element-button"><span><[small]></span></button>
+                    <p class="noselect">Маленькая пауза</p>
+                </div>
+                <div class="element" onclick="add('<[medium]>')">
+                    <button class="element-button"><span><[medium]></span></button>
+                    <p class="noselect">Средняя пауза</p>
+                </div>
+                <div class="element" onclick="add('<[large]>')">
+                    <button class="element-button"><span><[large]></span></button>
+                    <p class="noselect">Большая пауза</p>
+                </div>
+                <div class="element" onclick="add('sil<[t]>')">
+                    <button class="element-button"><span><[t]></span></button>
+                    <p class="noselect">t — в миллисекундах</p>
+                </div>
+            </div>
+            <div class="element-group">
+                <h3 class="noselect">Ударение</h3>
+                <div class="element" onclick="add('+')">
+                    <button class="element-button"><span>+</span></button>
+                    <p class="noselect">Перед гласной</p>
+                </div>
+            </div>
+            <div class="element-group">
+                <h3 class="noselect">Акцент на слове</h3>
+                <div class="element" onclick="addSelection('**','**')">
+                    <button class="element-button"><span>** **</span></button>
+                    <p class="noselect">Между звездочек</p>
+                </div>
+            </div>
+            <div class="element-group">
+                <h3 class="noselect">Фонемы</h3>
+                <div class="element" onclick="addSelection('[[', ']]')">
+                    <button class="element-button"><span>[[ ]]</span></button>
+                    <p class="noselect">Внутри скобок</p>
+                </div>
+            </div>
+        </div>
+        <div class="central-block">
+            <textarea id="text" placeholder="Введите сюда текст для озвучки"></textarea>
+            <div class="controls">
+                <div class="control">
+                    <h4 class="noselect">Голос</h4>
+                    <select id="voice">
+                    </select>
+                </div>
+                <div class="control">
+                    <h4 class="noselect">Амплуа</h4>
+                    <select id="role">
+                    </select>
+                </div>
+                <div class="control">
+                    <h4>Скорость речи</h4>
+                    <input type="range" id="speed" min="0" max="3" step="0.01" value="1" oninput="this.nextElementSibling.value = this.value">
+                    <output class="noselect" id="speedOutput" ondblclick="setDefaultValue('speed', 1), this.value=1">1</output>
+                </div>
+                <div class="control">
+                    <h4>Высота голоса</h4>
+                    <input type="range" id="pitchShift" min="-1000" max="1000" step="10" value="0" oninput="this.nextElementSibling.value = this.value">
+                    <output class="noselect" id="pitchOutput" ondblclick="setDefaultValue('pitchShift', 0); this.value=0">0</output>
+                </div>
+                <div class="control">
+                    <button class="generate-button" onclick="generate()">Сгенерировать</button>
+                </div>
+                <div class="control">
+                    <button class="generate-button" onclick="saveSettings()">Cохранить</button>
+                    <button class="generate-button" onclick="loadSettings()">Загрузить</button>
+                </div>
+            </div>
+        </div>
+        <div class="audios" id="audios">
+            <h3 class="noselect">Сгенерированные аудио</h3>
+            <div class="audio-list" id="audio-list">
+            </div>
+        </div>
+    </body>
+    <script src="/web/scripts/text2speech/voices.js"></script>
+    <script src="/web/scripts/text2speech/script.js"></script>
+</html>

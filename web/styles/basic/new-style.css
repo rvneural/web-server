@@ -1,6 +1,6 @@
 
 body {
-    font-family: "PT Sans";
+    font-family: sans-serif;
     overflow: hidden;
     font-size: 14px;
     background: #edeef0;
@@ -106,4 +106,24 @@ a, a:hover{
 .active-button{
     background-color: #e3e5e8;
     color: black;
+}
+
+.new{
+    font-weight: bold;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.new::before{
+    content: "NEW";
+    font-weight: bold;
+    color: rgb(255, 79, 79);
+    border: 2px solid rgb(255, 79, 79);
+    border-radius: 7px;
+    padding: 2px;
+    box-sizing: border-box;
+    display: inline;
+    margin-right: 5px;
 }

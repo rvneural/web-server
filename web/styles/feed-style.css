@@ -33,13 +33,14 @@
     margin-top: 5px;
     margin-bottom: 5px;
     text-transform: uppercase;
+    font-size: 14px;
   }
 
   .news-element .description{
     margin-top: 8px;  /* Установите нужное значение */
     margin-bottom: 0px; /* Установите нужное значение */
     font-style: italic;
-    font-size: 16px;
+    font-size: 14px;
   }
 
   .news-element .info{
@@ -47,18 +48,21 @@
     justify-content: space-between;
     margin-bottom: -2px;
     margin-top: auto; /* Отодвигаем элемент info вниз */
-    font-size: 14px;
   }
 
   .news-element .info .author{
     font-weight: bold;
+    font-size: 14px;
   }
 
   .news-element .info .date{
     color: rgb(75, 75, 75);
+    font-size: 14px;
   }
 
   .news-element:hover{
     background: #e3e5e8;
     color: white;
   }
+
+  

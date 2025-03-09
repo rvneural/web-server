@@ -133,7 +133,7 @@ input[type=file]::file-selector-button:hover {
   border: 1px solid #e3e5e8;
 }
 
-.normalize-group img{
+.normalize-group img:not(.logo-image){
   max-height: 50%;
   margin-right: 1%;
   cursor: help;

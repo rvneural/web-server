@@ -1,0 +1,27 @@
+{{template "header.html" .}}
+<script type="text/javascript">
+    var tableText = {{.Table}};
+    var selectValue = {{.Value}}
+    var fromBack = {{.From}}
+    var toBack = {{.To}}
+</script>
+<div class="work-group nobg">
+    <div class="select-box clr">
+        <select class="select" id="modelSelect" name="model">
+            <option value="none">Выбрать таблицу</option>
+            {{ range .Models}}
+                <option value="{{ .Code }}">{{ .Name }}</option>
+            {{ end }}
+          </select>
+          <input type="date" id="search-input-start" class="search-input">
+          <p>↔</p>
+          <input type="date" id="search-input-end" class="search-input">
+          <button id="redo-button" class="button search-button redo-button">
+            <img src="/web/static/img/redo.webp">
+        </button>
+          <button id="search-button" class="button search-button">Найти</button>
+    </div>
+    <div class="table-box clr" id="table-box">
+    </div>
+</div>
+{{template "footer.html" .}}

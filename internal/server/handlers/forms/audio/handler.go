@@ -69,13 +69,17 @@ func (n *RecognitionHandler) HandleForm(c *gin.Context) {
 	str_id, err := c.Cookie("user_id")
 	var user_id int
 	if err != nil {
+		n.logger.Error("Getting user id", "error", err)
 		user_id = 0
 	} else {
 		user_id, err = strconv.Atoi(str_id)
 		if err != nil {
+			n.logger.Error("Converting user id", "error", err)
 			user_id = 0
 		}
 	}
+
+	n.logger.Info("Operation AUDIO from", "user", user_id, "str", str_id)
 
 	var Request models.Request
 	url := c.Request.FormValue("url")
